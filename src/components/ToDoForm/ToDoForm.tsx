@@ -3,6 +3,8 @@ import React, { SyntheticEvent, useContext, useState } from "react";
 import todoFormStyle from "./ToDoFormStyle.module.css";
 import axios from "axios";
 import AppCtx from "../../context/app-context";
+import { addItemAction } from "../../actions/itemActions";
+import { ITodo } from "../../interfaces/interfaces";
 
 function ToDoInput(props: any) {
   return (
@@ -20,27 +22,35 @@ function ToDoInput(props: any) {
 }
 
 function ToDoForm() {
-  const [toDo, setToDo] = useState("");
+  const [title, setTitle] = useState("");
   const [typed, setTyped] = useState(false);
   const { dispatch } = useContext(AppCtx);
 
   const onChangeHandler = (event: SyntheticEvent) => {
     const target = event.target as HTMLInputElement;
-    setToDo(target.value);
+    setTitle(target.value);
     setTyped(true);
   };
   const onSubmitHandler = async (event: SyntheticEvent) => {
     event.preventDefault();
-    const response = await axios.post("http://localhost:3000/items", {
-      title: toDo,
-    });
-    console.log(response);
-    console.log(toDo);
-    setToDo("");
+
+    let creatingTodo: ITodo = {
+      title: title,
+    };
+    const response = await axios.post(
+      "http://localhost:3000/items",
+      creatingTodo
+    );
+
+    const createdTodoFromServer = response.data.data;
+    console.log(response.data);
+    console.log(createdTodoFromServer);
+    dispatch(addItemAction(createdTodoFromServer));
+    setTitle("");
     setTyped(false);
   };
 
-  const inputError: boolean = toDo.trim() === "" && typed ? true : false;
+  const inputError: boolean = title.trim() === "" && typed ? true : false;
 
   return (
     <div className={todoFormStyle.form}>
@@ -48,7 +58,7 @@ function ToDoForm() {
         <form onSubmit={onSubmitHandler}>
           <ToDoInput
             fullWidth
-            value={toDo}
+            value={title}
             onChange={onChangeHandler}
             error={inputError}
           ></ToDoInput>
