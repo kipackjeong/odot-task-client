@@ -1,0 +1,17 @@
+.list {
+  width: 95%;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  height: 100%;
+  margin-bottom: 5vh;
+  text-align: center;
+  display: flex;
+  flex-direction: center;
+  align-items: center;
+}
+
+.list-item span {
+}
+
+.list-head {
+}

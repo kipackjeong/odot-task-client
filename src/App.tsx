@@ -1,25 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import boardStyle from "../src/Board.module.css";
+import appStyle from "../src/App.module.css";
+import ToDoList from "./components/ToDoList/ToDoList";
+import ToDoForm from "./components/ToDoForm/ToDoForm";
+import AppCtx from "./context/app-context";
+import AppContextInterface from "./context/app-context.interface";
+import AppContextProvider from "./context/app-context.provider";
+
+function Board(props: any) {
+  return (
+    <div className={boardStyle.board}>
+      <h1>Board</h1>
+      {props.children};
+    </div>
+  );
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppContextProvider>
+      <div className={appStyle.App}>
+        <header className="App-header">
+          <h1>App</h1>
+        </header>
+        <body>
+          <Board>
+            <ToDoList></ToDoList>
+            <ToDoForm></ToDoForm>
+          </Board>
+        </body>
+      </div>
+    </AppContextProvider>
   );
 }
 
