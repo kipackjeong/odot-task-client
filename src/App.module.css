@@ -1,4 +1,6 @@
 .App {
+  width: 100%;
+  height: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -18,15 +20,11 @@
 }
 
 .App-header {
-  background-color: black;
-  min-height: 10vh;
+  max-height: 6vh;
+  min-height: 5vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-}
-
-.App-link {
-  color: #61dafb;
 }

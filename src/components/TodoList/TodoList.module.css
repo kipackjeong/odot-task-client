@@ -1,6 +1,5 @@
 .list {
-  width: 95%;
-  overflow-y: scroll;
+  width: 70%;
   scroll-behavior: smooth;
   height: 100%;
   margin-bottom: 5vh;
@@ -10,8 +9,10 @@
   align-items: center;
 }
 
-.list-item span {
+.list-item {
+  padding-right: 0px;
 }
 
 .list-head {
+  text-align: center;
 }

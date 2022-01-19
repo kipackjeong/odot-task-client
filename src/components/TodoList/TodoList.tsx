@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import ToDoItem from "./ToDoItem/ToDoItem";
-import toDoListStyle from "./ToDoList.module.css";
-import { List, Paper } from "@mui/material";
+import TodoItem from "./TodoItem/TodoItem";
+import todoListStyle from "./TodoList.module.css";
+import { Backdrop, List, Paper } from "@mui/material";
 import AppCtx from "../../context/app-context";
 import ListHead from "./ListHead/ListHead";
 
-function ToDoList(props: any) {
+function TodoList(props: any) {
   const ctx = useContext(AppCtx);
   const { todos } = ctx.state;
 
@@ -38,30 +38,29 @@ function ToDoList(props: any) {
   return isLoading ? (
     <Loading />
   ) : (
-    <Paper className={toDoListStyle.list} elevation={2}>
-      <List
-        sx={{
-          height: "100%",
-          width: "100%",
-          bgcolor: "background.paper",
-          display: "flex",
-          flexDirection: "column",
-          alignContent: "center",
-        }}
-      >
-        <ListHead />
-        {todos.map((toDo: any) => {
-          return (
-            <ToDoItem
-              toDo={toDo}
-              checkToggle={handleCheckToggle}
-              checked={checked.indexOf(toDo) !== -1}
-            />
-          );
-        })}
-      </List>
-    </Paper>
+    <List
+      sx={{
+        width: "100%",
+        height: "92%",
+        overflowY: "scroll",
+        bgcolor: "background.paper",
+        display: "flex",
+        flexDirection: "column",
+        alignContent: "center",
+      }}
+    >
+      <ListHead />
+      {todos.map((todo: any) => {
+        return (
+          <TodoItem
+            todo={todo}
+            checkToggle={handleCheckToggle}
+            checked={checked.indexOf(todo) !== -1}
+          />
+        );
+      })}
+    </List>
   );
 }
 
-export default ToDoList;
+export default TodoList;

@@ -1,34 +1,51 @@
 import React, { useState } from "react";
-import boardStyle from "../src/Board.module.css";
-import appStyle from "../src/App.module.css";
-import ToDoList from "./components/ToDoList/ToDoList";
-import ToDoForm from "./components/ToDoForm/ToDoForm";
+import appStyle from "./App.module.css";
+import TodoList from "./components/TodoList/TodoList";
+import TodoForm from "./components/TodoForm/TodoForm";
 import AppCtx from "./context/app-context";
 import AppContextInterface from "./context/app-context.interface";
 import AppContextProvider from "./context/app-context.provider";
-
-function Board(props: any) {
-  return (
-    <div className={boardStyle.board}>
-      <h1>Board</h1>
-      {props.children};
-    </div>
-  );
-}
+import Board from "./components/UI/Board";
+import StaticDatePickerLandscape from "./components/Calendar/Calendar";
+import { Grid } from "@mui/material";
 
 function App() {
   return (
     <AppContextProvider>
       <div className={appStyle.App}>
-        <header className="App-header">
-          <h1>App</h1>
-        </header>
-        <body>
-          <Board>
-            <ToDoList></ToDoList>
-            <ToDoForm></ToDoForm>
-          </Board>
-        </body>
+        <Board>
+          <Grid container paddingY={2} spacing={1}>
+            <Grid
+              item
+              xs={6}
+              md={6}
+              display="flex"
+              flexDirection="column"
+              justifyContent={"center"}
+              alignContent={"center"}
+            >
+              <Grid
+                columns={12}
+                container
+                height={"100%"}
+                direction={"column"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                flexWrap={"nowrap"}
+              >
+                <Grid item xs={6} md={6}>
+                  <StaticDatePickerLandscape />
+                </Grid>
+                <Grid item xs={6} md={6}>
+                  <TodoForm></TodoForm>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item height={"100%"} xs={6} md={6}>
+              <TodoList></TodoList>
+            </Grid>
+          </Grid>
+        </Board>
       </div>
     </AppContextProvider>
   );

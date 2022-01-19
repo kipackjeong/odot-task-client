@@ -1,6 +1,5 @@
 import React, { Dispatch } from "react";
 import AppContextInterface from "./app-context.interface";
-import { IState } from "../interfaces/interfaces";
 
 const defaultValue: AppContextInterface = {
   state: {

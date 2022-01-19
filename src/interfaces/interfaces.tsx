@@ -8,16 +8,12 @@ export interface IUser {
   name: string;
 }
 export interface ITodo {
-  title: string;
-  description: string;
+  id?: string;
+  title?: string;
   modifiedAt?: Date;
   priority?: Priority;
 }
 
-export interface IState {
-  user: IUser;
-  todos: ITodo[];
-}
 export interface IStateAction {
   type: string;
   payload: any;
@@ -28,7 +24,7 @@ export interface ItemAction extends IStateAction {
   value: any;
 }
 
-interface IReducer<T> {
-  (state: IState, action: IStateAction): IState;
+interface IReducer<T = any> {
+  (state: T & T[], action: IStateAction): T | T[];
 }
 export default IReducer;

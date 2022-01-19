@@ -3,11 +3,11 @@ import { IStateAction, ITodo } from "../interfaces/interfaces";
 export enum ItemActionType {
   FetchAll = "ALL",
   AddItem = "ADD",
+  UpdateItem = "UPDATE",
   RemoveItem = "REMOVE",
-  DeleteItem = "DELETE",
 }
 
-export const { FetchAll, AddItem, RemoveItem, DeleteItem } = ItemActionType;
+export const { FetchAll, AddItem, RemoveItem, UpdateItem } = ItemActionType;
 
 export const fetchAllAction = (todos: ITodo): IStateAction => {
   return {

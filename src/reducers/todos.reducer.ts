@@ -1,18 +1,36 @@
-import IReducer, {
-  ITodo,
-  IState,
-  IStateAction,
-} from "../interfaces/interfaces";
-import { ItemActionType } from "../actions/itemActions";
+import IReducer, { ITodo, IStateAction } from "../interfaces/interfaces";
+import {
+  FetchAll,
+  AddItem,
+  RemoveItem,
+  UpdateItem,
+} from "../actions/itemActions";
 
-let toDosReducer: IReducer<ITodo>;
-toDosReducer = function (state: IState, action: IStateAction): IState {
-  const newState = { ...state };
-  switch (action.type) {
-    case ItemActionType.FetchAll:
-      newState.todos = [...state.todos, ...action.payload];
+let todosReducer: IReducer<ITodo>;
+todosReducer = function (state: ITodo[], action: IStateAction): ITodo[] {
+  const { type, payload } = action;
+  let newTodos = [...state];
+  let index;
+  switch (type) {
+    case FetchAll:
+      newTodos = [...payload];
+      break;
+    case AddItem:
+      newTodos.push(payload);
+      break;
+    case RemoveItem:
+      index = newTodos.findIndex((todo) => todo.id === payload);
+      newTodos.splice(index, 1);
+      break;
+    case UpdateItem:
+      index = newTodos.findIndex((todo) => todo.id === payload.id);
+      const newTodo = { ...newTodos[index], ...payload.todo };
+      newTodos.splice(index, 1, newTodo);
+      break;
+    default:
+      break;
   }
-  return newState;
+  return newTodos;
 };
 
-export default toDosReducer;
+export default todosReducer;

@@ -1,16 +1,23 @@
-import { Button, FormControl, TextField } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  Grid,
+  TextField,
+  ThemeProvider,
+} from "@mui/material";
 import React, { SyntheticEvent, useContext, useState } from "react";
-import todoFormStyle from "./ToDoFormStyle.module.css";
+import todoFormStyle from "./TodoFormStyle.module.css";
 import axios from "axios";
 import AppCtx from "../../context/app-context";
 import { addItemAction } from "../../actions/itemActions";
 import { ITodo } from "../../interfaces/interfaces";
+import DateSelector from "../Calendar/DateSelector";
 
-function ToDoInput(props: any) {
+function TodoInput(props: any) {
   return (
     <>
       <TextField
-        id="standard-basic"
+        color="success"
         label="What To Do?"
         variant="standard"
         value={props.value}
@@ -21,7 +28,7 @@ function ToDoInput(props: any) {
   );
 }
 
-function ToDoForm() {
+function TodoForm() {
   const [title, setTitle] = useState("");
   const [typed, setTyped] = useState(false);
   const { dispatch } = useContext(AppCtx);
@@ -53,19 +60,40 @@ function ToDoForm() {
   const inputError: boolean = title.trim() === "" && typed ? true : false;
 
   return (
-    <div className={todoFormStyle.form}>
-      <FormControl fullWidth margin={"dense"} component="fieldset">
+    <Grid
+      container
+      height={"100%"}
+      direction={"column"}
+      justifyContent={"center"}
+      alignItems={"center"}
+    >
+      <FormControl
+        className={todoFormStyle["form-control"]}
+        fullWidth
+        margin={"dense"}
+        component="fieldset"
+      >
         <form onSubmit={onSubmitHandler}>
-          <ToDoInput
-            fullWidth
-            value={title}
-            onChange={onChangeHandler}
-            error={inputError}
-          ></ToDoInput>
-          <Button type="submit">button</Button>
+          <Grid md>
+            <TodoInput
+              fullWidth
+              value={title}
+              onChange={onChangeHandler}
+              error={inputError}
+            ></TodoInput>
+          </Grid>
+          <Grid md>
+            <DateSelector />
+          </Grid>
+          <Grid md>
+            <Button variant="outlined" type="submit">
+              {" "}
+              Save{" "}
+            </Button>
+          </Grid>
         </form>
       </FormControl>
-    </div>
+    </Grid>
   );
 }
-export default ToDoForm;
+export default TodoForm;

@@ -1,0 +1,10 @@
+.board {
+  margin-top: 8vh;
+  width: 80vw;
+  height: 85vh;
+
+  text-align: center;
+  display: flex;
+
+  background-color: none;
+}

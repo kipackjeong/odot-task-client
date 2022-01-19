@@ -1,11 +1,10 @@
 import AppCtx from "./app-context";
 import React, { useEffect, useReducer } from "react";
 import AppContextInterface from "./app-context.interface";
-import { IState, IStateAction } from "../interfaces/interfaces";
+import { IStateAction } from "../interfaces/interfaces";
 import axios from "axios";
 import { fetchAllAction } from "../actions/itemActions";
-
-const appReducer = (state: IState, action: IStateAction): IState => {};
+import combinedReducer from "../reducers/combine.reducer";
 
 const defaultContext: AppContextInterface = {
   state: {
@@ -20,7 +19,7 @@ const defaultContext: AppContextInterface = {
 function AppContextProvider(props: any) {
   const children = props.children;
 
-  const [state, dispatch] = useReducer(appReducer, defaultContext.state);
+  const [state, dispatch] = useReducer(combinedReducer, defaultContext.state);
 
   useEffect(() => {
     async function fetchData(): Promise<void> {

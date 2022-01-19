@@ -1,8 +1,8 @@
 import { Dispatch } from "react";
-import { IState, IStateAction } from "../interfaces/interfaces";
+import { IStateAction } from "../interfaces/interfaces";
 
 interface AppContextInterface {
-  state: IState;
+  state: any;
   dispatch: Dispatch<IStateAction>;
 }
 

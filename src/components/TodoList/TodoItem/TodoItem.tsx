@@ -1,5 +1,5 @@
 import React from "react";
-import toDoListStyle from "../ToDoList.module.css";
+import todoListStyle from "../TodoList.module.css";
 import IconButton from "@mui/material/IconButton";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -7,25 +7,27 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 
-function ToDoItem(props: any) {
-  const { toDo, checked, checkToggle } = props;
-  const labelId = `checkbox-list-label-${toDo.id}`;
+function todoItem(props: any) {
+  const columnWidth = "100px";
+
+  const { todo, checked, checkToggle } = props;
+  const labelId = `checkbox-list-label-${todo.id}`;
   return (
     <ListItem
-      key={toDo.id}
-      className={toDoListStyle["list-item"]}
+      key={todo.id}
+      className={todoListStyle["list-item"]}
       secondaryAction={
         <IconButton edge="end" aria-label="comments"></IconButton>
       }
       disablePadding
     >
       <ListItemButton
-        sx={{ textAlign: "center" }}
+        sx={{ padding: 0, textAlign: "center" }}
         role={undefined}
-        onClick={checkToggle(toDo)}
+        onClick={checkToggle(todo)}
         dense
       >
-        <ListItemIcon sx={{ columnWidth: "10rem" }}>
+        <ListItemIcon sx={{ columnWidth }}>
           <Checkbox
             edge="start"
             checked={checked}
@@ -35,24 +37,20 @@ function ToDoItem(props: any) {
           />
         </ListItemIcon>
         <ListItemText
-          sx={{ columnWidth: "10rem" }}
+          sx={{ columnWidth }}
           id={labelId}
-          primary={`${toDo.title}`}
+          primary={`${todo.task}`}
+        />
+
+        <ListItemText
+          sx={{ columnWidth }}
+          id={labelId}
+          primary={`${todo.dueDate}`}
         />
         <ListItemText
-          sx={{ columnWidth: "10rem" }}
+          sx={{ columnWidth }}
           id={labelId}
-          primary={`${toDo.description}`}
-        />
-        <ListItemText
-          sx={{ columnWidth: "10rem" }}
-          id={labelId}
-          primary={`${toDo.dueDate}`}
-        />
-        <ListItemText
-          sx={{ columnWidth: "10rem" }}
-          id={labelId}
-          primary={`${toDo.priority}`}
+          primary={`${todo.priority}`}
         />
         {/*  */}
       </ListItemButton>
@@ -60,4 +58,4 @@ function ToDoItem(props: any) {
   );
 }
 
-export default ToDoItem;
+export default todoItem;
