@@ -5,6 +5,7 @@ import {
   RemoveItem,
   UpdateItem,
 } from "../actions/itemActions";
+import ReadTodo from "../models/read-todo";
 
 const fetchAllItems = (newTodos: ITodo[], items: ITodo[]) => {
   newTodos = [...items];
@@ -15,9 +16,11 @@ const addNewItem = (newTodos: ITodo[], item: ITodo) => {
   newTodos.push(item);
 };
 
-const removeItem = (newTodos: ITodo[], todoIdxsToRemove: number[]) => {
-  for (var idx of todoIdxsToRemove) {
-    newTodos.splice(idx, 1);
+const removeItem = (newTodos: ITodo[], todoIds: string[]) => {
+  for (var i = 0; i < todoIds.length; i++) {
+    newTodos = newTodos.filter((newTodo) => {
+      return todoIds.includes(newTodo.id || "");
+    });
   }
   return newTodos;
 };
@@ -35,7 +38,8 @@ todosReducer = function (state: ITodo[], action: IStateAction): ITodo[] {
       addNewItem(newTodos, payload);
       break;
     case RemoveItem:
-      newTodos = removeItem(newTodos, payload);
+      const todoIds: string[] = payload;
+      newTodos = removeItem(newTodos, todoIds);
       break;
     case UpdateItem:
       index = newTodos.findIndex((todo) => todo.id === payload.id);

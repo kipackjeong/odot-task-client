@@ -1,5 +1,5 @@
 import AppCtx from "./app-context";
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import AppContextInterface from "./app-context.interface";
 import { IStateAction } from "../interfaces/interfaces";
 import axios from "axios";
@@ -20,14 +20,6 @@ function AppContextProvider(props: any) {
   const children = props.children;
 
   const [state, dispatch] = useReducer(combinedReducer, defaultContext.state);
-
-  useEffect(() => {
-    async function fetchData(): Promise<void> {
-      const response = await axios.get("http://localhost:3000/items");
-      dispatch(fetchAllAction(response.data.data));
-    }
-    fetchData();
-  }, []);
 
   return (
     <AppCtx.Provider value={{ state, dispatch }}>{children}</AppCtx.Provider>

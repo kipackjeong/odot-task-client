@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import appStyle from "./App.module.css";
 import TodoList from "./components/TodoList/TodoList";
 import TodoForm from "./components/TodoForm/TodoForm";
-import AppCtx from "./context/app-context";
-import AppContextInterface from "./context/app-context.interface";
 import AppContextProvider from "./context/app-context.provider";
 import Board from "./components/UI/Board";
-import StaticDatePickerLandscape from "./components/Calendar/Calendar";
-import { Grid } from "@mui/material";
+import Calendar from "./components/Calendar/Calendar";
+import { Divider, Grid } from "@mui/material";
+import TodoListTwo from "./components/TodoList/TodoListTwo";
 
 function App() {
   return (
@@ -17,8 +16,8 @@ function App() {
           <Grid container paddingY={2} spacing={1}>
             <Grid
               item
-              xs={6}
-              md={6}
+              xs={4}
+              md={4}
               display="flex"
               flexDirection="column"
               justifyContent={"center"}
@@ -33,19 +32,27 @@ function App() {
                 alignItems={"center"}
                 flexWrap={"nowrap"}
               >
-                <Grid item xs={6} md={6}>
-                  <StaticDatePickerLandscape />
+                <Grid item xs={12} md={12}>
+                  <Calendar />
                 </Grid>
-                <Grid item xs={6} md={6}>
+                <Grid item xs={12} md={12}>
                   <TodoForm></TodoForm>
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item height={"100%"} xs={6} md={6}>
-              <TodoList></TodoList>
+            <Grid item xs md>
+              {/* <TodoList></TodoList> */}
+              <TodoListTwo></TodoListTwo>
             </Grid>
           </Grid>
         </Board>
+
+        {
+          //TODO: Make references component
+        }
+        <a href="https://www.flaticon.com/free-icons/tick" title="tick icons">
+          Tick icons created by Alfredo Hernandez - Flaticon
+        </a>
       </div>
     </AppContextProvider>
   );

@@ -1,36 +1,46 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import TodoItem from "./TodoItem/TodoItem";
 import todoListStyle from "./TodoList.module.css";
-import { List } from "@mui/material";
+import { List, ScopedCssBaseline } from "@mui/material";
 import AppCtx from "../../context/app-context";
 import ListHead from "./ListHead/ListHead";
-import { ITodo } from "../../interfaces/interfaces";
-import { removeItemsAction } from "../../actions/itemActions";
+import { fetchAllAction, removeItemsAction } from "../../actions/itemActions";
+import todoApi from "../../api/todoApi";
+import ReadTodo from "../../models/read-todo";
 
 function TodoList(props: any) {
-  const ctx = useContext(AppCtx);
-  const { todos } = ctx.state;
+  // Context
+  const { state, dispatch } = useContext(AppCtx);
+  const { todos } = state;
 
-  const defaultChecked: number[] = useMemo(() => {
+  // States
+  const defaultChecked: string[] = useMemo(() => {
     return [];
   }, []);
   const [checked, setChecked] = React.useState(defaultChecked);
-  const [isLoading, setIsLoading] = useState(todos.length === 0);
+  const [isLoading, setIsLoading] = useState(false);
 
+  //
   useEffect(() => {
-    if (todos.length !== 0) {
-      setIsLoading(false);
-    } else {
+    async function fetchData(): Promise<void> {
       setIsLoading(true);
+      const newTodos = await todoApi.getAllTodos();
+      dispatch(fetchAllAction(newTodos));
+      setIsLoading(false);
     }
-  }, [todos]);
 
-  const handleCheckToggle = (index: number) => () => {
-    const currentIndex = checked.indexOf(index);
+    if (checked.length === 0) {
+      fetchData();
+    }
+  }, [checked, dispatch]);
+
+  // Handlers
+  const handleCheckToggle = (todoId: string) => () => {
+    const currentIndex = checked.indexOf(todoId);
     const newChecked = [...checked];
 
     if (currentIndex === -1) {
-      newChecked.push(index);
+      newChecked.push(todoId);
     } else {
       newChecked.splice(currentIndex, 1);
     }
@@ -38,15 +48,21 @@ function TodoList(props: any) {
     setChecked(newChecked);
   };
 
-  const handleDone = () => {
-    ctx.dispatch(removeItemsAction(checked));
-    setChecked(defaultChecked);
-  };
-  const handleRemove = () => {
-    ctx.dispatch(removeItemsAction(checked));
-    setChecked(defaultChecked);
+  const handleDone = () => {};
+
+  const handleRemove = async () => {
+    dispatch(removeItemsAction(checked));
+    if (checked.length > 1) {
+      await todoApi.deleteMultipleTodos(checked);
+    } else if (checked.length === 1) {
+      await todoApi.deleteTodo(checked[0]);
+    } else {
+      return;
+    }
+    setChecked([]);
   };
 
+  // Subs
   const Loading = () => {
     return <div>isLoading..</div>;
   };
@@ -54,25 +70,22 @@ function TodoList(props: any) {
   return isLoading ? (
     <Loading />
   ) : (
-    <List
-      sx={{
-        width: "100%",
-        height: "92%",
-        overflowY: "scroll",
-        bgcolor: "background.paper",
-        display: "flex",
-        flexDirection: "column",
-        alignContent: "center",
-      }}
-    >
-      <ListHead showDoneButton={checked.length !== 0} onRemove={handleDone} />
-      {todos.map((todo: ITodo, idx: number) => {
+    <List sx={{ bgcolor: "background.paper" }} className={todoListStyle.list}>
+      {
+        //TODO: implement onDone
+      }
+      <ListHead
+        showDoneButton={checked.length !== 0}
+        onRemove={handleRemove}
+        onDone={handleDone}
+      />
+      {todos.map((todo: ReadTodo) => {
         return (
           <TodoItem
+            key={todo.id}
             todo={todo}
-            idx={idx}
             checkToggle={handleCheckToggle}
-            checked={checked.indexOf(idx) !== -1}
+            checked={checked.indexOf(todo.id) !== -1}
           />
         );
       })}

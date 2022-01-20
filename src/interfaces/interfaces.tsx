@@ -9,12 +9,11 @@ export interface IUser {
 }
 export interface ITodo {
   id?: string;
-  task?: string;
-  createdAt?: Date;
-  modifiedAt?: Date;
-  dueDate?: Date;
+  task: string;
   priority?: Priority;
+  done?: boolean;
 }
+
 export interface IStateAction {
   type: string;
   payload: any;

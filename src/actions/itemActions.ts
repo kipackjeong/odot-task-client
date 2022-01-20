@@ -21,10 +21,10 @@ export const addItemAction = (todo: ITodo): IStateAction => {
     payload: todo,
   };
 };
-export const removeItemsAction = (todosIdxToRemove: number[]): IStateAction => {
+export const removeItemsAction = (todosIdsToRemove: string[]): IStateAction => {
   return {
     type: RemoveItem,
-    payload: todosIdxToRemove,
+    payload: todosIdsToRemove,
   };
 };
 export const updateItemAction = (todo: ITodo): IStateAction => {

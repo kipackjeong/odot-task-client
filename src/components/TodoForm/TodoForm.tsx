@@ -1,12 +1,13 @@
 import { Button, FormControl, Grid, TextField } from "@mui/material";
 import React, { SyntheticEvent, useContext, useState } from "react";
 import todoFormStyle from "./TodoFormStyle.module.css";
-import axios from "axios";
 import AppCtx from "../../context/app-context";
 import { addItemAction } from "../../actions/itemActions";
-import { ITodo } from "../../interfaces/interfaces";
 import DateSelector from "../Calendar/DateSelector";
 import { isEmpty } from "../../utilities/validation.utility";
+import todoApi from "../../api/todoApi";
+import CreateTodo from "../../models/create-todo";
+import ReadTodo from "../../models/read-todo";
 
 function TodoInput(props: any) {
   return (
@@ -42,15 +43,13 @@ function TodoForm() {
       return;
     }
 
-    let creatingTodo: ITodo = {
+    let creatingTodo: CreateTodo = {
       task: task,
     };
 
-    const response = await axios.post(
-      "http://localhost:3000/items",
+    const createdTodoFromServer: ReadTodo = await todoApi.createTodo(
       creatingTodo
     );
-    const createdTodoFromServer: ITodo = response.data.data;
 
     dispatch(addItemAction(createdTodoFromServer));
     setTask("");
@@ -74,7 +73,7 @@ function TodoForm() {
         component="fieldset"
       >
         <form onSubmit={onSubmitHandler}>
-          <Grid md>
+          <Grid item md>
             <TodoInput
               fullWidth
               value={task}
@@ -82,10 +81,10 @@ function TodoForm() {
               error={inputError}
             ></TodoInput>
           </Grid>
-          <Grid md>
+          <Grid item md>
             <DateSelector />
           </Grid>
-          <Grid md>
+          <Grid item md>
             <Button variant="outlined" type="submit">
               Save
             </Button>
