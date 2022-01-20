@@ -1,10 +1,4 @@
-import {
-  Button,
-  FormControl,
-  Grid,
-  TextField,
-  ThemeProvider,
-} from "@mui/material";
+import { Button, FormControl, Grid, TextField } from "@mui/material";
 import React, { SyntheticEvent, useContext, useState } from "react";
 import todoFormStyle from "./TodoFormStyle.module.css";
 import axios from "axios";
@@ -56,7 +50,7 @@ function TodoForm() {
       "http://localhost:3000/items",
       creatingTodo
     );
-    const createdTodoFromServer = response.data.data;
+    const createdTodoFromServer: ITodo = response.data.data;
 
     dispatch(addItemAction(createdTodoFromServer));
     setTask("");

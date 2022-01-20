@@ -6,6 +6,22 @@ import {
   UpdateItem,
 } from "../actions/itemActions";
 
+const fetchAllItems = (newTodos: ITodo[], items: ITodo[]) => {
+  newTodos = [...items];
+  return newTodos;
+};
+
+const addNewItem = (newTodos: ITodo[], item: ITodo) => {
+  newTodos.push(item);
+};
+
+const removeItem = (newTodos: ITodo[], todoIdxsToRemove: number[]) => {
+  for (var idx of todoIdxsToRemove) {
+    newTodos.splice(idx, 1);
+  }
+  return newTodos;
+};
+
 let todosReducer: IReducer<ITodo>;
 todosReducer = function (state: ITodo[], action: IStateAction): ITodo[] {
   const { type, payload } = action;
@@ -13,14 +29,13 @@ todosReducer = function (state: ITodo[], action: IStateAction): ITodo[] {
   let index;
   switch (type) {
     case FetchAll:
-      newTodos = [...payload];
+      newTodos = fetchAllItems(newTodos, payload);
       break;
     case AddItem:
-      newTodos.push(payload);
+      addNewItem(newTodos, payload);
       break;
     case RemoveItem:
-      index = newTodos.findIndex((todo) => todo.id === payload);
-      newTodos.splice(index, 1);
+      newTodos = removeItem(newTodos, payload);
       break;
     case UpdateItem:
       index = newTodos.findIndex((todo) => todo.id === payload.id);

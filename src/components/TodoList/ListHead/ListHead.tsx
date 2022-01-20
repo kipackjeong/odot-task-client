@@ -5,9 +5,11 @@ import {
   ListItemText,
 } from "@mui/material";
 import todoListStyle from "../TodoList.module.css";
+import DeleteButton from "./DeleteButton";
 
-function ListHead() {
+function ListHead(props: any) {
   const columnWidth = "100px";
+
   return (
     <ListItem
       className={todoListStyle["list-head"]}
@@ -17,7 +19,12 @@ function ListHead() {
       }
       disablePadding
     >
-      <ListItemIcon sx={{ columnWidth }}></ListItemIcon>
+      <ListItemIcon sx={{ columnWidth }}>
+        <DeleteButton
+          showButton={props.showDoneButton}
+          onSubmit={props.onRemove}
+        ></DeleteButton>
+      </ListItemIcon>
       <ListItemText
         sx={{ textAlign: "center", columnWidth }}
         id={"header1"}

@@ -15,7 +15,6 @@ export interface ITodo {
   dueDate?: Date;
   priority?: Priority;
 }
-
 export interface IStateAction {
   type: string;
   payload: any;

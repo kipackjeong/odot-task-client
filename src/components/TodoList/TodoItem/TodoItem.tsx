@@ -10,8 +10,9 @@ import Checkbox from "@mui/material/Checkbox";
 function todoItem(props: any) {
   const columnWidth = "100px";
 
-  const { todo, checked, checkToggle } = props;
+  const { todo, checked, checkToggle, idx } = props;
   const labelId = `checkbox-list-label-${todo.id}`;
+
   return (
     <ListItem
       key={todo.id}
@@ -24,7 +25,7 @@ function todoItem(props: any) {
       <ListItemButton
         sx={{ padding: 0, textAlign: "center" }}
         role={undefined}
-        onClick={checkToggle(todo)}
+        onClick={checkToggle(idx)}
         dense
       >
         <ListItemIcon sx={{ columnWidth }}>
