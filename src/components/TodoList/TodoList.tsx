@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import TodoItem from "./TodoItem/TodoItem";
 import todoListStyle from "./TodoList.module.css";
-import { Backdrop, List, Paper } from "@mui/material";
+import { List } from "@mui/material";
 import AppCtx from "../../context/app-context";
 import ListHead from "./ListHead/ListHead";
 

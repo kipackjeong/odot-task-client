@@ -21,7 +21,7 @@ function ListHead() {
       <ListItemText
         sx={{ textAlign: "center", columnWidth }}
         id={"header1"}
-        primary={"Title"}
+        primary={"Task"}
       />
 
       <ListItemText

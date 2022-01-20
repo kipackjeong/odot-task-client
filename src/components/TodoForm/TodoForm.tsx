@@ -12,6 +12,7 @@ import AppCtx from "../../context/app-context";
 import { addItemAction } from "../../actions/itemActions";
 import { ITodo } from "../../interfaces/interfaces";
 import DateSelector from "../Calendar/DateSelector";
+import { isEmpty } from "../../utilities/validation.utility";
 
 function TodoInput(props: any) {
   return (
@@ -29,35 +30,40 @@ function TodoInput(props: any) {
 }
 
 function TodoForm() {
-  const [title, setTitle] = useState("");
-  const [typed, setTyped] = useState(false);
   const { dispatch } = useContext(AppCtx);
+
+  const [task, setTask] = useState("");
+  const [typed, setTyped] = useState(false);
 
   const onChangeHandler = (event: SyntheticEvent) => {
     const target = event.target as HTMLInputElement;
-    setTitle(target.value);
+    setTask(target.value);
     setTyped(true);
   };
   const onSubmitHandler = async (event: SyntheticEvent) => {
     event.preventDefault();
 
+    if (!isEmpty(task)) {
+      setTyped(true);
+      return;
+    }
+
     let creatingTodo: ITodo = {
-      title: title,
+      task: task,
     };
+
     const response = await axios.post(
       "http://localhost:3000/items",
       creatingTodo
     );
-
     const createdTodoFromServer = response.data.data;
-    console.log(response.data);
-    console.log(createdTodoFromServer);
+
     dispatch(addItemAction(createdTodoFromServer));
-    setTitle("");
+    setTask("");
     setTyped(false);
   };
 
-  const inputError: boolean = title.trim() === "" && typed ? true : false;
+  const inputError: boolean = task.trim() === "" && typed ? true : false;
 
   return (
     <Grid
@@ -77,7 +83,7 @@ function TodoForm() {
           <Grid md>
             <TodoInput
               fullWidth
-              value={title}
+              value={task}
               onChange={onChangeHandler}
               error={inputError}
             ></TodoInput>
@@ -87,8 +93,7 @@ function TodoForm() {
           </Grid>
           <Grid md>
             <Button variant="outlined" type="submit">
-              {" "}
-              Save{" "}
+              Save
             </Button>
           </Grid>
         </form>

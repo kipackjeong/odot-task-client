@@ -9,8 +9,10 @@ export interface IUser {
 }
 export interface ITodo {
   id?: string;
-  title?: string;
+  task?: string;
+  createdAt?: Date;
   modifiedAt?: Date;
+  dueDate?: Date;
   priority?: Priority;
 }
 
