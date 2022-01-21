@@ -1,0 +1,23 @@
+.list {
+  width: 100%;
+  height: 95%;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.list::-webkit-scrollbar {
+  display: none;
+}
+
+.list-item {
+  padding-right: 0px;
+}
+
+.list-head {
+  text-align: center;
+}
