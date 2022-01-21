@@ -6,20 +6,17 @@ import axios from "axios";
 import { fetchAllAction } from "../actions/itemActions";
 import combinedReducer from "../reducers/combine.reducer";
 
-const defaultContext: AppContextInterface = {
-  state: {
-    user: {
-      name: "Kipack Jeong",
-    },
-    todos: [],
+const defaultState = {
+  user: {
+    name: "Kipack Jeong",
   },
-  dispatch: (action: IStateAction) => {},
+  todos: [],
 };
 
 function AppContextProvider(props: any) {
   const children = props.children;
 
-  const [state, dispatch] = useReducer(combinedReducer, defaultContext.state);
+  const [state, dispatch] = useReducer(combinedReducer, defaultState);
 
   return (
     <AppCtx.Provider value={{ state, dispatch }}>{children}</AppCtx.Provider>

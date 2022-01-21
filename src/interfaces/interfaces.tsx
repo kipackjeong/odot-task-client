@@ -11,7 +11,7 @@ export interface ITodo {
   id?: string;
   task: string;
   priority?: Priority;
-  done?: boolean;
+  completed?: boolean;
 }
 
 export interface IStateAction {
@@ -21,7 +21,7 @@ export interface IStateAction {
 
 export interface ItemAction extends IStateAction {
   type: string;
-  value: any;
+  payload: any;
 }
 
 interface IReducer<T = any> {
