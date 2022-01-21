@@ -20,6 +20,7 @@ function todoItem(props: any) {
     <TableRow key={todo.id}>
       <StyledTableCell>
         <Checkbox
+          aria-label={labelId}
           edge="start"
           checked={checked}
           tabIndex={-1}
@@ -30,13 +31,13 @@ function todoItem(props: any) {
           }}
         />
       </StyledTableCell>
-      <StyledTableCell width={"40%"} align="left">
+      <StyledTableCell width={"40%"} align="center">
         {todo.task}
       </StyledTableCell>
-      <StyledTableCell width={"10%"} align="left">
+      <StyledTableCell width={"10%"} align="center">
         {todo.priority}
       </StyledTableCell>
-      <StyledTableCell width={"30%"} align="left">
+      <StyledTableCell width={"30%"} align="center">
         {todo.dueDate}
       </StyledTableCell>
     </TableRow>

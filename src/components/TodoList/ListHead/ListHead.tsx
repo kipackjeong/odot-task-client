@@ -1,17 +1,10 @@
 import {
   Checkbox,
-  IconButton,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   styled,
   TableCell,
   tableCellClasses,
   TableRow,
 } from "@mui/material";
-import todoListStyle from "../TodoList.module.css";
-import DeleteButton from "./DeleteButton";
-import DoneButton from "./DoneButton";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -24,20 +17,30 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 function ListHead(props: any) {
+  // props
+  const { onCheckToggle, checked } = props;
+
   return (
     <TableRow>
       <StyledTableCell align="left">
         <Checkbox
           edge="start"
-          checked={false}
+          checked={checked}
           tabIndex={-1}
           disableRipple
           inputProps={{ "aria-labelledby": "1215125" }}
+          onClick={onCheckToggle}
         />
       </StyledTableCell>
-      <StyledTableCell align="left">Task</StyledTableCell>
-      <StyledTableCell align="left">Priority</StyledTableCell>
-      <StyledTableCell align="left">Due</StyledTableCell>
+      <StyledTableCell width="40%" align="center">
+        Task
+      </StyledTableCell>
+      <StyledTableCell width="10%" align="center">
+        Priority
+      </StyledTableCell>
+      <StyledTableCell width="30%" align="center">
+        Due
+      </StyledTableCell>
     </TableRow>
   );
 }
