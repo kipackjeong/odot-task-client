@@ -2,6 +2,7 @@ import axios from "axios";
 import { ITodo } from "../interfaces/interfaces";
 import CreateTodo from "../models/create-todo";
 import ReadTodo from "../models/read-todo";
+import UpdateTodo from "../models/update-todo";
 
 class TodoApi {
   url = "http://localhost:3000/items/";
@@ -30,8 +31,8 @@ class TodoApi {
     const response = await axios.put(this.url + id, updatingItem);
   };
 
-  updateMultipleTodos = async (todoIds: string[]) => {
-    await axios.put(this.url, { data: todoIds });
+  updateMultipleTodos = async (updateTodos?: UpdateTodo[]) => {
+    await axios.put(this.url, { data: updateTodos });
   };
 
   deleteTodo = async (todoId: string) => {

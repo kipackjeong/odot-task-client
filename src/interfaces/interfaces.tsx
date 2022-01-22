@@ -26,11 +26,6 @@ export interface TodosAction extends IStateAction {
   payload: any;
 }
 
-export interface UpdateTodoDataObject {
-  todoId: string;
-  updateTodo: UpdateTodo;
-}
-
 interface IReducer<T = any> {
   (state: T & T[] & any, action: IStateAction): T | T[];
 }

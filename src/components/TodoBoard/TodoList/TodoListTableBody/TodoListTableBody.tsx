@@ -8,26 +8,34 @@ type TodoListTableBodyProps = {
   todos: ReadTodo[];
   checkBoxColor: string;
   fontSize: string;
-  handleCheckToggle: Function;
+  onCheckToggle: Function;
   checkedItemIds: string[];
+  onUpdate: Function;
 };
 
 const TodoListTableBody = (props: TodoListTableBodyProps) => {
   // todos here can be either completed or incompleted.
-  const { todos, checkBoxColor, checkedItemIds, fontSize, handleCheckToggle } =
-    props;
+  const {
+    todos,
+    checkBoxColor,
+    checkedItemIds,
+    fontSize,
+    onCheckToggle,
+    onUpdate,
+  } = props;
   console.log(todos);
   return (
     <TableBody>
       {todos.map((todo: ReadTodo, idx: number) => (
         <TodoItem
           key={todo.id}
+          fontSize={fontSize}
           time={idx * 500}
           todo={todo}
-          fontSize={fontSize}
-          checkBoxColor={checkBoxColor}
-          onCheckToggle={handleCheckToggle}
           checked={checkedItemIds.indexOf(todo.id) !== -1}
+          checkBoxColor={checkBoxColor}
+          onCheckToggle={onCheckToggle}
+          onUpdate={onUpdate}
         />
       ))}
     </TableBody>

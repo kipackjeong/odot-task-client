@@ -44,6 +44,7 @@ export default function TodoList(props: TodoListProperty) {
     handleAllCheckToggle,
     handleCheckToggle,
     handleListTypeToggle,
+    handleUpdate,
   } = useTodoList(
     inCompTodos,
     compTodos,
@@ -85,8 +86,9 @@ export default function TodoList(props: TodoListProperty) {
             }
             fontSize={itemFontSize}
             checkBoxColor={checkBoxColor}
-            handleCheckToggle={handleCheckToggle}
+            onCheckToggle={handleCheckToggle}
             checkedItemIds={checkedItemIds}
+            onUpdate={handleUpdate}
           />
         </Table>
       </TableContainer>

@@ -11,6 +11,8 @@ import {
 import { LocalizationProvider, MobileDateTimePicker } from "@mui/lab";
 import DateSelector from "../../Calendar/DateSelector";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import ReadTodo from "../../../../models/read-todo";
+import UpdateTodo from "../../../../models/update-todo";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -22,10 +24,20 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+type TodoItemProps = {
+  todo: ReadTodo;
+  checked: boolean;
+  fontSize: string;
+  checkBoxColor: string;
+  onCheckToggle: Function;
+  onUpdate: Function;
+};
 function TodoItem(props: any) {
   // props
-  const { time, todo, checked, fontSize, onCheckToggle, checkBoxColor } = props;
-  // ANCHOR state;
+  const { todo, checked, fontSize, onCheckToggle, checkBoxColor, onUpdate } =
+    props;
+
+  // ANCHOR state
   const [dueDate, setDueDate] = useState(todo.dueDate);
   const [dateFormat, setDateFormat] = useState("MM/dd");
   const labelId = `checkbox-list-label-${todo.id}`;
@@ -45,9 +57,19 @@ function TodoItem(props: any) {
       setDateFormat("MM/yyyy");
     }
   }, []);
+  useEffect(() => {
+    console.log("setDueDate");
+    setDueDate(todo.dueDate);
+  }, [todo.dueDate]);
 
-  const onDueDateClick = (event: MouseEvent) => {
-    console.log(event.target);
+  // ANCHOR handlers
+  const handleDueDatePickerSave = (newDueDate: Date) => {
+    const updateTodo: UpdateTodo = new UpdateTodo(todo.id, {
+      dueDate: newDueDate,
+    });
+
+    setDueDate(newDueDate);
+    onUpdate(updateTodo);
   };
 
   return (
@@ -85,9 +107,11 @@ function TodoItem(props: any) {
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <MobileDateTimePicker
               value={dueDate}
-              onChange={(newValue) => {
-                setDueDate(newValue);
+              onAccept={handleDueDatePickerSave}
+              onClose={() => {
+                console.log("datepicker closed");
               }}
+              onChange={(date) => {}}
               onError={console.log}
               minDate={new Date("2018-01-01T00:00")}
               inputFormat={dateFormat}

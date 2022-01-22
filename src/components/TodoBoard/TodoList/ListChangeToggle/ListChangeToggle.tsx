@@ -40,8 +40,10 @@ const ListChangeToggle = (props: any) => {
         </IconButton>
       </div>
 
+      {
+        // FIXME MUI: A component is changing the default checked state of an uncontrolled SwitchBase after being initialized. To suppress this warning opt to use a controlled SwitchBase.
+      }
       <Switch
-        aria-label="listtype-toggler"
         defaultChecked={listType === TodoListType.Completed}
         color="success"
         onChange={onToggle}
