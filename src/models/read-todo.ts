@@ -4,9 +4,9 @@ export default class ReadTodo implements ITodo {
   constructor(
     public id: string,
     public task: string,
-    public createdAt: string,
-    public modifiedAt: string,
-    public dueDate: string,
+    public createdAt: Date,
+    public modifiedAt: Date,
+    public dueDate: Date,
     public priority: Priority,
     public completed: boolean
   ) {}

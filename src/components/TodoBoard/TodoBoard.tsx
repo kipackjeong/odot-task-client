@@ -14,9 +14,9 @@ export enum TodoListType {
 
 const TodoBoard = () => {
   // ANCHOR states
-  const [date, setDate] = useState<Date>(new Date(Date.now()));
+  const [listDate, setDate] = useState<Date>(new Date(Date.now()));
 
-  const [itemAdded, setItemAdded] = useState<boolean>(false);
+  const [isItemAdded, setIsItemAdded] = useState<boolean>(false);
 
   // ANCHOR handler
 
@@ -25,11 +25,11 @@ const TodoBoard = () => {
   };
 
   const handleSubmit = () => {
-    setItemAdded(true);
+    setIsItemAdded(true);
   };
 
-  const resetItemAddedAfteFetching = useCallback(() => {
-    setItemAdded(false);
+  const resetIsItemAddedAfteFetching = useCallback(() => {
+    setIsItemAdded(false);
   }, []);
 
   return (
@@ -55,7 +55,7 @@ const TodoBoard = () => {
             flexWrap={"nowrap"}
           >
             <Grid item xs={12} md={12}>
-              <Calendar date={date} onChange={handleCalendarDatePick} />
+              <Calendar date={listDate} onChange={handleCalendarDatePick} />
             </Grid>
             <Grid item xs={12} md={12}>
               <TodoForm onSubmit={handleSubmit}></TodoForm>
@@ -65,9 +65,9 @@ const TodoBoard = () => {
 
         <Grid height="100%" item xs md>
           <TodoList
-            date={date}
-            itemAdded={itemAdded}
-            resetItemAddedStatus={resetItemAddedAfteFetching}
+            date={listDate}
+            isItemAdded={isItemAdded}
+            afterFetching={resetIsItemAddedAfteFetching}
           ></TodoList>
         </Grid>
       </Grid>

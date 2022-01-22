@@ -7,9 +7,9 @@ import ReadTodo from "../models/read-todo";
 const useTodoList = (
   inCompTodos: ReadTodo[],
   compTodos: ReadTodo[],
-  itemAdded: boolean,
+  isItemAdded: boolean,
   date: Date,
-  resetAddItemStatus: Function,
+  afterFetching: Function,
   dispatch: Function
 ) => {
   // ANCHOR states
@@ -41,7 +41,7 @@ const useTodoList = (
           newTodos = await todoApi.getInCompletedTodos(date);
           setListChanged(false);
           dispatch(fetchAllAction(newTodos, TodoListType.Incompleted));
-          resetAddItemStatus();
+          afterFetching();
           break;
         default:
           break;
@@ -56,13 +56,13 @@ const useTodoList = (
     // if session has data, and if on incompleted list.
     if (listType === TodoListType.Incompleted) {
       // check if there should be any changes.
-      if (listChanged || itemAdded) {
+      if (listChanged || isItemAdded) {
         // there is a change then call api
         newTodos = await todoApi.getInCompletedTodos(date);
         // update session storage
         sessionStorage.setItem(sessionKey, JSON.stringify(newTodos));
         dispatch(fetchAllAction(newTodos, TodoListType.Incompleted));
-        resetAddItemStatus();
+        afterFetching();
         setListChanged(false);
       } else {
         // no change needed. get data from session.
@@ -90,7 +90,7 @@ const useTodoList = (
 
     setIsLoading(false);
 
-    // resets prop from TodoBoard,itemAdded to false.
+    // resets prop from TodoBoard,isItemAdded to false.
   };
 
   // useEffects
@@ -103,7 +103,7 @@ const useTodoList = (
   }, []);
   useEffect(() => {
     fetchData();
-  }, [listType, itemAdded, listChanged, doneListChanged]);
+  }, [listType, isItemAdded, listChanged, doneListChanged]);
 
   const handleAllCheckToggle = () => {
     // remove all check

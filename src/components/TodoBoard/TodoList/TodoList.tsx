@@ -19,13 +19,13 @@ import TodoListTableBody from "./TodoListTableBody/TodoListTableBody";
 
 type TodoListProperty = {
   date: Date;
-  itemAdded: boolean;
-  resetItemAddedStatus: Function;
+  isItemAdded: boolean;
+  afterFetching: Function;
 };
 
 export default function TodoList(props: TodoListProperty) {
   // ANCHOR props
-  const { date, itemAdded, resetItemAddedStatus } = props;
+  const { date, isItemAdded, afterFetching } = props;
 
   // ANCHOR context
   const ctx = useContext(AppCtx);
@@ -47,14 +47,17 @@ export default function TodoList(props: TodoListProperty) {
   } = useTodoList(
     inCompTodos,
     compTodos,
-    itemAdded,
+    isItemAdded,
     date,
-    resetItemAddedStatus,
+    afterFetching,
     dispatch
   );
 
   // ANCHOR styles
   const checkBoxColor = "success";
+  const itemFontSize = "1rem";
+  const headerFontSize = "1.0rem";
+
   return isLoading ? (
     <div>loading</div>
   ) : (
@@ -71,6 +74,7 @@ export default function TodoList(props: TodoListProperty) {
       <TableContainer className={todoListStyle.list}>
         <Table stickyHeader aria-label="sticky table">
           <TodoListTableHead
+            fontSize={headerFontSize}
             checkBoxColor={checkBoxColor}
             onCheckToggle={handleAllCheckToggle}
             checked={allChecked}
@@ -79,6 +83,7 @@ export default function TodoList(props: TodoListProperty) {
             todos={
               listType === TodoListType.Completed ? compTodos : inCompTodos
             }
+            fontSize={itemFontSize}
             checkBoxColor={checkBoxColor}
             handleCheckToggle={handleCheckToggle}
             checkedItemIds={checkedItemIds}
