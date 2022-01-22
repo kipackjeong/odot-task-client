@@ -34,12 +34,9 @@ const ListChangeToggle = (props: any) => {
           style={
             listType === TodoListType.Incompleted ? dynamicStyle : initialStyle
           }
+          onClick={onToggle}
         >
-          <CheckCircleOutlineIcon
-            color="disabled"
-            fontSize="large"
-            onClick={onToggle}
-          />
+          <CheckCircleOutlineIcon color="disabled" fontSize="large" />
         </IconButton>
       </div>
 
@@ -55,12 +52,9 @@ const ListChangeToggle = (props: any) => {
           style={
             listType === TodoListType.Completed ? dynamicStyle : initialStyle
           }
+          onClick={onToggle}
         >
-          <CheckCircleOutlineIcon
-            color="success"
-            fontSize="large"
-            onClick={onToggle}
-          />
+          <CheckCircleOutlineIcon color="success" fontSize="large" />
         </IconButton>
       </div>
     </div>
