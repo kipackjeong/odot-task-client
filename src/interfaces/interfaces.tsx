@@ -1,3 +1,5 @@
+import UpdateTodo from "../models/update-todo";
+
 export enum Priority {
   HIGH = 3,
   MEDIUM = 2,
@@ -19,9 +21,14 @@ export interface IStateAction {
   payload: any;
 }
 
-export interface ItemAction extends IStateAction {
+export interface TodosAction extends IStateAction {
   type: string;
   payload: any;
+}
+
+export interface UpdateTodoObject {
+  todoId: string;
+  updateTodo: UpdateTodo;
 }
 
 interface IReducer<T = any> {

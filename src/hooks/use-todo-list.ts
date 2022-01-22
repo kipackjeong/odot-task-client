@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { fetchAllAction } from "../actions/itemActions";
 import todoApi from "../api/todoApi";
 import { TodoListType } from "../components/TodoBoard/TodoBoard";
+import { UpdateTodoObject } from "../interfaces/interfaces";
 import ReadTodo from "../models/read-todo";
 
 const useTodoList = (
@@ -13,87 +14,14 @@ const useTodoList = (
   dispatch: Function
 ) => {
   // ANCHOR states
-  const defaultChecked: string[] = [];
-  const [checkedItemIds, setCheckedItemIds] = useState(defaultChecked);
+  const [checkedItemIds, setCheckedItemIds] = useState<string[]>([]);
+  const [toUpdateTodos, setToUpdateTodos] = useState<UpdateTodoObject[]>([]);
+
   const [allChecked, setAllChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [listType, setListType] = useState(TodoListType.Incompleted);
   const [listChanged, setListChanged] = useState(false);
   const [doneListChanged, setDoneListChanged] = useState(false);
-
-  // ANCHOR helpers
-  const fetchData = async (): Promise<void> => {
-    const sessionKey = `${date.toLocaleDateString()},${listType}`;
-    const todosFromSession: string | null = sessionStorage.getItem(sessionKey);
-    let newTodos;
-
-    // if session does not have data, doesn't matter if it's incompleted or completed list, need to fetch from api.
-    if (!todosFromSession) {
-      console.log("data is not in session");
-      switch (listType) {
-        case TodoListType.Completed:
-          newTodos = await todoApi.getCompletedTodos(date);
-          setDoneListChanged(false);
-          dispatch(fetchAllAction(newTodos, TodoListType.Completed));
-
-          break;
-        case TodoListType.Incompleted:
-          newTodos = await todoApi.getInCompletedTodos(date);
-          setListChanged(false);
-          dispatch(fetchAllAction(newTodos, TodoListType.Incompleted));
-          afterFetching();
-          break;
-        default:
-          break;
-      }
-
-      // update session storage
-      sessionStorage.setItem(sessionKey, JSON.stringify(newTodos));
-      setIsLoading(false);
-      return;
-    }
-
-    // if session has data, and if on incompleted list.
-    if (listType === TodoListType.Incompleted) {
-      // check if there should be any changes.
-      if (listChanged || isItemAdded) {
-        // there is a change then call api
-        newTodos = await todoApi.getInCompletedTodos(date);
-        // update session storage
-        sessionStorage.setItem(sessionKey, JSON.stringify(newTodos));
-        dispatch(fetchAllAction(newTodos, TodoListType.Incompleted));
-        afterFetching();
-        setListChanged(false);
-      } else {
-        // no change needed. get data from session.
-        const sessionData = JSON.parse(sessionStorage.getItem(sessionKey)!);
-        setListChanged(false);
-        dispatch(fetchAllAction(sessionData, TodoListType.Incompleted));
-      }
-    }
-
-    // if session has data, and if on completed list.
-    if (listType === TodoListType.Completed) {
-      console.log("complist");
-      // if there is any changes need to be made.
-      if (doneListChanged) {
-        newTodos = await todoApi.getCompletedTodos(date);
-        sessionStorage.setItem(sessionKey, JSON.stringify(newTodos));
-        dispatch(fetchAllAction(newTodos, TodoListType.Completed));
-        setDoneListChanged(false);
-      } else {
-        // if no change needed, just get from local storage
-        const sessionData = JSON.parse(sessionStorage.getItems(sessionKey));
-        dispatch(fetchAllAction(sessionData, TodoListType.Completed));
-      }
-    }
-
-    setIsLoading(false);
-
-    // resets prop from TodoBoard,isItemAdded to false.
-  };
-
-  // useEffects
 
   // ANCHOR useEffects
   useEffect(() => {
@@ -105,6 +33,7 @@ const useTodoList = (
     fetchData();
   }, [listType, isItemAdded, listChanged, doneListChanged]);
 
+  // ANCHOR: handlers
   const handleAllCheckToggle = () => {
     // remove all check
     if (checkedItemIds.length > 0) {
@@ -131,8 +60,6 @@ const useTodoList = (
       setAllChecked((prev) => !prev);
     }
   };
-
-  // ANCHOR: handlers
 
   const handleListTypeToggle = () => {
     if (listType === TodoListType.Incompleted)
@@ -191,6 +118,80 @@ const useTodoList = (
     // notify change
     setListChanged(true);
     setDoneListChanged(true);
+  };
+  // ANCHOR helpers
+
+  const fetchData = async (): Promise<void> => {
+    const sessionKey = `${date.toLocaleDateString()},${listType}`;
+    const todosFromSession: string | null = sessionStorage.getItem(sessionKey);
+    let newTodos;
+
+    // if session does not have data, doesn't matter if it's incompleted or completed list, need to fetch from api.
+    if (!todosFromSession) {
+      console.log("data is not in session");
+      switch (listType) {
+        case TodoListType.Completed:
+          newTodos = await todoApi.getCompletedTodos(date);
+          setDoneListChanged(false);
+          dispatch(fetchAllAction(newTodos, TodoListType.Completed));
+
+          break;
+        case TodoListType.Incompleted:
+          newTodos = await todoApi.getInCompletedTodos(date);
+          console.log(newTodos);
+          setListChanged(false);
+          dispatch(fetchAllAction(newTodos, TodoListType.Incompleted));
+          afterFetching();
+
+          break;
+        default:
+          break;
+      }
+
+      // update session storage
+      sessionStorage.setItem(sessionKey, JSON.stringify(newTodos));
+      setIsLoading(false);
+      return;
+    }
+
+    // if session has data, and if on incompleted list.
+    if (listType === TodoListType.Incompleted) {
+      // check if there should be any changes.
+      if (listChanged || isItemAdded) {
+        // there is a change then call api
+        newTodos = await todoApi.getInCompletedTodos(date);
+        // update session storage
+        sessionStorage.setItem(sessionKey, JSON.stringify(newTodos));
+        dispatch(fetchAllAction(newTodos, TodoListType.Incompleted));
+        afterFetching();
+        setListChanged(false);
+      } else {
+        // no change needed. get data from session.
+        const sessionData = JSON.parse(sessionStorage.getItem(sessionKey)!);
+        setListChanged(false);
+        dispatch(fetchAllAction(sessionData, TodoListType.Incompleted));
+      }
+    }
+
+    // if session has data, and if on completed list.
+    if (listType === TodoListType.Completed) {
+      console.log("complist");
+      // if there is any changes need to be made.
+      if (doneListChanged) {
+        newTodos = await todoApi.getCompletedTodos(date);
+        sessionStorage.setItem(sessionKey, JSON.stringify(newTodos));
+        dispatch(fetchAllAction(newTodos, TodoListType.Completed));
+        setDoneListChanged(false);
+      } else {
+        // if no change needed, just get from local storage
+        const sessionData = JSON.parse(sessionStorage.getItems(sessionKey));
+        dispatch(fetchAllAction(sessionData, TodoListType.Completed));
+      }
+    }
+
+    setIsLoading(false);
+
+    // resets prop from TodoBoard,isItemAdded to false.
   };
 
   return {

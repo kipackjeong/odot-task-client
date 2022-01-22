@@ -7,6 +7,7 @@ import {
 } from "../actions/itemActions";
 import { TodoListType } from "../components/TodoBoard/TodoBoard";
 import React from "react";
+import { TodosAction } from "../interfaces/interfaces";
 
 const fetchAllItems = (newState: ITodo[], items: ITodo[]) => {
   newState = [...items];
@@ -27,7 +28,7 @@ const removeItem = (newState: ITodo[], todoIds: string[]) => {
 };
 
 let todosReducer: IReducer;
-todosReducer = function (state, action: IStateAction): ITodo[] {
+todosReducer = function (state, action: TodosAction): ITodo[] {
   console.log("todoReducer");
   const { type } = action;
   const { listType, data } = action.payload;

@@ -18,14 +18,13 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: theme.palette.common.black,
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+    fontSize: 16,
   },
 }));
 
 function TodoItem(props: any) {
   // props
   const { time, todo, checked, fontSize, onCheckToggle, checkBoxColor } = props;
-
   // ANCHOR state;
   const [dueDate, setDueDate] = useState(todo.dueDate);
   const [dateFormat, setDateFormat] = useState("MM/dd");
@@ -54,7 +53,10 @@ function TodoItem(props: any) {
   return (
     <Grow in={todo !== null} timeout={700}>
       <TableRow key={todo.id}>
-        <StyledTableCell style={{ paddingTop: 0, paddingBottom: 0 }}>
+        <StyledTableCell
+          height={"5px"}
+          style={{ paddingTop: 0, paddingBottom: 0 }}
+        >
           <Checkbox
             aria-label={labelId}
             edge="start"
@@ -68,7 +70,7 @@ function TodoItem(props: any) {
             }}
           />
         </StyledTableCell>
-        <StyledTableCell width={"40%"} align="center">
+        <StyledTableCell height={"5px"} width={"40%"} align="center">
           <p style={{ fontSize }}> {todo.task}</p>
         </StyledTableCell>
         <StyledTableCell width={"10%"} align="center">
@@ -77,8 +79,8 @@ function TodoItem(props: any) {
         {/* TODO Implement calendar pick that will:
           - change current todo's date.
           - add current todo to todosToBeModified
-          
          */}
+
         <StyledTableCell align="center">
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <MobileDateTimePicker
@@ -88,7 +90,7 @@ function TodoItem(props: any) {
               }}
               onError={console.log}
               minDate={new Date("2018-01-01T00:00")}
-              inputFormat="MM/dd"
+              inputFormat={dateFormat}
               mask="__/__"
               renderInput={(params) => <TextField {...params} />}
             />

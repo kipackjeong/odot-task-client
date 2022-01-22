@@ -72,7 +72,7 @@ export default function TodoList(props: TodoListProperty) {
       <ListChangeToggle listType={listType} onToggle={handleListTypeToggle} />
 
       <TableContainer className={todoListStyle.list}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table size="small" stickyHeader aria-label="sticky table">
           <TodoListTableHead
             fontSize={headerFontSize}
             checkBoxColor={checkBoxColor}

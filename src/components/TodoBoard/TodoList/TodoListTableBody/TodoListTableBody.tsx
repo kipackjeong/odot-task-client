@@ -16,7 +16,7 @@ const TodoListTableBody = (props: TodoListTableBodyProps) => {
   // todos here can be either completed or incompleted.
   const { todos, checkBoxColor, checkedItemIds, fontSize, handleCheckToggle } =
     props;
-
+  console.log(todos);
   return (
     <TableBody>
       {todos.map((todo: ReadTodo, idx: number) => (
