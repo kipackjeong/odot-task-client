@@ -6,8 +6,8 @@ import TableHead from "@mui/material/TableHead";
 import { fetchAllAction } from "../../../actions/itemActions";
 import AppCtx from "../../../context/app-context";
 import ReadTodo from "../../../models/read-todo";
-import TodoItem from "./TodoItem/TodoItem";
-import ListHead from "./ListHead/ListHead";
+import TodoItem from "./TodoListTableBody/TodoItem";
+import TodoListTableHead from "./TodoListTableHead/TodoListTableHead";
 import todoApi from "../../../api/todoApi";
 import todoListStyle from "./TodoList.module.css";
 import TodoStatusBtn from "./TodoStatusBtn/TodoStatusBtn";
@@ -15,6 +15,7 @@ import { TodoListType } from "../TodoBoard";
 import ListChangeToggle from "./ListChangeToggle/ListChangeToggle";
 import { ITodo } from "../../../interfaces/interfaces";
 import useTodoList from "../../../hooks/use-todo-list";
+import TodoListTableBody from "./TodoListTableBody/TodoListTableBody";
 
 type TodoListProperty = {
   date: Date;
@@ -54,10 +55,6 @@ export default function TodoList(props: TodoListProperty) {
 
   // ANCHOR styles
   const checkBoxColor = "success";
-
-  const todos = listType === TodoListType.Incompleted ? inCompTodos : compTodos;
-  console.log(todos);
-
   return isLoading ? (
     <div>loading</div>
   ) : (
@@ -69,43 +66,23 @@ export default function TodoList(props: TodoListProperty) {
           onRemove={handleRemove}
         />
       </div>
-
       <ListChangeToggle listType={listType} onToggle={handleListTypeToggle} />
 
       <TableContainer className={todoListStyle.list}>
         <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <ListHead
-              checkBoxColor={checkBoxColor}
-              onCheckToggle={handleAllCheckToggle}
-              checked={allChecked}
-            />
-          </TableHead>
-          {listType === TodoListType.Incompleted ? (
-            <TableBody>
-              {inCompTodos.map((todo: ReadTodo) => (
-                <TodoItem
-                  key={todo.id}
-                  todo={todo}
-                  checkBoxColor={checkBoxColor}
-                  onCheckToggle={handleCheckToggle}
-                  checked={checkedItemIds.indexOf(todo.id) !== -1}
-                />
-              ))}
-            </TableBody>
-          ) : (
-            <TableBody>
-              {todos.map((todo: ReadTodo) => (
-                <TodoItem
-                  key={todo.id}
-                  todo={todo}
-                  checkBoxColor={checkBoxColor}
-                  onCheckToggle={handleCheckToggle}
-                  checked={checkedItemIds.indexOf(todo.id) !== -1}
-                />
-              ))}
-            </TableBody>
-          )}
+          <TodoListTableHead
+            checkBoxColor={checkBoxColor}
+            onCheckToggle={handleAllCheckToggle}
+            checked={allChecked}
+          />
+          <TodoListTableBody
+            todos={
+              listType === TodoListType.Completed ? compTodos : inCompTodos
+            }
+            checkBoxColor={checkBoxColor}
+            handleCheckToggle={handleCheckToggle}
+            checkedItemIds={checkedItemIds}
+          />
         </Table>
       </TableContainer>
     </div>

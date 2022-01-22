@@ -1,21 +1,23 @@
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { TodoListType } from "../../TodoBoard";
 import listChangeToggle from "./ListChangeToggle.module.css";
+import slide from "./slide.module.css";
+import Switch from "@mui/material/Switch";
+import { IconButton } from "@mui/material";
 
 const ListChangeToggle = (props: any) => {
   // ANCHOR props
   const { listType, onToggle } = props;
 
   // ANCHOR style
-  const toggleColor = "rgb(46, 125, 50)";
-  const toggleClass = "toggle";
-
-  const togglerButtonClass =
-    listType === TodoListType.Completed ? "completed" : "incompleted";
-
-  const toggleHandler = () => {
-    const toggler = document.getElementById("toggle");
+  const initialStyle = {
+    transition: "all 700 ease-in-out",
   };
+  const dynamicStyle = {
+    transform: "scale(1.4)",
+    transition: "all 700 ease-in-out",
+  };
+
   return (
     <div
       style={{
@@ -28,24 +30,38 @@ const ListChangeToggle = (props: any) => {
       }}
     >
       <div>
-        <CheckCircleOutlineIcon
-          color="disabled"
-          fontSize="large"
-          onClick={toggleHandler}
-        />{" "}
+        <IconButton
+          style={
+            listType === TodoListType.Incompleted ? dynamicStyle : initialStyle
+          }
+        >
+          <CheckCircleOutlineIcon
+            color="disabled"
+            fontSize="large"
+            onClick={onToggle}
+          />
+        </IconButton>
       </div>
-      <label className={listChangeToggle.switch}>
-        <input id="toggle" type="checkbox" onClick={onToggle} />
-        <span
-          className={`${listChangeToggle.slider}  ${listChangeToggle.round}`}
-        ></span>
-      </label>
+
+      <Switch
+        aria-label="listtype-toggler"
+        defaultChecked={listType === TodoListType.Completed}
+        color="success"
+        onChange={onToggle}
+      />
+
       <div>
-        <CheckCircleOutlineIcon
-          color="success"
-          fontSize="large"
-          onClick={toggleHandler}
-        />
+        <IconButton
+          style={
+            listType === TodoListType.Completed ? dynamicStyle : initialStyle
+          }
+        >
+          <CheckCircleOutlineIcon
+            color="success"
+            fontSize="large"
+            onClick={onToggle}
+          />
+        </IconButton>
       </div>
     </div>
   );

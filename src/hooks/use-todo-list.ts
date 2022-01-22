@@ -168,11 +168,13 @@ const useTodoList = (
     setIsLoading(true);
     // refresh allChecked.
     setAllChecked(false);
+
     // notify change
+    // when incompleted item is deleted
     if (listType === TodoListType.Incompleted) {
       setListChanged(true);
     } else {
-      setListType(TodoListType.Incompleted);
+      // when completed item is deleted
       setDoneListChanged(true);
     }
   };

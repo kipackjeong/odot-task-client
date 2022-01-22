@@ -7,6 +7,7 @@ function App() {
     <AppContextProvider>
       <div className={appStyle.App}>
         <TodoBoard />
+
         {
           //TODO Make references component
         }
