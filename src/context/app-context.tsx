@@ -6,6 +6,7 @@ const defaultValue: AppContextInterface = {
   state: {
     user: { name: "Kipack Jeong" },
     todos: [],
+    compTodos: [],
   },
   dispatch: () => {},
 };

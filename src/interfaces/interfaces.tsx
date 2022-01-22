@@ -25,6 +25,6 @@ export interface ItemAction extends IStateAction {
 }
 
 interface IReducer<T = any> {
-  (state: T & T[], action: IStateAction): T | T[];
+  (state: T & T[] & any, action: IStateAction): T | T[];
 }
 export default IReducer;

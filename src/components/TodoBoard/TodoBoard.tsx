@@ -1,13 +1,10 @@
 import { Button, ButtonGroup, Grid, IconButton } from "@mui/material";
 import Calendar from "./Calendar/Calendar";
 import TodoForm from "./TodoForm/TodoForm";
-import TodoListTwo from "./TodoList/TodoListTwo";
+import TodoList from "./TodoList/TodoList";
 import Board from "../UI/Board";
 import { useCallback, useState } from "react";
 import todoListStyle from "./TodoList/TodoList.module.css";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import ListChangeToggle from "./ListChangeToggle/ListChangeToggle";
-import TodoStatusBtn from "./TodoList/TodoStatusBtn/TodoStatusBtn";
 
 export enum TodoListType {
   ALL = 0,
@@ -16,22 +13,21 @@ export enum TodoListType {
 }
 
 const TodoBoard = () => {
-  const [listType, setListType] = useState(TodoListType.Incompleted);
+  // ANCHOR states
   const [date, setDate] = useState<Date>(new Date(Date.now()));
+
   const [itemAdded, setItemAdded] = useState<boolean>(false);
+
+  // ANCHOR handler
 
   const handleCalendarDatePick = (newDate: any) => {
     setDate(newDate);
   };
 
-  const handleToggle = () => {
-    if (listType === TodoListType.Incompleted)
-      setListType(TodoListType.Completed);
-    else setListType(TodoListType.Incompleted);
-  };
   const handleSubmit = () => {
     setItemAdded(true);
   };
+
   const resetItemAddedAfteFetching = useCallback(() => {
     setItemAdded(false);
   }, []);
@@ -68,13 +64,11 @@ const TodoBoard = () => {
         </Grid>
 
         <Grid height="100%" item xs md>
-          <TodoListTwo
+          <TodoList
             date={date}
-            listType={listType}
             itemAdded={itemAdded}
-            afterFetch={resetItemAddedAfteFetching}
-            onToggle={handleToggle}
-          ></TodoListTwo>
+            resetItemAddedStatus={resetItemAddedAfteFetching}
+          ></TodoList>
         </Grid>
       </Grid>
     </Board>

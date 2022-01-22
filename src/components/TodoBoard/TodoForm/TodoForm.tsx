@@ -8,6 +8,7 @@ import { isEmpty } from "../../../utilities/validation.utility";
 import todoApi from "../../../api/todoApi";
 import CreateTodo from "../../../models/create-todo";
 import ReadTodo from "../../../models/read-todo";
+import { TodoListType } from "../TodoBoard";
 
 function TodoInput(props: any) {
   return (
@@ -61,7 +62,7 @@ function TodoForm(props: TodoFormProp) {
       creatingTodo
     );
 
-    dispatch(addItemAction(createdTodoFromServer));
+    dispatch(addItemAction(createdTodoFromServer, TodoListType.Incompleted));
     setTask("");
     setTyped(false);
     onSubmit(true);

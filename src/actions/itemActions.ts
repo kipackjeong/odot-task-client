@@ -1,4 +1,5 @@
 import { IStateAction, ITodo } from "../interfaces/interfaces";
+import { TodoListType } from "../components/TodoBoard/TodoBoard";
 
 export enum ItemActionType {
   FetchAll = "ALL",
@@ -9,27 +10,39 @@ export enum ItemActionType {
 
 export const { FetchAll, AddItem, RemoveItem, UpdateItem } = ItemActionType;
 
-export const fetchAllAction = (todos: ITodo[]): IStateAction => {
+export const fetchAllAction = (
+  todos: ITodo[],
+  listType: TodoListType
+): IStateAction => {
   return {
     type: FetchAll,
-    payload: todos,
+    payload: { listType: listType, data: todos },
   };
 };
-export const addItemAction = (todo: ITodo): IStateAction => {
+export const addItemAction = (
+  todo: ITodo,
+  listType: TodoListType
+): IStateAction => {
   return {
     type: AddItem,
-    payload: todo,
+    payload: { listType: listType, data: todo },
   };
 };
-export const removeItemsAction = (todosIdsToRemove: string[]): IStateAction => {
+export const removeItemsAction = (
+  todosIdsToRemove: string[],
+  listType: TodoListType
+): IStateAction => {
   return {
     type: RemoveItem,
-    payload: todosIdsToRemove,
+    payload: { listType: listType, data: todosIdsToRemove },
   };
 };
-export const updateItemAction = (todo: ITodo): IStateAction => {
+export const updateItemAction = (
+  todo: ITodo,
+  listType: TodoListType
+): IStateAction => {
   return {
     type: UpdateItem,
-    payload: todo,
+    payload: { listType: listType, data: todo },
   };
 };

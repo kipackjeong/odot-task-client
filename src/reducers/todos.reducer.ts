@@ -5,51 +5,68 @@ import {
   RemoveItem,
   UpdateItem,
 } from "../actions/itemActions";
-import ReadTodo from "../models/read-todo";
+import { TodoListType } from "../components/TodoBoard/TodoBoard";
+import React from "react";
 
-const fetchAllItems = (newTodos: ITodo[], items: ITodo[]) => {
-  newTodos = [...items];
-  return newTodos;
+const fetchAllItems = (newState: ITodo[], items: ITodo[]) => {
+  newState = [...items];
+  return newState;
 };
 
-const addNewItem = (newTodos: ITodo[], item: ITodo) => {
-  newTodos.push(item);
+const addNewItem = (newState: ITodo[], item: ITodo) => {
+  newState.push(item);
 };
 
-const removeItem = (newTodos: ITodo[], todoIds: string[]) => {
+const removeItem = (newState: ITodo[], todoIds: string[]) => {
   for (var i = 0; i < todoIds.length; i++) {
-    newTodos = newTodos.filter((newTodo) => {
+    newState = newState.filter((newTodo) => {
       return todoIds.includes(newTodo.id || "");
     });
   }
-  return newTodos;
+  return newState;
 };
 
-let todosReducer: IReducer<ITodo>;
-todosReducer = function (state: ITodo[], action: IStateAction): ITodo[] {
-  const { type, payload } = action;
-  let newTodos = [...state];
+let todosReducer: IReducer;
+todosReducer = function (state, action: IStateAction): ITodo[] {
+  console.log("todoReducer");
+  const { type } = action;
+  const { listType, data } = action.payload;
+
+  const newState = { ...state };
+  let newTodos =
+    listType === TodoListType.Completed
+      ? [...state.compTodos]
+      : [...state.todos];
+
   let index;
   switch (type) {
     case FetchAll:
-      newTodos = fetchAllItems(newTodos, payload);
+      newTodos = fetchAllItems(newTodos, data);
       break;
     case AddItem:
-      addNewItem(newTodos, payload);
+      addNewItem(newTodos, data);
       break;
     case RemoveItem:
-      const todoIds: string[] = payload;
+      const todoIds: string[] = data;
       newTodos = removeItem(newTodos, todoIds);
       break;
     case UpdateItem:
-      index = newTodos.findIndex((todo) => todo.id === payload.id);
-      const newTodo = { ...newTodos[index], ...payload.todo };
+      index = newTodos.findIndex((todo) => todo.id === data.id);
+      const newTodo = { ...newTodos[index], ...data.todo };
       newTodos.splice(index, 1, newTodo);
       break;
     default:
       break;
   }
-  return newTodos;
+  console.log("todosReducer: updated state: " + newTodos);
+
+  if (listType === TodoListType.Completed) {
+    newState.compTodos = [...newTodos];
+  } else {
+    newState.todos = [...newTodos];
+  }
+
+  return newState;
 };
 
 export default todosReducer;

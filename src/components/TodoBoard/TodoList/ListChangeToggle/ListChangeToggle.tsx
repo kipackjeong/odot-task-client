@@ -1,15 +1,18 @@
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import todoListToggleStyle from "./TodoListToggle.module.css";
+import { TodoListType } from "../../TodoBoard";
+import listChangeToggle from "./ListChangeToggle.module.css";
 
 const ListChangeToggle = (props: any) => {
-  // props
-  const { onToggle } = props;
+  // ANCHOR props
+  const { listType, onToggle } = props;
 
-  // style
+  // ANCHOR style
   const toggleColor = "rgb(46, 125, 50)";
   const toggleClass = "toggle";
 
-  //TODO: when clicking done or undone icon, toggler need to move.
+  const togglerButtonClass =
+    listType === TodoListType.Completed ? "completed" : "incompleted";
+
   const toggleHandler = () => {
     const toggler = document.getElementById("toggle");
   };
@@ -31,10 +34,10 @@ const ListChangeToggle = (props: any) => {
           onClick={toggleHandler}
         />{" "}
       </div>
-      <label className={todoListToggleStyle.switch}>
+      <label className={listChangeToggle.switch}>
         <input id="toggle" type="checkbox" onClick={onToggle} />
         <span
-          className={`${todoListToggleStyle.slider}  ${todoListToggleStyle.round}`}
+          className={`${listChangeToggle.slider}  ${listChangeToggle.round}`}
         ></span>
       </label>
       <div>

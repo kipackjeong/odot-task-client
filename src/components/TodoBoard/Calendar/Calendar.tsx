@@ -4,7 +4,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import CalendarPicker from "@mui/lab/CalendarPicker";
 import calendarStyle from "./Calendar.module.css";
 
-//TODO: make component that will toggle Month/Year picker.
+// TODO  make component that will toggle Month/Year picker.
 
 export default function Calendar(props: any) {
   const minDate = useMemo(() => {
