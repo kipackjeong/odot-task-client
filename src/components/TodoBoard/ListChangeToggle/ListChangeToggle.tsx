@@ -9,6 +9,10 @@ const ListChangeToggle = (props: any) => {
   const toggleColor = "rgb(46, 125, 50)";
   const toggleClass = "toggle";
 
+  //TODO: when clicking done or undone icon, toggler need to move.
+  const toggleHandler = () => {
+    const toggler = document.getElementById("toggle");
+  };
   return (
     <div
       style={{
@@ -21,16 +25,24 @@ const ListChangeToggle = (props: any) => {
       }}
     >
       <div>
-        <CheckCircleOutlineIcon color="disabled" fontSize="large" />{" "}
+        <CheckCircleOutlineIcon
+          color="disabled"
+          fontSize="large"
+          onClick={toggleHandler}
+        />{" "}
       </div>
       <label className={todoListToggleStyle.switch}>
-        <input type="checkbox" onClick={onToggle} />
+        <input id="toggle" type="checkbox" onClick={onToggle} />
         <span
           className={`${todoListToggleStyle.slider}  ${todoListToggleStyle.round}`}
         ></span>
       </label>
       <div>
-        <CheckCircleOutlineIcon color="success" fontSize="large" />
+        <CheckCircleOutlineIcon
+          color="success"
+          fontSize="large"
+          onClick={toggleHandler}
+        />
       </div>
     </div>
   );

@@ -1,11 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import { fetchAllAction } from "../../../actions/itemActions";
 import AppCtx from "../../../context/app-context";
 import ReadTodo from "../../../models/read-todo";
@@ -16,47 +13,77 @@ import todoListStyle from "./TodoList.module.css";
 import TodoStatusBtn from "./TodoStatusBtn/TodoStatusBtn";
 import { TodoListType } from "../TodoBoard";
 import ListChangeToggle from "../ListChangeToggle/ListChangeToggle";
+import { ITodo } from "../../../interfaces/interfaces";
 
-export default function TodoListTwo(props: any) {
+type TodoListTwoProperty = {
+  listType: TodoListType;
+  date: Date;
+  itemAdded: boolean;
+  onToggle: Function;
+  afterFetch: Function;
+};
+export default function TodoListTwo(props: TodoListTwoProperty) {
   // context
   const ctx = useContext(AppCtx);
   const todos: ReadTodo[] = ctx.state.todos;
   const dispatch = ctx.dispatch;
 
   // props
-  const { listType, onToggle, date } = props;
-  // local state
+  const { listType, date, itemAdded, onToggle, afterFetch } = props;
+
+  // states
   const defaultChecked: string[] = [];
   const [checkedItemIds, setCheckedItemIds] = useState(defaultChecked);
   const [allChecked, setAllChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [listChanged, setListChanged] = useState(false);
 
   // helper
-  async function fetchData(): Promise<void> {
-    let newTodos;
-    switch (listType) {
-      case TodoListType.Completed:
-        newTodos = await todoApi.getCompletedTodos(date);
-        break;
-      case TodoListType.Incompleted:
-        newTodos = await todoApi.getInCompletedTodos(date);
-        break;
+  const fetchData = useCallback(async (): Promise<void> => {
+    setIsLoading(true);
+
+    const sessionKey = `${date.toLocaleDateString()},${listType}`;
+    const todosFromSession: string | null = sessionStorage.getItem(sessionKey);
+
+    // when session has data and local component data did not change.
+    if (todosFromSession && !listChanged) {
+      const todos: ITodo[] = JSON.parse(todosFromSession);
+      dispatch(fetchAllAction(todos));
+    } else {
+      // when session does not have data or local component data changed.
+      let newTodos: ITodo[] = [];
+      // if data is not saved in storage.
+      switch (listType) {
+        case TodoListType.Completed:
+          newTodos = await todoApi.getCompletedTodos(date);
+          break;
+        case TodoListType.Incompleted:
+          newTodos = await todoApi.getInCompletedTodos(date);
+          break;
+        default:
+          break;
+      }
+      // update session storage
+      sessionStorage.setItem(sessionKey, JSON.stringify(newTodos));
+      dispatch(fetchAllAction(newTodos));
+      setListChanged(false);
     }
-    console.log(newTodos);
-    dispatch(fetchAllAction(newTodos));
+
     setIsLoading(false);
-  }
+    afterFetch();
+  }, [date, dispatch, listChanged, listType, afterFetch]);
 
   // useEffects
+
   useEffect(() => {
-    if (isLoading) {
-      fetchData();
+    if (itemAdded) {
+      setListChanged(true);
     }
-  }, [isLoading]);
+  }, [itemAdded]);
 
   useEffect(() => {
     fetchData();
-  }, [listType, date]);
+  }, [listType, date, listChanged, fetchData]);
 
   const handleAllCheckToggle = () => {
     // remove all check
@@ -105,6 +132,8 @@ export default function TodoListTwo(props: any) {
     setIsLoading(true);
     // refresh allChecked.
     setAllChecked(false);
+    // notify change
+    setListChanged(true);
   };
 
   const handleDone = async () => {
@@ -116,6 +145,8 @@ export default function TodoListTwo(props: any) {
     setIsLoading(true);
     // refresh allChecked.
     setAllChecked(false);
+    // notify change
+    setListChanged(true);
   };
 
   // styles

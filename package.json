@@ -26,6 +26,7 @@
   },
   "scripts": {
     "start": "PORT=3001 react-scripts start",
+    "start:dev": "PORT=3001 NODE_ENV=production npm start ",
     "build": "PORT=3001 react-scripts build",
     "test": "PORT=3001 react-scripts test",
     "eject": "PORT=3001 react-scripts eject"

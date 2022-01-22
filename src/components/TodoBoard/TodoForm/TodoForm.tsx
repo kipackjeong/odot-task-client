@@ -25,12 +25,21 @@ function TodoInput(props: any) {
   );
 }
 
-function TodoForm() {
-  const { dispatch } = useContext(AppCtx);
+type TodoFormProp = {
+  onSubmit: Function;
+};
 
+function TodoForm(props: TodoFormProp) {
+  // context
+  const { dispatch } = useContext(AppCtx);
+  // state
   const [task, setTask] = useState("");
   const [typed, setTyped] = useState(false);
 
+  // props
+  const { onSubmit } = props;
+
+  // handlers
   const handleOnChange = (event: SyntheticEvent) => {
     const target = event.target as HTMLInputElement;
     setTask(target.value);
@@ -55,8 +64,10 @@ function TodoForm() {
     dispatch(addItemAction(createdTodoFromServer));
     setTask("");
     setTyped(false);
+    onSubmit(true);
   };
 
+  // error check
   const inputError: boolean = task.trim() === "" && typed ? true : false;
 
   return (

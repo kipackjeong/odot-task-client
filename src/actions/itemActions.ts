@@ -9,7 +9,7 @@ export enum ItemActionType {
 
 export const { FetchAll, AddItem, RemoveItem, UpdateItem } = ItemActionType;
 
-export const fetchAllAction = (todos: ITodo): IStateAction => {
+export const fetchAllAction = (todos: ITodo[]): IStateAction => {
   return {
     type: FetchAll,
     payload: todos,
