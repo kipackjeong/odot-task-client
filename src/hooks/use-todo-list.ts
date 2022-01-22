@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { fetchAllAction } from "../actions/itemActions";
 import todoApi from "../api/todoApi";
 import { TodoListType } from "../components/TodoBoard/TodoBoard";
-import { UpdateTodoObject } from "../interfaces/interfaces";
+import { UpdateTodoDataObject } from "../interfaces/interfaces";
 import ReadTodo from "../models/read-todo";
 
 const useTodoList = (
@@ -15,7 +15,9 @@ const useTodoList = (
 ) => {
   // ANCHOR states
   const [checkedItemIds, setCheckedItemIds] = useState<string[]>([]);
-  const [toUpdateTodos, setToUpdateTodos] = useState<UpdateTodoObject[]>([]);
+  const [toUpdateTodos, setToUpdateTodos] = useState<UpdateTodoDataObject[]>(
+    []
+  );
 
   const [allChecked, setAllChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);

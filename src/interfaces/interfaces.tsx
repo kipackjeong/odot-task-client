@@ -26,7 +26,7 @@ export interface TodosAction extends IStateAction {
   payload: any;
 }
 
-export interface UpdateTodoObject {
+export interface UpdateTodoDataObject {
   todoId: string;
   updateTodo: UpdateTodo;
 }
