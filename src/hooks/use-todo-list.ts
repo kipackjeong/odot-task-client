@@ -9,11 +9,11 @@ const useTodoList = (
   inCompTodos: ReadTodo[],
   compTodos: ReadTodo[],
   isItemAdded: boolean,
-  date: Date,
+  listDate: Date,
   afterFetching: Function,
   dispatch: Function
 ) => {
-  // ANCHOR states
+  // ANCHOR state
   const [checkedItemIds, setCheckedItemIds] = useState<string[]>([]);
   const [toUpdateTodos, setToUpdateTodos] = useState<UpdateTodo[]>([]);
   console.log(toUpdateTodos);
@@ -39,7 +39,7 @@ const useTodoList = (
     }
 
     fetchData();
-  }, [listType, isItemAdded, listChanged, doneListChanged]);
+  }, [listDate, listType, isItemAdded, listChanged, doneListChanged]);
 
   // ANCHOR: handlers
   const handleAllCheckToggle = () => {
@@ -119,7 +119,10 @@ const useTodoList = (
     const updateTodos: UpdateTodo[] = [];
     for (var checkedItemId of checkedItemIds) {
       const updateTodo: UpdateTodo = new UpdateTodo(checkedItemId, {
-        completed: true,
+        // the completed status depends on the type of the list currently on.
+        // if current list is completed list and user clicks undone, then here should set item.completed = false.
+
+        completed: listType === TodoListType.Completed ? false : true,
       });
       updateTodos.push(updateTodo);
     }
@@ -164,7 +167,7 @@ const useTodoList = (
 
   const fetchData = async (): Promise<void> => {
     console.log("fetchData");
-    const sessionKey = `${date.toLocaleDateString()},${listType}`;
+    const sessionKey = `${listDate.toLocaleDateString()},${listType}`;
     const todosFromSession: string | null = sessionStorage.getItem(sessionKey);
     let newTodos;
 
@@ -172,13 +175,13 @@ const useTodoList = (
     if (!todosFromSession) {
       switch (listType) {
         case TodoListType.Completed:
-          newTodos = await todoApi.getCompletedTodos(date);
+          newTodos = await todoApi.getCompletedTodos(listDate);
           setDoneListChanged(false);
           dispatch(fetchAllAction(newTodos, TodoListType.Completed));
 
           break;
         case TodoListType.Incompleted:
-          newTodos = await todoApi.getInCompletedTodos(date);
+          newTodos = await todoApi.getInCompletedTodos(listDate);
           setListChanged(false);
           dispatch(fetchAllAction(newTodos, TodoListType.Incompleted));
           afterFetching();
@@ -199,7 +202,7 @@ const useTodoList = (
       // check if there should be any changes.
       if (listChanged || isItemAdded) {
         // there is a change then call api
-        newTodos = await todoApi.getInCompletedTodos(date);
+        newTodos = await todoApi.getInCompletedTodos(listDate);
         // update session storage
         sessionStorage.setItem(sessionKey, JSON.stringify(newTodos));
         dispatch(fetchAllAction(newTodos, TodoListType.Incompleted));
@@ -217,7 +220,7 @@ const useTodoList = (
     if (listType === TodoListType.Completed) {
       // if there is any changes need to be made.
       if (doneListChanged) {
-        newTodos = await todoApi.getCompletedTodos(date);
+        newTodos = await todoApi.getCompletedTodos(listDate);
         sessionStorage.setItem(sessionKey, JSON.stringify(newTodos));
         dispatch(fetchAllAction(newTodos, TodoListType.Completed));
         setDoneListChanged(false);

@@ -9,7 +9,6 @@ import {
   TextField,
 } from "@mui/material";
 import { LocalizationProvider, MobileDateTimePicker } from "@mui/lab";
-import DateSelector from "../../Calendar/DateSelector";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import ReadTodo from "../../../../models/read-todo";
 import UpdateTodo from "../../../../models/update-todo";
@@ -28,14 +27,22 @@ type TodoItemProps = {
   todo: ReadTodo;
   checked: boolean;
   fontSize: string;
+  renderTime: number;
   checkBoxColor: string;
   onCheckToggle: Function;
   onUpdate: Function;
 };
 function TodoItem(props: any) {
   // props
-  const { todo, checked, fontSize, onCheckToggle, checkBoxColor, onUpdate } =
-    props;
+  const {
+    todo,
+    checked,
+    renderTime,
+    fontSize,
+    onCheckToggle,
+    checkBoxColor,
+    onUpdate,
+  } = props;
 
   // ANCHOR state
   const [dueDate, setDueDate] = useState(todo.dueDate);
@@ -64,6 +71,10 @@ function TodoItem(props: any) {
 
   // ANCHOR handlers
   const handleDueDatePickerSave = (newDueDate: Date) => {
+    if (newDueDate < new Date(Date.now())) {
+      return;
+    }
+
     const updateTodo: UpdateTodo = new UpdateTodo(todo.id, {
       dueDate: newDueDate,
     });
@@ -73,7 +84,7 @@ function TodoItem(props: any) {
   };
 
   return (
-    <Grow in={todo !== null} timeout={700}>
+    <Grow in={todo !== null} timeout={renderTime}>
       <TableRow key={todo.id}>
         <StyledTableCell
           height={"5px"}
@@ -98,10 +109,6 @@ function TodoItem(props: any) {
         <StyledTableCell width={"10%"} align="center">
           <p style={{ fontSize }}> {todo.priority}</p>
         </StyledTableCell>
-        {/* TODO Implement calendar pick that will:
-          - change current todo's date.
-          - add current todo to todosToBeModified
-         */}
 
         <StyledTableCell align="center">
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -115,7 +122,7 @@ function TodoItem(props: any) {
               onError={console.log}
               minDate={new Date("2018-01-01T00:00")}
               inputFormat={dateFormat}
-              mask="__/__"
+              mask="__/__/____"
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>

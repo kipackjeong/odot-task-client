@@ -7,15 +7,29 @@ import { IconButton } from "@mui/material";
 
 const ListChangeToggle = (props: any) => {
   // ANCHOR props
-  const { listType, onToggle } = props;
+  const { listType, onChange } = props;
 
   // ANCHOR style
   const initialStyle = {
-    transition: "all 700 ease-in-out",
+    transition: "all 0.4s ease-in-out",
   };
   const dynamicStyle = {
-    transform: "scale(1.4)",
-    transition: "all 700 ease-in-out",
+    transform: "scale(1.2)",
+    transition: "all 0.4s ease-in-out",
+  };
+
+  // ANCHOR handler
+  const toInCompletedListBtnClick = () => {
+    if (listType === TodoListType.Incompleted) {
+      return;
+    }
+    onChange();
+  };
+  const toCompletedListBtnClick = () => {
+    if (listType === TodoListType.Completed) {
+      return;
+    }
+    onChange();
   };
 
   return (
@@ -34,19 +48,16 @@ const ListChangeToggle = (props: any) => {
           style={
             listType === TodoListType.Incompleted ? dynamicStyle : initialStyle
           }
-          onClick={onToggle}
+          onClick={toInCompletedListBtnClick}
         >
           <CheckCircleOutlineIcon color="disabled" fontSize="large" />
         </IconButton>
       </div>
 
-      {
-        // FIXME MUI: A component is changing the default checked state of an uncontrolled SwitchBase after being initialized. To suppress this warning opt to use a controlled SwitchBase.
-      }
       <Switch
         defaultChecked={listType === TodoListType.Completed}
         color="success"
-        onChange={onToggle}
+        onChange={onChange}
       />
 
       <div>
@@ -54,7 +65,7 @@ const ListChangeToggle = (props: any) => {
           style={
             listType === TodoListType.Completed ? dynamicStyle : initialStyle
           }
-          onClick={onToggle}
+          onClick={toCompletedListBtnClick}
         >
           <CheckCircleOutlineIcon color="success" fontSize="large" />
         </IconButton>

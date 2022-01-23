@@ -18,14 +18,14 @@ import useTodoList from "../../../hooks/use-todo-list";
 import TodoListTableBody from "./TodoListTableBody/TodoListTableBody";
 
 type TodoListProperty = {
-  date: Date;
+  listDate: Date;
   isItemAdded: boolean;
   afterFetching: Function;
 };
 
 export default function TodoList(props: TodoListProperty) {
   // ANCHOR props
-  const { date, isItemAdded, afterFetching } = props;
+  const { listDate, isItemAdded, afterFetching } = props;
 
   // ANCHOR context
   const ctx = useContext(AppCtx);
@@ -49,10 +49,21 @@ export default function TodoList(props: TodoListProperty) {
     inCompTodos,
     compTodos,
     isItemAdded,
-    date,
+    listDate,
     afterFetching,
     dispatch
   );
+
+  // ANCHOR state
+  const [renderAll, setRenderAll] = useState(true);
+  useEffect(() => {
+    setRenderAll(true);
+  }, [listType]);
+  useEffect(() => {
+    if (isItemAdded) {
+      setRenderAll(false);
+    }
+  }, [isItemAdded]);
 
   // ANCHOR styles
   const checkBoxColor = "success";
@@ -62,15 +73,16 @@ export default function TodoList(props: TodoListProperty) {
   return isLoading ? (
     <div>loading</div>
   ) : (
-    <div style={{ width: "100%" }}>
+    <div style={{ paddingLeft: "1%", width: "97%", height: "95%" }}>
       <div style={{ position: "static" }}>
         <TodoStatusBtn
+          listType={listType}
           showButtons={checkedItemIds.length > 0}
           onDone={handleDone}
           onRemove={handleRemove}
         />
       </div>
-      <ListChangeToggle listType={listType} onToggle={handleListTypeToggle} />
+      <ListChangeToggle listType={listType} onChange={handleListTypeToggle} />
 
       <TableContainer className={todoListStyle.list}>
         <Table size="small" stickyHeader aria-label="sticky table">
@@ -84,6 +96,7 @@ export default function TodoList(props: TodoListProperty) {
             todos={
               listType === TodoListType.Completed ? compTodos : inCompTodos
             }
+            renderAll={renderAll}
             fontSize={itemFontSize}
             checkBoxColor={checkBoxColor}
             onCheckToggle={handleCheckToggle}
