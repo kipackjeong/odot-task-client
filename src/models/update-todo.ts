@@ -1,4 +1,5 @@
-import { ITodo, Priority } from "../interfaces/interfaces";
+import { ITodo } from "../interfaces/interfaces";
+import Priority from "enums/priority.enum";
 
 export interface UpdateTodoOption {
   task?: string;

@@ -1,0 +1,12 @@
+.modal {
+  outline: none;
+}
+
+.calendar {
+  background-color: white;
+}
+.container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}

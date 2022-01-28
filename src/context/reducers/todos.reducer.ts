@@ -1,13 +1,14 @@
-import IReducer, { ITodo, IStateAction } from "../interfaces/interfaces";
+import { IReducer, ITodo } from "interfaces/interfaces";
 import {
   FetchAll,
   AddItem,
   RemoveItem,
   UpdateItem,
-} from "../actions/itemActions";
-import { TodoListType } from "../components/TodoBoard/TodoBoard";
+} from "context/actions/itemActions";
+
 import React from "react";
-import { TodosAction } from "../interfaces/interfaces";
+import { TodosAction } from "interfaces/interfaces";
+import TodoListType from "enums/todo-list-type.enum";
 
 const fetchAllItems = (newState: ITodo[], items: ITodo[]) => {
   newState = [...items];
@@ -29,7 +30,6 @@ const removeItem = (newState: ITodo[], todoIds: string[]) => {
 
 let todosReducer: IReducer;
 todosReducer = function (state, action: TodosAction): ITodo[] {
-  console.log("todoReducer");
   const { type } = action;
   const { listType, data } = action.payload;
 
@@ -54,12 +54,12 @@ todosReducer = function (state, action: TodosAction): ITodo[] {
     case UpdateItem:
       index = newTodos.findIndex((todo) => todo.id === data.id);
       const newTodo = { ...newTodos[index], ...data.todo };
+      // swap old item with updated item.
       newTodos.splice(index, 1, newTodo);
       break;
     default:
       break;
   }
-  console.log("todosReducer: updated state: " + newTodos);
 
   if (listType === TodoListType.Completed) {
     newState.compTodos = [...newTodos];

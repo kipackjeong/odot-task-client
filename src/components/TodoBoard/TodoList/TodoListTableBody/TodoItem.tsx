@@ -1,17 +1,22 @@
 import React, { MouseEvent, useEffect, useMemo, useState } from "react";
-import Checkbox from "@mui/material/Checkbox";
 import {
+  Checkbox,
   Grow,
   styled,
+  StyledEngineProvider,
   TableCell,
   tableCellClasses,
   TableRow,
   TextField,
 } from "@mui/material";
-import { LocalizationProvider, MobileDateTimePicker } from "@mui/lab";
+import { DateTimePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import ReadTodo from "../../../../models/read-todo";
 import UpdateTodo from "../../../../models/update-todo";
+import "./TodoItem.css";
+import PriorityIcon from "../../../UI/PriorityIcon/PriorityIcon";
+import TextDateTimePicker from "components/UI/Calendar/TextDateTimePicker";
+import { ConstructionOutlined } from "@mui/icons-material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -28,11 +33,11 @@ type TodoItemProps = {
   checked: boolean;
   fontSize: string;
   renderTime: number;
-  checkBoxColor: string;
+  checkBoxColor: any;
   onCheckToggle: Function;
   onUpdate: Function;
 };
-function TodoItem(props: any) {
+function TodoItem(props: TodoItemProps) {
   // props
   const {
     todo,
@@ -44,43 +49,55 @@ function TodoItem(props: any) {
     onUpdate,
   } = props;
 
-  // ANCHOR state
-  const [dueDate, setDueDate] = useState(todo.dueDate);
+  /* ANCHOR state */
+  const [dateToDisplay, setDateToDisplay] = useState(todo.dueDate);
+
   const [dateFormat, setDateFormat] = useState("MM/dd");
-  const labelId = `checkbox-list-label-${todo.id}`;
+  const labelId = `checkbox-li  st-label-${todo.id}`;
+  /* ANCHOR hooks */
 
-  // ANCHOR local var.
-  const todayYear = useMemo(() => {
-    return new Date(Date.now()).getFullYear();
+  /* ANCHOR local var, component */
+  const todayDate = useMemo(() => {
+    return new Date(Date.now());
   }, []);
 
-  const todoDueYear = useMemo(() => {
-    return new Date(dueDate).getFullYear();
-  }, [dueDate]);
+  /* ANCHOR useEffect */
 
-  // ANCHOR useEffect
+  /* change date display format */
   useEffect(() => {
-    if (todayYear !== todoDueYear) {
-      setDateFormat("MM/yyyy");
+    if (!todo.dueDate) {
+      return;
     }
-  }, []);
-  useEffect(() => {
-    console.log("setDueDate");
-    setDueDate(todo.dueDate);
-  }, [todo.dueDate]);
+    if (
+      todo.dueDate.getDate() === todayDate.getDate() &&
+      todo.dueDate.getMonth() === todayDate.getMonth() &&
+      todo.dueDate.getFullYear() === todayDate.getFullYear()
+    ) {
+      setDateFormat("HH:mm");
+      setDateToDisplay(todo.dueDate);
+    } else {
+      setDateFormat("MM/dd");
+      setDateToDisplay(todo.dueDate);
+    }
+  }, [todo]);
 
-  // ANCHOR handlers
-  const handleDueDatePickerSave = (newDueDate: Date) => {
-    if (newDueDate < new Date(Date.now())) {
+  /* ANCHOR handlers */
+  const handleDueDatePickerAccept = (newDueDate: Date | null) => {
+    if (newDueDate! < todayDate) {
       return;
     }
 
     const updateTodo: UpdateTodo = new UpdateTodo(todo.id, {
-      dueDate: newDueDate,
+      dueDate: newDueDate!,
     });
-
-    setDueDate(newDueDate);
+    setDateToDisplay(new Date(newDueDate!));
     onUpdate(updateTodo);
+  };
+
+  const handleDueDatePickerChange = (newDueDate: Date) => {
+    if (newDueDate > todayDate) {
+      return;
+    }
   };
 
   return (
@@ -107,29 +124,27 @@ function TodoItem(props: any) {
           <p style={{ fontSize }}> {todo.task}</p>
         </StyledTableCell>
         <StyledTableCell width={"10%"} align="center">
-          <p style={{ fontSize }}> {todo.priority}</p>
+          <PriorityIcon priority={todo.priority} />
         </StyledTableCell>
 
         <StyledTableCell align="center">
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MobileDateTimePicker
-              value={dueDate}
-              onAccept={handleDueDatePickerSave}
-              onClose={() => {
-                console.log("datepicker closed");
-              }}
-              onChange={(date) => {}}
-              onError={console.log}
-              minDate={new Date("2018-01-01T00:00")}
-              inputFormat={dateFormat}
-              mask="__/__/____"
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
+          <StyledEngineProvider injectFirst>
+            <div className="date-container">
+              <TextDateTimePicker
+                iconForNullDate={true}
+                displayTimeForToday={true}
+                date={dateToDisplay}
+                showClock={true}
+                onDateChange={handleDueDatePickerChange}
+                onDateAccept={handleDueDatePickerAccept}
+                fontSize={"medium"}
+              />
+            </div>
+          </StyledEngineProvider>
         </StyledTableCell>
       </TableRow>
     </Grow>
   );
 }
 
-export default TodoItem;
+export default React.memo(TodoItem);

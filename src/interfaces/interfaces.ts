@@ -1,10 +1,4 @@
-import UpdateTodo from "../models/update-todo";
-
-export enum Priority {
-  HIGH = 3,
-  MEDIUM = 2,
-  LOW = 1,
-}
+import Priority from "enums/priority.enum";
 
 export interface IUser {
   name: string;
@@ -12,7 +6,7 @@ export interface IUser {
 export interface ITodo {
   id?: string;
   task: string;
-  priority?: Priority;
+  priority?: Priority | string;
   completed?: boolean;
 }
 
@@ -26,7 +20,6 @@ export interface TodosAction extends IStateAction {
   payload: any;
 }
 
-interface IReducer<T = any> {
+export interface IReducer<T = any> {
   (state: T & T[] & any, action: IStateAction): T | T[];
 }
-export default IReducer;

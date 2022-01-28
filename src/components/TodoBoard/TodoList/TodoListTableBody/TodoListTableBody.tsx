@@ -1,7 +1,7 @@
 import { TableBody } from "@mui/material";
 import { ITodo } from "../../../../interfaces/interfaces";
 import ReadTodo from "../../../../models/read-todo";
-import { TodoListType } from "../../TodoBoard";
+import TodoListType from "enums/todo-list-type.enum";
 import TodoItem from "./TodoItem";
 
 type TodoListTableBodyProps = {
@@ -15,7 +15,6 @@ type TodoListTableBodyProps = {
 };
 
 const TodoListTableBody = (props: TodoListTableBodyProps) => {
-  console.log("TodoListTableBody");
   // todos here can be either completed or incompleted.
   const {
     todos,

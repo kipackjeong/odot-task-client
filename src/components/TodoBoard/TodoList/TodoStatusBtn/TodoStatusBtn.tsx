@@ -6,7 +6,7 @@ import ReactDOM from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import "./TodoStatusBtn.css";
 
-import { TodoListType } from "../../TodoBoard";
+import TodoListType from "enums/todo-list-type.enum";
 
 type TodoStatusBtn = {
   listType: TodoListType;
@@ -29,7 +29,10 @@ const TodoStatusBtn = (props: any) => {
   const animationClassName = showButtons ? null : "inactive";
 
   return (
-    <div style={{ position: "absolute", right: "59.2%" }}>
+    <div
+      className="status-container"
+      style={{ position: "absolute", right: "67.8%" }}
+    >
       <CSSTransition in={showButtons} classNames="fade" timeout={2000}>
         <ButtonGroup className="buttons">
           <IconButton size="small" onClick={onDone}>

@@ -1,0 +1,20 @@
+.MuiFormControl-root.MuiTextField-root.css-1u3bzj6-MuiFormControl-root-MuiTextField-root {
+  max-width: 100%;
+}
+
+#select-label.MuiSelect-select.MuiSelect-outlined.MuiOutlinedInput-input.MuiInputBase-input {
+  height: 0;
+  padding: 14.5px 15px;
+  margin: auto;
+}
+
+.select-container
+  .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiSelect-icon.MuiSelect-iconOutlined {
+  display: none;
+}
+.MuiMenuItem-root.MuiMenuItem-gutters.MuiButtonBase-root {
+  justify-content: center;
+}
+.MuiOutlinedInput-root.MuiInputBase-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd {
+  height: 52px;
+}

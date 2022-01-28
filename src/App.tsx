@@ -1,6 +1,6 @@
 import appStyle from "./App.module.css";
-import AppContextProvider from "./context/app-context.provider";
-import TodoBoard from "./components/TodoBoard/TodoBoard";
+import AppContextProvider from "context/app-context.provider";
+import TodoBoard from "components/TodoBoard/TodoBoard";
 
 function App() {
   return (

@@ -1,20 +1,15 @@
 import { Grid } from "@mui/material";
 import TodoForm from "./TodoForm/TodoForm";
 import TodoList from "./TodoList/TodoList";
-import Board from "../UI/Board";
+import Board from "components/UI/Board/Board";
 import { useCallback, useState } from "react";
 import todoListStyle from "./TodoList/TodoList.module.css";
 import MainDate from "./MainDate/MainDate";
 
-export enum TodoListType {
-  ALL = 0,
-  Completed = 1,
-  Incompleted = 2,
-}
-
 const TodoBoard = () => {
   // ANCHOR states
   const [listDate, setListDate] = useState<Date>(new Date(Date.now()));
+  console.log("listDate: " + listDate);
 
   const [isItemAdded, setIsItemAdded] = useState<boolean>(false);
 
@@ -39,7 +34,7 @@ const TodoBoard = () => {
           item
           xs={3}
           md={3}
-          height="100%"
+          height="100vh%"
           display="flex"
           flexDirection="column"
           justifyContent={"center"}
@@ -47,20 +42,20 @@ const TodoBoard = () => {
         >
           <Grid
             container
-            height={"100%"}
+            height={"450px"}
             direction={"column"}
             justifyContent={"center"}
             alignItems={"center"}
             flexWrap={"nowrap"}
           >
-            <Grid item xs={12} md={2} width={"100%"} height={"10%"}>
+            <Grid item xs={3} md={1} width={"100%"}>
               <MainDate
                 listDate={listDate}
                 onDateChange={handleCalendarDatePick}
               />
             </Grid>
 
-            <Grid item xs={12} md={10}>
+            <Grid item xs={9} md={11}>
               <TodoForm listDate={listDate} onSubmit={handleSubmit}></TodoForm>
             </Grid>
           </Grid>

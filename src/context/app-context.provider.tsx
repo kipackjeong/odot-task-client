@@ -1,6 +1,6 @@
-import AppCtx from "./app-context";
-import React, { useEffect, useReducer, useState } from "react";
-import todosReducer from "../reducers/todos.reducer";
+import { useReducer } from "react";
+import todosReducer from "context/reducers/todos.reducer";
+import AppCtx from "context/app-context";
 
 const defaultState = {
   user: {
@@ -10,14 +10,15 @@ const defaultState = {
   compTodos: [],
 };
 
-function AppContextProvider(props: any) {
+const AppContextProvider = (props: any) => {
   const children = props.children;
-
   const [state, dispatch] = useReducer(todosReducer, defaultState);
-
   return (
-    <AppCtx.Provider value={{ state, dispatch }}>{children}</AppCtx.Provider>
+    <AppCtx.Provider value={{ state: state, dispatch: dispatch }}>
+      {" "}
+      {children}{" "}
+    </AppCtx.Provider>
   );
-}
+};
 
 export default AppContextProvider;

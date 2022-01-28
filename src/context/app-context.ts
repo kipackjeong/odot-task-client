@@ -1,5 +1,4 @@
-import React, { Dispatch } from "react";
-import ReadTodo from "../models/read-todo";
+import { createContext } from "react";
 import AppContextInterface from "./app-context.interface";
 
 const defaultValue: AppContextInterface = {
@@ -10,6 +9,6 @@ const defaultValue: AppContextInterface = {
   },
   dispatch: () => {},
 };
-const AppCtx = React.createContext<AppContextInterface>(defaultValue);
+const AppCtx = createContext(defaultValue);
 
 export default AppCtx;

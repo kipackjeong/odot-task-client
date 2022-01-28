@@ -29,10 +29,7 @@ function TodoListTableHead(props: any) {
   return (
     <TableHead>
       <TableRow>
-        <StyledTableCell
-          align="left"
-          style={{ paddingTop: 0, paddingBottom: 0 }}
-        >
+        <StyledTableCell align="left">
           <Checkbox
             edge="start"
             checked={checked}
@@ -43,13 +40,13 @@ function TodoListTableHead(props: any) {
             onClick={onCheckToggle}
           />
         </StyledTableCell>
-        <StyledTableCell width="40%" align="center">
+        <StyledTableCell width="60%" align="center">
           <p style={{ fontSize }}> Task </p>
         </StyledTableCell>
         <StyledTableCell width="10%" align="center">
           Priority
         </StyledTableCell>
-        <StyledTableCell width="17%" align="center">
+        <StyledTableCell width="15%" align="center">
           Due
         </StyledTableCell>
       </TableRow>

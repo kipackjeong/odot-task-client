@@ -3,18 +3,18 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import { fetchAllAction } from "../../../actions/itemActions";
-import AppCtx from "../../../context/app-context";
-import ReadTodo from "../../../models/read-todo";
+import { fetchAllAction } from "../../../context/actions/itemActions";
+import AppCtx from "context/app-context";
+import ReadTodo from "models/read-todo";
 import TodoItem from "./TodoListTableBody/TodoItem";
 import TodoListTableHead from "./TodoListTableHead/TodoListTableHead";
 import todoApi from "../../../api/todoApi";
 import todoListStyle from "./TodoList.module.css";
 import TodoStatusBtn from "./TodoStatusBtn/TodoStatusBtn";
-import { TodoListType } from "../TodoBoard";
+import TodoListType from "enums/todo-list-type.enum";
 import ListChangeToggle from "./ListChangeToggle/ListChangeToggle";
-import { ITodo } from "../../../interfaces/interfaces";
-import useTodoList from "../../../hooks/use-todo-list";
+import { ITodo } from "interfaces/interfaces";
+import useTodoList from "context/hooks/todo-list.hook";
 import TodoListTableBody from "./TodoListTableBody/TodoListTableBody";
 
 type TodoListProperty = {
@@ -84,7 +84,7 @@ export default function TodoList(props: TodoListProperty) {
       </div>
       <ListChangeToggle listType={listType} onChange={handleListTypeToggle} />
 
-      <TableContainer className={todoListStyle.list}>
+      <TableContainer style={{ width: "100%" }} className={todoListStyle.list}>
         <Table size="small" stickyHeader aria-label="sticky table">
           <TodoListTableHead
             fontSize={headerFontSize}

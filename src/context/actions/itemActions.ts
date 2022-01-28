@@ -1,5 +1,5 @@
-import { IStateAction, ITodo } from "../interfaces/interfaces";
-import { TodoListType } from "../components/TodoBoard/TodoBoard";
+import { IStateAction, ITodo } from "../../interfaces/interfaces";
+import TodoListType from "enums/todo-list-type.enum";
 
 export enum ItemActionType {
   FetchAll = "ALL",

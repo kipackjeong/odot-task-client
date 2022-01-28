@@ -1,9 +1,6 @@
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { TodoListType } from "../../TodoBoard";
-import listChangeToggle from "./ListChangeToggle.module.css";
-import slide from "./slide.module.css";
-import Switch from "@mui/material/Switch";
-import { IconButton } from "@mui/material";
+import { IconButton, Switch } from "@mui/material";
+import TodoListType from "enums/todo-list-type.enum";
 
 const ListChangeToggle = (props: any) => {
   // ANCHOR props

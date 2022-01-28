@@ -1,4 +1,5 @@
-import { ITodo, Priority } from "../interfaces/interfaces";
+import { ITodo } from "../interfaces/interfaces";
+import Priority from "enums/priority.enum";
 
 export default class ReadTodo implements ITodo {
   constructor(
@@ -6,8 +7,8 @@ export default class ReadTodo implements ITodo {
     public task: string,
     public createdAt: Date,
     public modifiedAt: Date,
-    public dueDate: Date,
     public priority: Priority,
-    public completed: boolean
+    public completed: boolean,
+    public dueDate?: Date
   ) {}
 }
