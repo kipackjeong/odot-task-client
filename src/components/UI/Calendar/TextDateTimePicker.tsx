@@ -1,6 +1,6 @@
 import { IconButton } from "@mui/material";
 import { isSameDay, isToday } from "date-fns";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 import ModalCalendarTimePicker from "./ModalCalendarTimePicker";
 import DateRangeIcon from "@mui/icons-material/DateRange";
@@ -11,6 +11,7 @@ type TextDateTimePickerProps = {
   date: Date | undefined;
   displayTimeForToday: boolean;
   showClock: boolean;
+  disablePast: boolean;
   iconForNullDate: boolean;
   onDateChange?: Function;
   onDateAccept: Function;
@@ -22,6 +23,7 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
   // ANCHOR props
   const {
     date,
+    disablePast,
     displayTimeForToday,
     showClock,
     iconForNullDate,
@@ -29,30 +31,34 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
     textUnderLine,
     fontSize,
   } = props;
+  // #region ANCHOR
   const [showModal, setShowModal] = useState(false);
-  // ANCHOR handlers
-  const handleTextDateClick = () => {
-    setShowModal(true);
-  };
-  const handleCaledarDatePickChange = (newDate: Date) => {
-    if (!showClock) {
-      onDateAccept(newDate);
-      setShowModal(false);
-    }
-  };
-  const handleCaledarDatePickAccept = (newDate: Date) => {
-    onDateAccept(newDate);
 
+  // #region ANCHOR Handlers
+  const handleTextDateClick = useCallback(() => {
+    setShowModal(true);
+  }, []);
+  const handleCaledarDatePickChange = useCallback(
+    (newDate: Date) => {
+      if (!showClock) {
+        onDateAccept(newDate);
+        setShowModal(false);
+      }
+    },
+    [showClock]
+  );
+  const handleCaledarDatePickAccept = useCallback((newDate: Date) => {
+    onDateAccept(newDate);
     // close calendar
     setShowModal(false);
-  };
-  const handleBackDropClick = () => {
+  }, []);
+
+  const handleBackDropClick = useCallback(() => {
     setShowModal(false);
-  };
+  }, []);
+  // #endregion Handlers
 
   // ANCHOR local
-  console.log("TextDateTimePicker: ", date);
-
   const title = useMemo(() => {
     return (
       <p
@@ -85,6 +91,7 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
 
   return showModal ? (
     <ModalCalendarTimePicker
+      disablePast={disablePast}
       showModal={showModal}
       displayTimeForToday={displayTimeForToday}
       date={date}
@@ -101,5 +108,6 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
 TextDateTimePicker.defaultProps = {
   displayTimeForToday: true,
   iconForNullDate: true,
+  disablePast: true,
 };
-export default TextDateTimePicker;
+export default React.memo(TextDateTimePicker);

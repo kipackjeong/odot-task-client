@@ -1,7 +1,20 @@
-import React, { MouseEvent, useEffect, useMemo, useState } from "react";
+import React, {
+  EventHandler,
+  KeyboardEventHandler,
+  MouseEvent,
+  ReactEventHandler,
+  SyntheticEvent,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   Checkbox,
   Grow,
+  IconButton,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   styled,
   StyledEngineProvider,
   TableCell,
@@ -11,12 +24,14 @@ import {
 } from "@mui/material";
 import { DateTimePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import ReadTodo from "../../../../models/read-todo";
-import UpdateTodo from "../../../../models/update-todo";
+import UpdateTodo from "models/update-todo";
 import "./TodoItem.css";
-import PriorityIcon from "../../../UI/PriorityIcon/PriorityIcon";
 import TextDateTimePicker from "components/UI/Calendar/TextDateTimePicker";
 import { ConstructionOutlined } from "@mui/icons-material";
+import Priority from "enums/priority.enum";
+import PrioritySelector from "components/UI/PrioritySelector/PrioritySelector";
+import ReadTodo from "models/read-todo";
+import TaskInput from "components/UI/TaskInput/TaskInput";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -49,39 +64,70 @@ function TodoItem(props: TodoItemProps) {
     onUpdate,
   } = props;
 
-  /* ANCHOR state */
+  // #region ANCHOR State
+
   const [dateToDisplay, setDateToDisplay] = useState(todo.dueDate);
-
   const [dateFormat, setDateFormat] = useState("MM/dd");
-  const labelId = `checkbox-li  st-label-${todo.id}`;
-  /* ANCHOR hooks */
+  const [priority, setPriority] = useState<Priority>(todo.priority);
+  const [task, setTask] = useState<string>(todo.task);
+  const [taskInputOn, setTaskInputOn] = useState<boolean>(false);
+  // #endregion State
 
-  /* ANCHOR local var, component */
-  const todayDate = useMemo(() => {
-    return new Date(Date.now());
-  }, []);
+  // #region ANCHOR Hooks
 
-  /* ANCHOR useEffect */
+  // #endregion
 
+  // #region ANCHOR Effects
   /* change date display format */
   useEffect(() => {
-    if (!todo.dueDate) {
-      return;
-    }
-    if (
-      todo.dueDate.getDate() === todayDate.getDate() &&
-      todo.dueDate.getMonth() === todayDate.getMonth() &&
-      todo.dueDate.getFullYear() === todayDate.getFullYear()
-    ) {
-      setDateFormat("HH:mm");
+    const decideDateFormat = function () {
+      if (!todo.dueDate) {
+        return;
+      }
+      if (
+        todo.dueDate.getDate() === todayDate.getDate() &&
+        todo.dueDate.getMonth() === todayDate.getMonth() &&
+        todo.dueDate.getFullYear() === todayDate.getFullYear()
+      )
+        setDateFormat("HH:mm");
+      else setDateFormat("MM/dd");
       setDateToDisplay(todo.dueDate);
-    } else {
-      setDateFormat("MM/dd");
-      setDateToDisplay(todo.dueDate);
-    }
-  }, [todo]);
+    };
 
-  /* ANCHOR handlers */
+    decideDateFormat();
+    setPriority(todo.priority);
+    setTask(todo.task);
+  }, [todo]);
+  // #endregion
+
+  // #region ANCHOR Handlers
+  const handleTaskClick = () => {
+    setTaskInputOn(true);
+  };
+
+  const handleTaskChange = (event: SyntheticEvent<HTMLInputElement>) => {
+    setTask(event.currentTarget.value);
+  };
+
+  const handleTaskSubmit: EventHandler<
+    SyntheticEvent<HTMLInputElement>
+  > = () => {
+    const updateTodo: UpdateTodo = new UpdateTodo(todo.id, {
+      task,
+    });
+    setTaskInputOn(false);
+    onUpdate(updateTodo);
+  };
+
+  const handlePrioritySelect = (event: any) => {
+    const newPriority: Priority = event.target.value as Priority;
+    const updateTodo: UpdateTodo = new UpdateTodo(todo.id, {
+      priority: newPriority,
+    });
+
+    setPriority(newPriority);
+    onUpdate(updateTodo);
+  };
   const handleDueDatePickerAccept = (newDueDate: Date | null) => {
     if (newDueDate! < todayDate) {
       return;
@@ -90,6 +136,7 @@ function TodoItem(props: TodoItemProps) {
     const updateTodo: UpdateTodo = new UpdateTodo(todo.id, {
       dueDate: newDueDate!,
     });
+
     setDateToDisplay(new Date(newDueDate!));
     onUpdate(updateTodo);
   };
@@ -99,10 +146,18 @@ function TodoItem(props: TodoItemProps) {
       return;
     }
   };
+  // #endregion Handlers
+
+  // #region ANCHOR Memo
+  const todayDate = useMemo(() => {
+    return new Date(Date.now());
+  }, []);
+  const labelId = useMemo(() => `checkbox-li  st-label-${todo.id}`, [todo]);
+  // #endregion Memo
 
   return (
     <Grow in={todo !== null} timeout={renderTime}>
-      <TableRow key={todo.id}>
+      <TableRow key={todo.id} className="todo-row">
         <StyledTableCell
           height={"5px"}
           style={{ paddingTop: 0, paddingBottom: 0 }}
@@ -120,11 +175,32 @@ function TodoItem(props: TodoItemProps) {
             }}
           />
         </StyledTableCell>
+
         <StyledTableCell height={"5px"} width={"40%"} align="center">
-          <p style={{ fontSize }}> {todo.task}</p>
+          {taskInputOn ? (
+            <TaskInput
+              fullWidth={false}
+              value={task}
+              onChange={handleTaskChange}
+              onSubmit={handleTaskSubmit}
+              error={false}
+            />
+          ) : (
+            <p
+              style={{ fontSize, cursor: "pointer" }}
+              onClick={handleTaskClick}
+            >
+              {task}
+            </p>
+          )}
         </StyledTableCell>
+
         <StyledTableCell width={"10%"} align="center">
-          <PriorityIcon priority={todo.priority} />
+          <PrioritySelector
+            priority={priority}
+            labelOn={false}
+            onSelect={handlePrioritySelect}
+          />
         </StyledTableCell>
 
         <StyledTableCell align="center">

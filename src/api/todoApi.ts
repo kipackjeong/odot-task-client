@@ -6,7 +6,10 @@ import UpdateTodo from "../models/update-todo";
 
 class TodoApi {
   url = "http://localhost:3000/items/";
-  private mapTodo(todo: any) {
+
+  /* mapping is needed because the date property is received as string from api. */
+  private mapTodo(todo: any): ReadTodo {
+    // when dueDate is null, don't do anything
     if (!todo.dueDate) {
       return todo;
     }
@@ -15,44 +18,33 @@ class TodoApi {
     return todo;
   }
 
-  private mapIncomingTodos(response: AxiosResponse) {
-    const todos = response.data.data;
+  private mapIncomingTodos(response: AxiosResponse): ReadTodo[] {
+    const todos: ReadTodo[] = response.data.data;
     todos.map(this.mapTodo);
     return todos;
   }
-  getAllTodos = async () => {
-    console.log("getAllTodos");
-    const response = await axios.get(this.url);
+  get = async (queryStr: string) => {
+    console.log(queryStr);
+    const response = await axios.get(this.url + queryStr);
     const todos = this.mapIncomingTodos(response);
-    console.log(todos);
+
     return todos;
   };
 
-  getCompletedTodos = async (date: Date) => {
-    const response = await axios.get(`${this.url}?completed=true&date=${date}`);
-    const todos = this.mapIncomingTodos(response);
-    return todos;
-  };
-  getInCompletedTodos = async (date: Date) => {
-    const response = await axios.get(
-      `${this.url}?completed=false&date=${new Date(date)}`
-    );
-    const todos = this.mapIncomingTodos(response);
-    return todos;
-  };
-
-  createTodo = async (newItem: CreateTodo): Promise<ReadTodo> => {
+  postTodo = async (newItem: CreateTodo): Promise<ReadTodo> => {
     const response = await axios.post(this.url, newItem);
     const createdTodo: ReadTodo = response.data.data;
-    console.log(createdTodo);
     return this.mapTodo(createdTodo);
   };
 
-  updateTodo = async (id: string, updatingItem: ITodo) => {
-    const response = await axios.put(this.url + id, updatingItem);
+  putTodo = async (updateTodo: UpdateTodo) => {
+    const response = await axios.put(
+      this.url + updateTodo.id,
+      updateTodo.option
+    );
   };
 
-  updateMultipleTodos = async (updateTodos?: UpdateTodo[]) => {
+  putMultipleTodos = async (updateTodos?: UpdateTodo[]) => {
     await axios.put(this.url, { data: updateTodos });
   };
 

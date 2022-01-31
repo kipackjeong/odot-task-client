@@ -15,3 +15,7 @@
 
   cursor: pointer;
 }
+
+.todo-row .MuiOutlinedInput-notchedOutline {
+  border: none;
+}

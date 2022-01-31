@@ -34,6 +34,7 @@ todosReducer = function (state, action: TodosAction): ITodo[] {
   const { listType, data } = action.payload;
 
   const newState = { ...state };
+
   let newTodos =
     listType === TodoListType.Completed
       ? [...state.compTodos]

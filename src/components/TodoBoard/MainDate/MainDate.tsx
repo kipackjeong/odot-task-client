@@ -20,6 +20,7 @@ const MainDate = (props: MainDateProps) => {
 
   return (
     <TextDateTimePicker
+      disablePast={false}
       displayTimeForToday={false}
       date={listDate}
       showClock={false}

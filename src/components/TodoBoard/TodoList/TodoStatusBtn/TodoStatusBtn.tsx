@@ -14,6 +14,7 @@ type TodoStatusBtn = {
   onDone: boolean;
   onRemove: Function;
 };
+
 const TodoStatusBtn = (props: any) => {
   // ANCHOR props
   const { listType, showButtons, onDone, onRemove } = props;

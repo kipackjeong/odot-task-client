@@ -1,9 +1,13 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo, EventHandler } from "react";
 import { fetchAllAction, updateItemAction } from "../actions/itemActions";
 import todoApi from "api/todoApi";
 import TodoListType from "enums/todo-list-type.enum";
 import ReadTodo from "models/read-todo";
 import UpdateTodo from "models/update-todo";
+import { SettingsInputComponentOutlined } from "@mui/icons-material";
+import todoService from "service/todoService";
+
+// FIXME: task update issue.
 
 const useTodoList = (
   inCompTodos: ReadTodo[],
@@ -13,35 +17,54 @@ const useTodoList = (
   afterFetching: Function,
   dispatch: Function
 ) => {
-  // ANCHOR state
+  // #region ANCHOR State
   const [checkedItemIds, setCheckedItemIds] = useState<string[]>([]);
   const [updateWaitingList, setUpdateWaitingList] = useState<UpdateTodo[]>([]);
-
   const [allChecked, setAllChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [listType, setListType] = useState(TodoListType.Incompleted);
   const [listChanged, setListChanged] = useState(false);
-  const [doneListChanged, setDoneListChanged] = useState(false);
+  // #endregion
 
-  // ANCHOR useEffects
-  useEffect(() => {
-    console.log("initial fetch");
-    fetchData();
-    setIsLoading(false);
-  }, []);
+  // #region ANCHOR Effects
 
-  useEffect(() => {
-    if (updateWaitingList.length > 0) {
-      updateData();
+  useEffect(whenInitialRender, []);
+  function whenInitialRender() {
+    const loadCallback = (event: any) => {
+      event.preventDefault();
       setListChanged(true);
-      setDoneListChanged(true);
+    };
+    window.addEventListener("load", loadCallback);
+    fetchTodos();
+
+    return () => {
+      window.removeEventListener("loadeddata", loadCallback);
+    };
+  }
+
+  /**When added new item , updated todo properties, and deleted todos
+   * must call request to refresh the data from the first.
+   */
+  useEffect(refreshData, [listDate, listType, listChanged]);
+
+  function refreshData() {
+    console.log("refreshData");
+    if (updateWaitingList.length > 0) {
+      callServiceToUpdate();
+      setUpdateWaitingList([]);
     }
+    fetchTodos();
+  }
 
-    fetchData();
-  }, [listDate, listType, isItemAdded, listChanged, doneListChanged]);
+  useEffect(whenItemAdded, [isItemAdded]);
+  function whenItemAdded() {
+    setListChanged(isItemAdded);
+  }
 
-  // ANCHOR: handlers
-  const handleAllCheckToggle = () => {
+  // #endregion
+
+  //#region ANCHOR: Handlers
+  const handleAllCheckToggle = useCallback(() => {
     // remove all check
     if (checkedItemIds.length > 0) {
       setCheckedItemIds([]);
@@ -51,12 +74,8 @@ const useTodoList = (
       setCheckedItemIds((checkedIds) => {
         const newCheckedIds: string[] = [];
 
-        let todos;
-        if (listType === TodoListType.Incompleted) {
-          todos = inCompTodos;
-        } else {
-          todos = compTodos;
-        }
+        let todos =
+          listType === TodoListType.Incompleted ? inCompTodos : compTodos;
 
         for (var todo of todos) {
           newCheckedIds.push(todo.id);
@@ -66,7 +85,7 @@ const useTodoList = (
       });
       setAllChecked((prev) => !prev);
     }
-  };
+  }, [checkedItemIds.length, compTodos, inCompTodos, listType]);
 
   const handleListTypeToggle = () => {
     if (listType === TodoListType.Incompleted)
@@ -96,7 +115,7 @@ const useTodoList = (
   const handleRemove = async (event: Event) => {
     event.preventDefault();
     // DELETE request
-    await todoApi.deleteMultipleTodos(checkedItemIds);
+    await todoService.deleteMultipleTodos(checkedItemIds);
 
     // empty out checkedItemIds.
     setCheckedItemIds([]);
@@ -105,14 +124,7 @@ const useTodoList = (
     // refresh allChecked.
     setAllChecked(false);
 
-    // notify change
-    // when incompleted item is deleted
-    if (listType === TodoListType.Incompleted) {
-      setListChanged(true);
-    } else {
-      // when completed item is deleted
-      setDoneListChanged(true);
-    }
+    setListChanged(true);
   };
 
   const handleDone = async () => {
@@ -122,13 +134,12 @@ const useTodoList = (
       const updateTodo: UpdateTodo = new UpdateTodo(checkedItemId, {
         // the completed status depends on the type of the list currently on.
         // if current list is completed list and user clicks undone, then here should set item.completed = false.
-
         completed: listType === TodoListType.Completed ? false : true,
       });
       updateTodos.push(updateTodo);
     }
 
-    await todoApi.updateMultipleTodos(updateTodos);
+    await todoService.updateMultipleTodos(updateTodos);
     // empty out checkedItemIds.
     setCheckedItemIds([]);
     // loading
@@ -137,12 +148,9 @@ const useTodoList = (
     setAllChecked(false);
     // notify change
     setListChanged(true);
-    setDoneListChanged(true);
   };
 
   const handleUpdate = (updateTodo: UpdateTodo) => {
-    console.log(`useTodoList: handleUpdate: ${JSON.stringify(updateTodo)}`);
-
     // update local state setUpdateWaitingList.
     setUpdateWaitingList((prev) => {
       const newList = [...prev];
@@ -155,122 +163,110 @@ const useTodoList = (
       if (indexOfExistingItem !== -1) {
         // get existing item with indexOfExisting Item.
         const existingItem = prev[indexOfExistingItem];
+
+        // copy exsitingItem and updateTodo's property to newItem.
         const newItem = {
           ...existingItem,
           ...updateTodo,
         };
+
         // replace existingItem with newItem
         newList.splice(indexOfExistingItem, 1, newItem);
       } else {
         newList.push(updateTodo);
       }
-
       return newList;
     });
-  };
-
-  // ANCHOR helpers
-
-  const updateData = async () => {
-    console.log("call api to updateData");
-
-    const result = await todoApi.updateMultipleTodos(updateWaitingList);
 
     setListChanged(true);
-    setUpdateWaitingList([]);
   };
+  // #endregion
 
-  const fetchData = async (): Promise<void> => {
-    console.log("fetchData");
-    const sessionKey = `${listDate.toLocaleDateString()},${listType}`;
+  // #region ANCHOR Helpers
+
+  // #endregion
+
+  // #region ANCHOR Memo
+
+  /*  Generate key by listDate. */
+  const sessionKey = useMemo(() => {
+    return `${listDate.toLocaleDateString()},${listType}`;
+  }, [listDate, listType]);
+  // #endregion
+
+  // #region ANCHOR call service Function
+
+  /**
+   * - calls todoService.updateMultipleTodos(updateWaitingList).
+   * - dependencies: updateWaitingList.
+   */
+  const callServiceToUpdate = useCallback(async () => {
+    const result = await todoService.updateMultipleTodos(updateWaitingList);
+  }, [updateWaitingList]);
+
+  /**
+   * - get todos upon listtype and listChanged state.
+   */
+  const fetchTodos = useCallback(async (): Promise<void> => {
     const todosFromSession: string | null = sessionStorage.getItem(sessionKey);
+
     let newTodos;
 
-    // if session does not have data, doesn't matter if it's incompleted or completed list, need to fetch from api.
-    if (!todosFromSession) {
-      switch (listType) {
-        case TodoListType.Completed:
-          newTodos = await todoApi.getCompletedTodos(listDate);
-          setDoneListChanged(false);
-          dispatch(fetchAllAction(newTodos, TodoListType.Completed));
-
-          break;
-        case TodoListType.Incompleted:
-          newTodos = await todoApi.getInCompletedTodos(listDate);
-          console.log(typeof newTodos[0].dueDate);
-          setListChanged(false);
-
-          dispatch(fetchAllAction(newTodos, TodoListType.Incompleted));
-          afterFetching();
-
-          break;
-        default:
-          break;
-      }
+    /** NOTE When session does not have data.
+     * - get todos from the service
+     * - save todos in session storage.
+    .*/
+    if (!todosFromSession || todosFromSession === "[]") {
+      console.log(`initialFetch: listType ${listType}`);
+      newTodos = await todoService.getTodos({
+        listType: listType,
+        date: listDate,
+      });
 
       // update session storage
       sessionStorage.setItem(sessionKey, JSON.stringify(newTodos));
-      setIsLoading(false);
-      return;
-    }
 
-    // session has data
-    const parsedTodosFromSession = JSON.parse(todosFromSession);
-    // if session has data, and if on incompleted list.
-    if (listType === TodoListType.Incompleted) {
-      // check if there should be any changes.
+      // update context
+    } else {
+      /** NOTE When session has data.
+       * - if anything in the list changed or item is added; get todos from the service.
+       * - otherwise, just use todos from the session storage.
+       */
+      // check if there is anything updated.
       if (listChanged || isItemAdded) {
-        // there is a change then call api
-        newTodos = await todoApi.getInCompletedTodos(listDate);
-        // update session storage
+        newTodos = await todoService.getTodos({
+          listType: listType,
+          date: listDate,
+        });
         sessionStorage.setItem(sessionKey, JSON.stringify(newTodos));
-        dispatch(fetchAllAction(newTodos, TodoListType.Incompleted));
-        afterFetching();
-        setListChanged(false);
       } else {
-        // no change needed. get data from session.
-
-        for (var todo of parsedTodosFromSession) {
+        newTodos = JSON.parse(todosFromSession);
+        for (var todo of newTodos) {
           if (!todo.dueDate) {
             continue;
           }
           todo.dueDate = new Date(todo.dueDate);
         }
-        setListChanged(false);
-        // update context
-        dispatch(
-          fetchAllAction(parsedTodosFromSession, TodoListType.Incompleted)
-        );
       }
     }
 
-    // if session has data, and if on completed list.
-    if (listType === TodoListType.Completed) {
-      // if there is any changes need to be made.
-      if (doneListChanged) {
-        newTodos = await todoApi.getCompletedTodos(listDate);
-        sessionStorage.setItem(sessionKey, JSON.stringify(newTodos));
-        dispatch(fetchAllAction(newTodos, TodoListType.Completed));
-        setDoneListChanged(false);
-      } else {
-        // if no change needed, just get from local storage
+    // update context
+    dispatch(fetchAllAction(newTodos, listType));
 
-        for (var todo of parsedTodosFromSession) {
-          if (!todo.dueDate) {
-            continue;
-          }
-          todo.dueDate = new Date(todo.dueDate);
-        }
-        dispatch(
-          fetchAllAction(parsedTodosFromSession, TodoListType.Completed)
-        );
-      }
-    }
-
+    // reset states.
     setIsLoading(false);
-
-    // resets prop from TodoBoard,isItemAdded to false.
-  };
+    setListChanged(false);
+    afterFetching();
+  }, [
+    sessionKey,
+    dispatch,
+    listType,
+    afterFetching,
+    listDate,
+    listChanged,
+    isItemAdded,
+  ]);
+  // #endregion fetchTodos
 
   return {
     listType,

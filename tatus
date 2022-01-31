@@ -1,0 +1,119 @@
+[33mcommit cd9892a24b549817d7453e26c1129b4f7698020b[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: kipackjeong <raphilo92@gmail.com>
+Date:   Thu Jan 27 20:37:54 2022 -0500
+
+    add due date icon, functionality, change dueDate data type to nullable, update Item functionality issue fix
+
+[33mcommit 71ef93a740c5902b58415ab05bc4ae2b88bb8757[m
+Author: kipackjeong <raphilo92@gmail.com>
+Date:   Sun Jan 23 01:40:42 2022 -0500
+
+    implement animation when rendering todoList, add MainDate comp with functionality, adjust grid of TodoForm
+
+[33mcommit 624a8895ec393c302741057df52141f4ef85b5f1[m
+Author: kipackjeong <raphilo92@gmail.com>
+Date:   Sat Jan 22 16:07:24 2022 -0500
+
+    add update dueDate functionality in TodoItem and useTodoList
+
+[33mcommit 23b9852b39395c517f6dbe49620154abd03a39e5[m
+Author: kipackjeong <raphilo92@gmail.com>
+Date:   Sat Jan 22 13:51:04 2022 -0500
+
+    add UpdateTodoObject, UpdateTodo, UpdateTodoDataObject
+
+[33mcommit b2371105210bd406fd58a1b0f79dbc7c6a499f38[m
+Author: kipackjeong <raphilo92@gmail.com>
+Date:   Sat Jan 22 13:50:45 2022 -0500
+
+    add UpdateTodoObject, UpdateTodo, UpdateTodoDataObject
+
+[33mcommit fa85f2742f5aaf3e575ecaa7baa5af3dcbd166f0[m
+Author: kipackjeong <raphilo92@gmail.com>
+Date:   Sat Jan 22 13:00:22 2022 -0500
+
+    change font size for TodoItem, TodoListTableHead &  change ReadItem models date data type : string -> Date
+
+[33mcommit 186b8f58e9f6ba94c2bad061a81c8a0d711049bc[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Sat Jan 22 11:19:53 2022 -0500
+
+    added skeleton datepicker at duedate column in TodoItem
+
+[33mcommit 813794b20cd4bbbff2c1462c3bdacb40062908dc[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Sat Jan 22 10:31:41 2022 -0500
+
+    added animation on list toggle, list rendering
+
+[33mcommit 954f2ab67f448fc4ee02126956a2628c3e51e850[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Sat Jan 22 07:28:04 2022 -0500
+
+    before modifying listtype toggle
+
+[33mcommit 135f1a4dcd91cc1a265b877c1ff275e7ce90fdc0[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Fri Jan 21 22:35:10 2022 -0500
+
+    implement session storage to save session data to reduce api calls
+
+[33mcommit 65a137e1d1c734f13ab5254413059488cd238262[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Fri Jan 21 11:55:54 2022 -0500
+
+    implement fetching data according with date picked from calendar
+
+[33mcommit 9a5ebe9b926b570a755e4ede94c5b321bbd20417[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Fri Jan 21 02:20:46 2022 -0500
+
+    add toggle to change list type, add todo status change button
+
+[33mcommit 4b2371da6fcbbbcbc711f18c9340a74be4590412[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Thu Jan 20 20:30:54 2022 -0500
+
+    implement checkbox, removebutton for TodoList
+
+[33mcommit fa1c8db31bacae2741c845f53f8e2cc1acd6255c[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Thu Jan 20 14:57:11 2022 -0500
+
+    integrate datatable on ToDoListTwo
+
+[33mcommit d5f46ebd39354da98e527a8b4394f3cef92b0959[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Wed Jan 19 23:53:05 2022 -0500
+
+    implement toggle done button on checked
+
+[33mcommit fde3f17877729490c4d3ca5761fb2d5d3a5c694c[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Wed Jan 19 22:40:53 2022 -0500
+
+    ToDoFrom : handle empty valued task submit
+
+[33mcommit 0c3e616ffbd6bb0d45956a1e5cce001d53d3ee46[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Tue Jan 18 23:30:54 2022 -0500
+
+    fix error: TodoItem : rendering undefined
+
+[33mcommit 728690d1d63648aa15452f8cf47a3eeb51c5f49e[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Tue Jan 18 15:52:00 2022 -0500
+
+    add addToDo functionality in TodoForm.tsx
+
+[33mcommit ae3818e58a515512ccdee070a2886e87f102c7de[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Tue Jan 18 14:48:03 2022 -0500
+
+    add context
+
+[33mcommit 417bcdc82356aa4b35376bf5147362207d73ec68[m
+Author: Kipack Jeong <kipack.jeong@outlook.com>
+Date:   Mon Jan 17 16:59:46 2022 -0500
+
+    Initialize project using Create React App

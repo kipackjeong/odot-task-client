@@ -23,6 +23,7 @@ import { TimePickerView } from "@mui/lab/TimePicker/shared";
 type ModalCalendarTimePickerProps = {
   date: Date | undefined;
   displayTimeForToday: boolean;
+  disablePast: boolean;
   onChange: Function;
   onAccept: Function;
   showModal: boolean;
@@ -50,6 +51,7 @@ const ModalCalendarTimePicker = (props: ModalCalendarTimePickerProps) => {
   // ANCHOR props
   const {
     date,
+    disablePast,
     onChange,
     onAccept,
     showModal,
@@ -159,7 +161,7 @@ const ModalCalendarTimePicker = (props: ModalCalendarTimePickerProps) => {
             ) : null
           ) : (
             <StaticDatePicker
-              disablePast={true}
+              disablePast={disablePast}
               displayStaticWrapperAs="desktop"
               openTo="day"
               value={date}
@@ -191,6 +193,10 @@ const ModalCalendarTimePicker = (props: ModalCalendarTimePickerProps) => {
       </Dialog>
     </>
   );
+};
+
+ModalCalendarTimePicker.defaultProps = {
+  disablePast: true,
 };
 
 export default ModalCalendarTimePicker;

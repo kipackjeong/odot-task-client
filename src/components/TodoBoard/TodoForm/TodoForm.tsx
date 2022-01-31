@@ -1,7 +1,5 @@
 import {
   Button,
-  FormControl,
-  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -9,7 +7,6 @@ import {
   TextField,
 } from "@mui/material";
 import React, { SyntheticEvent, useContext, useState, useEffect } from "react";
-import todoFormStyle from "./TodoForm.module.css";
 import "./TodoForm.css";
 import AppCtx from "context/app-context";
 import { addItemAction } from "context/actions/itemActions";
@@ -22,22 +19,8 @@ import { LocalizationProvider, DatePicker, DateTimePicker } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import Priority from "enums/priority.enum";
 import PriorityIcon from "../../UI/PriorityIcon/PriorityIcon";
-
-function TodoInput(props: any) {
-  return (
-    <>
-      <TextField
-        fullWidth
-        color="success"
-        label="What To Do?"
-        variant="standard"
-        value={props.value}
-        onChange={props.onChange}
-        error={props.error}
-      />
-    </>
-  );
-}
+import TaskInput from "components/UI/TaskInput/TaskInput";
+import todoService from "service/todoService";
 
 type TodoFormProp = {
   listDate: Date;
@@ -78,7 +61,7 @@ function TodoForm(props: TodoFormProp) {
       priority: priority,
     };
 
-    const createdTodoFromServer: ReadTodo = await todoApi.createTodo(
+    const createdTodoFromServer: ReadTodo = await todoService.createTodo(
       creatingTodo
     );
 
@@ -87,7 +70,7 @@ function TodoForm(props: TodoFormProp) {
     setTyped(false);
     onSubmit(true);
   };
-  const handleOnChange = (event: SyntheticEvent) => {
+  const handleOnChange = (event: SyntheticEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
     setTask(target.value);
     setTyped(true);
@@ -113,11 +96,12 @@ function TodoForm(props: TodoFormProp) {
         alignItems={"center"}
       >
         <Grid item width={"90%"} md={4}>
-          <TodoInput
+          <TaskInput
             value={task}
+            label="What do you need to do?"
             onChange={handleOnChange}
             error={inputError}
-          ></TodoInput>
+          />
         </Grid>
 
         <Grid item md={4}>

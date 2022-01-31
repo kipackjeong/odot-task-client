@@ -24,16 +24,18 @@ type TodoListProperty = {
 };
 
 export default function TodoList(props: TodoListProperty) {
-  // ANCHOR props
+  // #region ANCHOR Props
   const { listDate, isItemAdded, afterFetching } = props;
+  // #endregion
 
-  // ANCHOR context
+  // #region ANCHOR Context
   const ctx = useContext(AppCtx);
   const inCompTodos: ReadTodo[] = ctx.state.todos;
   const compTodos: ReadTodo[] = ctx.state.compTodos;
   const dispatch = ctx.dispatch;
+  // #endregion Context
 
-  // ANCHOR hooks
+  // #region ANCHOR Hooks
   const {
     listType,
     isLoading,
@@ -53,8 +55,9 @@ export default function TodoList(props: TodoListProperty) {
     afterFetching,
     dispatch
   );
+  // #endregion Hooks
 
-  // ANCHOR state
+  // #region ANCHOR State
   const [renderAll, setRenderAll] = useState(true);
   useEffect(() => {
     setRenderAll(true);
@@ -64,12 +67,13 @@ export default function TodoList(props: TodoListProperty) {
       setRenderAll(false);
     }
   }, [isItemAdded]);
+  // #endregion State
 
-  // ANCHOR styles
+  // #region ANCHOR Styles
   const checkBoxColor = "success";
   const itemFontSize = "1rem";
-  const headerFontSize = "1.0rem";
-
+  const headerFontSize = "  1.0rem";
+  // #endregion Styles
   return isLoading ? (
     <div>loading</div>
   ) : (

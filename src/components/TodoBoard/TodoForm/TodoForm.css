@@ -8,8 +8,7 @@
   margin: auto;
 }
 
-.select-container
-  .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiSelect-icon.MuiSelect-iconOutlined {
+.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiSelect-icon.MuiSelect-iconOutlined {
   display: none;
 }
 .MuiMenuItem-root.MuiMenuItem-gutters.MuiButtonBase-root {
