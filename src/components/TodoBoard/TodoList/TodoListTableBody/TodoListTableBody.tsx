@@ -6,6 +6,7 @@ import TodoItem from "./TodoItem";
 
 type TodoListTableBodyProps = {
   todos: ReadTodo[];
+  listType: TodoListType;
   checkBoxColor: string;
   fontSize: string;
   renderAll: boolean;
@@ -18,6 +19,7 @@ const TodoListTableBody = (props: TodoListTableBodyProps) => {
   // todos here can be either completed or incompleted.
   const {
     todos,
+    listType,
     checkBoxColor,
     checkedItemIds,
     fontSize,
@@ -28,9 +30,11 @@ const TodoListTableBody = (props: TodoListTableBodyProps) => {
 
   return (
     <TableBody>
-      {todos.map((todo: ReadTodo, idx: number) => (
+
+      {(todos.map((todo: ReadTodo, idx: number) => (
         <TodoItem
           key={todo.id}
+          listType={listType}
           fontSize={fontSize}
           renderTime={renderAll ? idx * 500 : 500}
           todo={todo}
@@ -39,7 +43,7 @@ const TodoListTableBody = (props: TodoListTableBodyProps) => {
           onCheckToggle={onCheckToggle}
           onUpdate={onUpdate}
         />
-      ))}
+      )))}
     </TableBody>
   );
 };

@@ -9,7 +9,7 @@ import {
 import React, { SyntheticEvent, useContext, useState, useEffect } from "react";
 import "./TodoForm.css";
 import AppCtx from "context/app-context";
-import { addItemAction } from "context/actions/itemActions";
+import { createAddItemAction } from "context/actions/itemActionCreators";
 import { isEmpty } from "utilities/validation.utility";
 import todoApi from "api/todoApi";
 import CreateTodo from "models/create-todo";
@@ -65,7 +65,7 @@ function TodoForm(props: TodoFormProp) {
       creatingTodo
     );
 
-    dispatch(addItemAction(createdTodoFromServer, TodoListType.Incompleted));
+    dispatch(createAddItemAction(createdTodoFromServer, TodoListType.Incompleted));
     setTask("");
     setTyped(false);
     onSubmit(true);

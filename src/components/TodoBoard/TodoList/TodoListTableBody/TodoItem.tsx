@@ -4,6 +4,7 @@ import React, {
   MouseEvent,
   ReactEventHandler,
   SyntheticEvent,
+  useContext,
   useEffect,
   useMemo,
   useState,
@@ -32,6 +33,9 @@ import Priority from "enums/priority.enum";
 import PrioritySelector from "components/UI/PrioritySelector/PrioritySelector";
 import ReadTodo from "models/read-todo";
 import TaskInput from "components/UI/TaskInput/TaskInput";
+import AppCtx from "context/app-context";
+import { createUpdateItemAction } from "context/actions/itemActionCreators";
+import TodoListType from "enums/todo-list-type.enum";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -45,6 +49,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 type TodoItemProps = {
   todo: ReadTodo;
+  listType: TodoListType;
   checked: boolean;
   fontSize: string;
   renderTime: number;
@@ -53,6 +58,10 @@ type TodoItemProps = {
   onUpdate: Function;
 };
 function TodoItem(props: TodoItemProps) {
+  // ANCHOR context
+  const { dispatch } = useContext(AppCtx)
+
+
   // props
   const {
     todo,
@@ -107,7 +116,7 @@ function TodoItem(props: TodoItemProps) {
 
   const handleTaskSubmit: EventHandler<
     SyntheticEvent<HTMLInputElement>
-  > = (event:any) => {
+  > = (event: any) => {
     const updateTodo: UpdateTodo = new UpdateTodo(todo.id, {
       task,
     });
@@ -136,6 +145,7 @@ function TodoItem(props: TodoItemProps) {
 
     setDateToDisplay(new Date(newDueDate!));
     onUpdate(updateTodo);
+    dispatch(createUpdateItemAction(updateTodo, props.listType))
   };
 
   const handleDueDatePickerChange = (newDueDate: Date) => {

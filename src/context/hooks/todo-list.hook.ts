@@ -1,36 +1,37 @@
-import { useState, useCallback, useEffect, useMemo, EventHandler } from "react";
-import { fetchAllAction, updateItemAction } from "../actions/itemActions";
+import { useState, useCallback, useEffect, useMemo, EventHandler, useContext, Dispatch } from "react";
+import { createFetchAllAction } from "context/actions/itemActionCreators";
 import todoApi from "api/todoApi";
 import TodoListType from "enums/todo-list-type.enum";
 import ReadTodo from "models/read-todo";
 import UpdateTodo from "models/update-todo";
 import { SettingsInputComponentOutlined } from "@mui/icons-material";
 import todoService from "service/todoService";
+import { IStateAction } from "interfaces/interfaces";
+import { createRemoveItemsAction } from '../actions/itemActionCreators';
 
 // FIXME: task update issue.
 
 const useTodoList = (
   inCompTodos: ReadTodo[],
   compTodos: ReadTodo[],
-  isItemAdded: boolean,
-  listDate: Date,
-  afterFetching: Function,
-  dispatch: Function
+  dispatch: Dispatch<IStateAction>,
 ) => {
-  // #region ANCHOR State
+  // #region ANCHOR states
+  const [listDate, setListDate] = useState<Date>(new Date(Date.now()));
+  const [isItemAdded, setIsItemAdded] = useState<boolean>(false);
   const [checkedItemIds, setCheckedItemIds] = useState<string[]>([]);
   const [updateWaitingList, setUpdateWaitingList] = useState<UpdateTodo[]>([]);
   const [allChecked, setAllChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [listType, setListType] = useState(TodoListType.Incompleted);
   const [listChanged, setListChanged] = useState(true);
-  // #endregion
+  // #endregion states
 
   // #region ANCHOR Effects
 
   // FIXME when page is refreshed, data doesn't get updated.
   // Assuming the session storage's data is used.
-  
+
   useEffect(whenInitialRender, []);
   function whenInitialRender() {
     const beforeunloadCallback = (event: any) => {
@@ -38,7 +39,7 @@ const useTodoList = (
       return event.returnValue = "Are you sure you want to exit?";
     };
 
-    window.addEventListener('beforeunload', beforeunloadCallback, {capture:true})
+    window.addEventListener('beforeunload', beforeunloadCallback, { capture: true })
     fetchTodos();
   }
 
@@ -59,13 +60,15 @@ const useTodoList = (
 
   useEffect(whenItemAdded, [isItemAdded]);
   function whenItemAdded() {
-    if(isItemAdded)
+    if (isItemAdded)
       setListChanged(isItemAdded);
   }
 
   // #endregion
 
   //#region ANCHOR: Handlers
+
+  /* CheckBox */
   const handleAllCheckToggle = useCallback(() => {
     // remove all check
     if (checkedItemIds.length > 0) {
@@ -88,15 +91,6 @@ const useTodoList = (
       setAllChecked((prev) => !prev);
     }
   }, [checkedItemIds.length, compTodos, inCompTodos, listType]);
-
-  const handleListTypeToggle = () => {
-    if (listType === TodoListType.Incompleted)
-      setListType(TodoListType.Completed);
-    else setListType(TodoListType.Incompleted);
-
-    console.log("ListType: changed");
-  };
-
   const handleCheckToggle = (todoId: string) => {
     // when removing check
     if (checkedItemIds.includes(todoId)) {
@@ -114,11 +108,20 @@ const useTodoList = (
     }
   };
 
+  /* ListType toggle */
+  const handleListTypeToggle = () => {
+    if (listType === TodoListType.Incompleted)
+      setListType(TodoListType.Completed);
+    else setListType(TodoListType.Incompleted);
+
+    console.log("ListType: changed");
+  };
+
+
   const handleRemove = async (event: Event) => {
     event.preventDefault();
     setIsLoading(true)
-    // DELETE request
-    await todoService.deleteMultipleTodos(checkedItemIds);
+    dispatch(createRemoveItemsAction(checkedItemIds, listType))
 
     // empty out checkedItemIds.
     setCheckedItemIds([]);
@@ -183,6 +186,18 @@ const useTodoList = (
 
     setListChanged(true);
   };
+
+  const handleTodoFormSubmit = () => {
+    setIsItemAdded(true);
+  };
+
+  const handleCalendarDatePick = (newDate: any) => {
+    setListDate(newDate);
+  };
+
+  const resetIsItemAddedAfteFetching = useCallback(() => {
+    setIsItemAdded(false);
+  }, []);
   // #endregion
 
   // #region ANCHOR Helpers
@@ -254,16 +269,14 @@ const useTodoList = (
     }
 
     // update context
-    dispatch(fetchAllAction(newTodos, listType));
+    dispatch(createFetchAllAction(newTodos, listType));
 
     // reset states.
     setIsLoading(false);
-    afterFetching();
   }, [
     sessionKey,
     dispatch,
     listType,
-    afterFetching,
     listDate,
     listChanged,
     isItemAdded,
@@ -271,16 +284,21 @@ const useTodoList = (
   // #endregion fetchTodos
 
   return {
+    listDate,
     listType,
+    isItemAdded,
     isLoading,
-    checkedItemIds,
     allChecked,
+    checkedItemIds,
     handleDone,
     handleRemove,
     handleAllCheckToggle,
     handleCheckToggle,
     handleListTypeToggle,
     handleUpdate,
+    handleTodoFormSubmit,
+    handleCalendarDatePick,
+    resetIsItemAddedAfteFetching
   };
 };
 

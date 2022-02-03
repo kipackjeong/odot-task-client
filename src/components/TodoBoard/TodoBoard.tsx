@@ -2,30 +2,48 @@ import { Grid } from "@mui/material";
 import TodoForm from "./TodoForm/TodoForm";
 import TodoList from "./TodoList/TodoList";
 import Board from "components/UI/Board/Board";
-import { useCallback, useState } from "react";
-import todoListStyle from "./TodoList/TodoList.module.css";
+import { useCallback, useContext, useState } from "react";
 import MainDate from "./MainDate/MainDate";
+import useTodoList from "context/hooks/todo-list.hook";
+import AppCtx from "context/app-context";
+import ReadTodo from "models/read-todo";
 
 const TodoBoard = () => {
-  // ANCHOR states
-  const [listDate, setListDate] = useState<Date>(new Date(Date.now()));
-  console.log("listDate: " + listDate);
 
-  const [isItemAdded, setIsItemAdded] = useState<boolean>(false);
+  // #region ANCHOR Context
+  const ctx = useContext(AppCtx);
+  const inCompTodos: ReadTodo[] = ctx.state.inCompTodos;
+  const compTodos: ReadTodo[] = ctx.state.compTodos;
+  const dispatch = ctx.dispatch;
+  // #endregion Context
+
+
+
+  // #region ANCHOR Hooks 
+  const {
+    listDate,
+    listType,
+    isItemAdded,
+    isLoading,
+    allChecked,
+    checkedItemIds,
+
+    handleDone,
+    handleRemove,
+    handleAllCheckToggle,
+    handleCheckToggle,
+    handleListTypeToggle,
+    handleUpdate,
+    handleTodoFormSubmit,
+    handleCalendarDatePick,
+    resetIsItemAddedAfteFetching
+  } = useTodoList(
+    inCompTodos,
+    compTodos,
+    dispatch
+  );
 
   // ANCHOR handler
-
-  const handleCalendarDatePick = (newDate: any) => {
-    setListDate(newDate);
-  };
-
-  const handleSubmit = () => {
-    setIsItemAdded(true);
-  };
-
-  const resetIsItemAddedAfteFetching = useCallback(() => {
-    setIsItemAdded(false);
-  }, []);
 
   return (
     <Board>
@@ -56,16 +74,27 @@ const TodoBoard = () => {
             </Grid>
 
             <Grid item xs={9} md={11}>
-              <TodoForm listDate={listDate} onSubmit={handleSubmit}></TodoForm>
+              <TodoForm listDate={listDate} onSubmit={handleTodoFormSubmit}></TodoForm>
             </Grid>
           </Grid>
         </Grid>
 
         <Grid height="100%" item xs md>
           <TodoList
+            inCompTodos={inCompTodos}
+            compTodos={compTodos}
+            listType={listType}
+            isLoading={isLoading}
+            checkedItemIds={checkedItemIds}
+            allChecked={allChecked}
+            handleDone={handleDone}
+            handleRemove={handleRemove}
+            handleAllCheckToggle={handleAllCheckToggle}
+            handleCheckToggle={handleCheckToggle}
+            handleListTypeToggle={handleListTypeToggle}
+            handleUpdate={handleUpdate}
             listDate={listDate}
             isItemAdded={isItemAdded}
-            afterFetching={resetIsItemAddedAfteFetching}
           ></TodoList>
         </Grid>
       </Grid>

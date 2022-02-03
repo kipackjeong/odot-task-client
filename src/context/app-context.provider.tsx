@@ -6,8 +6,9 @@ const defaultState = {
   user: {
     name: "Kipack Jeong",
   },
-  todos: [],
+  inCompTodos: [],
   compTodos: [],
+  updateList: []
 };
 
 const AppContextProvider = (props: any) => {

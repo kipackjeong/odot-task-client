@@ -4,10 +4,11 @@ import AppContextInterface from "./app-context.interface";
 const defaultValue: AppContextInterface = {
   state: {
     user: { name: "Kipack Jeong" },
-    todos: [],
+    inCompTodos: [],
     compTodos: [],
+    updateList: [],
   },
-  dispatch: () => {},
+  dispatch: () => { },
 };
 const AppCtx = createContext(defaultValue);
 
