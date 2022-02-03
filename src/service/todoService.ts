@@ -21,7 +21,6 @@ class TodoService {
 
   async getTodos(option?: getAllOption): Promise<ReadTodo[]> {
     let queryStr = "";
-    let date = new Date(Date.now());
     let result;
     if (option) {
       switch (option.listType) {
@@ -37,7 +36,7 @@ class TodoService {
         queryStr += `&date=${option.date}`;
       }
     }
-
+    queryStr += '&sort=createdat,ASC'
     console.log(`todoService : getTodos() : queryStr ${queryStr}`);
     result = await todoApi.get(queryStr);
     console.log(`todoService : getTodos() : todos ${result}`);

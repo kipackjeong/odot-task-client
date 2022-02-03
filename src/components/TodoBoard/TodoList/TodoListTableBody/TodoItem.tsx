@@ -73,10 +73,6 @@ function TodoItem(props: TodoItemProps) {
   const [taskInputOn, setTaskInputOn] = useState<boolean>(false);
   // #endregion State
 
-  // #region ANCHOR Hooks
-
-  // #endregion
-
   // #region ANCHOR Effects
   /* change date display format */
   useEffect(() => {
@@ -111,7 +107,7 @@ function TodoItem(props: TodoItemProps) {
 
   const handleTaskSubmit: EventHandler<
     SyntheticEvent<HTMLInputElement>
-  > = () => {
+  > = (event:any) => {
     const updateTodo: UpdateTodo = new UpdateTodo(todo.id, {
       task,
     });
@@ -120,6 +116,7 @@ function TodoItem(props: TodoItemProps) {
   };
 
   const handlePrioritySelect = (event: any) => {
+    console.log('handlePrioritySelect called')
     const newPriority: Priority = event.target.value as Priority;
     const updateTodo: UpdateTodo = new UpdateTodo(todo.id, {
       priority: newPriority,

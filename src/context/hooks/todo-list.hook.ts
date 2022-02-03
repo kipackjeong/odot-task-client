@@ -23,33 +23,34 @@ const useTodoList = (
   const [allChecked, setAllChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [listType, setListType] = useState(TodoListType.Incompleted);
-  const [listChanged, setListChanged] = useState(false);
+  const [listChanged, setListChanged] = useState(true);
   // #endregion
 
   // #region ANCHOR Effects
 
+  // FIXME when page is refreshed, data doesn't get updated.
+  // Assuming the session storage's data is used.
+  
   useEffect(whenInitialRender, []);
   function whenInitialRender() {
-    const loadCallback = (event: any) => {
-      event.preventDefault();
-      setListChanged(true);
+    const beforeunloadCallback = (event: any) => {
+      callServiceToUpdate()
+      return event.returnValue = "Are you sure you want to exit?";
     };
-    window.addEventListener("load", loadCallback);
-    fetchTodos();
 
-    return () => {
-      window.removeEventListener("loadeddata", loadCallback);
-    };
+    window.addEventListener('beforeunload', beforeunloadCallback, {capture:true})
+    fetchTodos();
   }
 
   /**When added new item , updated todo properties, and deleted todos
    * must call request to refresh the data from the first.
    */
-  useEffect(refreshData, [listDate, listType, listChanged]);
+  useEffect(refreshData, [listDate, listType]);
 
   function refreshData() {
     console.log("refreshData");
     if (updateWaitingList.length > 0) {
+      console.log(updateWaitingList);
       callServiceToUpdate();
       setUpdateWaitingList([]);
     }
@@ -58,7 +59,8 @@ const useTodoList = (
 
   useEffect(whenItemAdded, [isItemAdded]);
   function whenItemAdded() {
-    setListChanged(isItemAdded);
+    if(isItemAdded)
+      setListChanged(isItemAdded);
   }
 
   // #endregion
@@ -114,16 +116,16 @@ const useTodoList = (
 
   const handleRemove = async (event: Event) => {
     event.preventDefault();
+    setIsLoading(true)
     // DELETE request
     await todoService.deleteMultipleTodos(checkedItemIds);
 
     // empty out checkedItemIds.
     setCheckedItemIds([]);
     // loading
-    setIsLoading(true);
+    setIsLoading(false);
     // refresh allChecked.
     setAllChecked(false);
-
     setListChanged(true);
   };
 
@@ -151,6 +153,7 @@ const useTodoList = (
   };
 
   const handleUpdate = (updateTodo: UpdateTodo) => {
+    console.log('handleUpdate called')
     // update local state setUpdateWaitingList.
     setUpdateWaitingList((prev) => {
       const newList = [...prev];
@@ -212,7 +215,7 @@ const useTodoList = (
 
     let newTodos;
 
-    /** NOTE When session does not have data.
+    /** When session does not have data.
      * - get todos from the service
      * - save todos in session storage.
     .*/
@@ -228,12 +231,12 @@ const useTodoList = (
 
       // update context
     } else {
-      /** NOTE When session has data.
+      /** When session has data.
        * - if anything in the list changed or item is added; get todos from the service.
        * - otherwise, just use todos from the session storage.
        */
       // check if there is anything updated.
-      if (listChanged || isItemAdded) {
+      if (listChanged) {
         newTodos = await todoService.getTodos({
           listType: listType,
           date: listDate,
@@ -255,7 +258,6 @@ const useTodoList = (
 
     // reset states.
     setIsLoading(false);
-    setListChanged(false);
     afterFetching();
   }, [
     sessionKey,

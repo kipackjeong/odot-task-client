@@ -1,4 +1,4 @@
-import { Select, MenuItem, SelectChangeEvent, InputLabel } from "@mui/material";
+import { Select, MenuItem, SelectChangeEvent, InputLabel, FormControl } from "@mui/material";
 import Priority from "enums/priority.enum";
 import { ReactEventHandler } from "react";
 import PriorityIcon from "../PriorityIcon/PriorityIcon";
@@ -6,7 +6,7 @@ import PriorityIcon from "../PriorityIcon/PriorityIcon";
 type PrioritySelectorProps = {
   priority: Priority;
   labelOn?: boolean;
-  onSelect: ReactEventHandler;
+  onSelect: any;
 };
 
 const PrioritySelector = (props: PrioritySelectorProps) => {
@@ -34,17 +34,16 @@ const PrioritySelector = (props: PrioritySelectorProps) => {
         labelId={labelOn ? "select-label" : "false"}
         id="select-label"
         value={priority}
-        defaultValue={Priority.MEDIUM}
         label="Priority"
-        onSelect={onSelect}
+        onChange={onSelect}
       >
-        <MenuItem value={Priority.LOW}>
+        <MenuItem  value={Priority.LOW}>
           <PriorityIcon priority={Priority.LOW} size="medium" />
         </MenuItem>
-        <MenuItem value={Priority.MEDIUM}>
+        <MenuItem  value={Priority.MEDIUM}>
           <PriorityIcon priority={Priority.MEDIUM} size="medium" />
         </MenuItem>
-        <MenuItem value={Priority.HIGH}>
+        <MenuItem  value={Priority.HIGH}>
           <PriorityIcon priority={Priority.HIGH} size="medium" />
         </MenuItem>
       </Select>
