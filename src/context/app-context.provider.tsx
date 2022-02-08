@@ -1,14 +1,12 @@
 import { useReducer } from "react";
 import todosReducer from "context/reducers/todos.reducer";
 import AppCtx from "context/app-context";
+import { ITodoState } from "interfaces/interfaces";
 
-const defaultState = {
-  user: {
-    name: "Kipack Jeong",
-  },
+const defaultState: ITodoState = {
   inCompTodos: [],
   compTodos: [],
-  updateList: []
+  updateWaitingList: []
 };
 
 const AppContextProvider = (props: any) => {

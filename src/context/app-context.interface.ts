@@ -1,8 +1,8 @@
 import { Dispatch } from "react";
-import { IStateAction } from "interfaces/interfaces";
+import { IStateAction, ITodoState } from "interfaces/interfaces";
 
 interface AppContextInterface {
-  state: any;
+  state: ITodoState;
   dispatch: Dispatch<IStateAction>;
 }
 

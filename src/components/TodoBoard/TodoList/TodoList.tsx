@@ -13,7 +13,7 @@ import TodoStatusBtn from "./TodoStatusBtn/TodoStatusBtn";
 import TodoListType from "enums/todo-list-type.enum";
 import ListChangeToggle from "./ListChangeToggle/ListChangeToggle";
 import { ITodo } from "interfaces/interfaces";
-import useTodoList from "context/hooks/todo-list.hook";
+import useTodoList from "hooks/todo-list/todo-list.hook";
 import TodoListTableBody from "./TodoListTableBody/TodoListTableBody";
 
 type TodoListProperty = {
@@ -42,6 +42,7 @@ export default function TodoList(props: TodoListProperty) {
   useEffect(() => {
     setRenderAll(true);
   }, [props.listType]);
+
   useEffect(() => {
     if (props.isItemAdded) {
       setRenderAll(false);
@@ -54,6 +55,7 @@ export default function TodoList(props: TodoListProperty) {
   const itemFontSize = "1rem";
   const headerFontSize = "  1.0rem";
   // #endregion Styles
+
   return props.isLoading ? (
     <div>loading</div>
   ) : (

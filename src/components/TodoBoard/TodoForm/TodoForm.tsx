@@ -6,21 +6,20 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import React, { SyntheticEvent, useContext, useState, useEffect } from "react";
+import { SyntheticEvent, useContext, useState } from "react";
 import "./TodoForm.css";
 import AppCtx from "context/app-context";
 import { createAddItemAction } from "context/actions/itemActionCreators";
 import { isEmpty } from "utilities/validation.utility";
-import todoApi from "api/todoApi";
 import CreateTodo from "models/create-todo";
 import ReadTodo from "models/read-todo";
 import TodoListType from "enums/todo-list-type.enum";
-import { LocalizationProvider, DatePicker, DateTimePicker } from "@mui/lab";
+import { DateTimePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import Priority from "enums/priority.enum";
 import PriorityIcon from "../../UI/PriorityIcon/PriorityIcon";
 import TaskInput from "components/UI/TaskInput/TaskInput";
-import todoService from "service/todoService";
+import todoService from "service/todo.service";
 
 type TodoFormProp = {
   listDate: Date;

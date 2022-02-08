@@ -4,7 +4,7 @@ import TodoList from "./TodoList/TodoList";
 import Board from "components/UI/Board/Board";
 import { useCallback, useContext, useState } from "react";
 import MainDate from "./MainDate/MainDate";
-import useTodoList from "context/hooks/todo-list.hook";
+import useTodoList from "hooks/todo-list/todo-list.hook";
 import AppCtx from "context/app-context";
 import ReadTodo from "models/read-todo";
 
@@ -36,11 +36,7 @@ const TodoBoard = () => {
     handleUpdate,
     handleTodoFormSubmit,
     handleCalendarDatePick,
-    resetIsItemAddedAfteFetching
   } = useTodoList(
-    inCompTodos,
-    compTodos,
-    dispatch
   );
 
   // ANCHOR handler

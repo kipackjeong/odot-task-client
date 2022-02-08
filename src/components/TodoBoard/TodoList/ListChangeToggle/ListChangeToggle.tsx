@@ -52,7 +52,7 @@ const ListChangeToggle = (props: any) => {
       </div>
 
       <Switch
-        defaultChecked={listType === TodoListType.Completed}
+        checked={listType === TodoListType.Completed}
         color="success"
         onChange={onChange}
       />

@@ -7,15 +7,11 @@ import React from "react";
 import { TodosAction } from "interfaces/interfaces";
 import TodoListType from "enums/todo-list-type.enum";
 import UpdateTodo from "models/update-todo";
-import ReadTodo from "models/read-todo";
+import { transferTodoToOtherList, updateCurrentList, updateUpdateWaitingList } from './todos.reducer.helper';
 
-const fetchAllItems = (newState: ITodo[], items: ITodo[]) => {
-  newState = [...items];
-  return newState;
-};
 
-const addNewItem = (newState: ITodo[], item: ITodo) => {
-  newState.push(item);
+const addNewItem = (newState: ITodo[], newTodo: ITodo) => {
+  newState.push(newTodo);
 };
 
 const removeItems = (newState: ITodo[], todoIdsToRemove: string[]) => {
@@ -26,79 +22,91 @@ const removeItems = (newState: ITodo[], todoIdsToRemove: string[]) => {
   }
 
   return newState;
-};
+}
 
 let todosReducer: IReducer;
 todosReducer = function (state, action: TodosAction): ITodo[] {
   const { type, payload } = action;
 
   const newState = { ...state };
+  newState.compTodos = [...state.compTodos];
+  newState.inCompTodos = [...state.inCompTodos];
+  newState.updateWaitingList = [...state.updateWaitingList];
+  const listType = payload.listType;
 
   let newTodos =
     payload.listType === TodoListType.Completed
       ? [...state.compTodos]
       : [...state.inCompTodos];
 
-  let index;
-  // TODO: change functionality of all todo reducer actions.
+
+
+  let updateTodo: UpdateTodo;
+
   switch (type) {
+
     case ItemActionType.FetchAll:
-      newTodos = fetchAllItems(newTodos, payload.todos);
+
+      newState.compTodos = payload.compTodos;
+      newState.inCompTodos = payload.inCompTodos;
+
       break;
+
     case ItemActionType.AddItem:
-      addNewItem(newTodos, payload.newTodo);
+
+      const targetList = listType === TodoListType.Completed ? newState.compTodos : newState.inCompTodos;
+      addNewItem(targetList, payload.newTodo)
+
       break;
+
     case ItemActionType.RemoveItems:
+
       newTodos = removeItems(newTodos, payload.todosIdsToRemove);
+
+      if (payload.listType === TodoListType.Completed)
+        newState.compTodos = newTodos;
+      else
+        newState.inCompTodos = newTodos;
+
+      break;
+
+    /* Updates items' completion status. */
+    case ItemActionType.ToggleDone:
+      // payload.updateTodos : UpdateTodo []
+
+      // remove seleceted todos from the current list inCompTodos | compTodo.
+
+      updateTodo = payload.updateTodo;
+
+      updateUpdateWaitingList(newState.updateWaitingList, payload.updateTodo);
+
+      transferTodoToOtherList(updateTodo, newState.compTodos, newState.inCompTodos, listType);
+
       break;
 
 
     /* Update item in context, then add it in updateWaitingList */
-    // TODO: Test functionality.
     case ItemActionType.UpdateItem:
-      const todoToUpdate: UpdateTodo = payload.todoToUpdate;
+      updateTodo = payload.updateTodo;
 
-      const updateTodos = () => {
-        index = newTodos.findIndex((todo) => todo.id === payload.todoToUpdate.id);
 
-        const newTodo = { ...newTodos[index], ...payload.todoIdsToRemove.option };
+      updateUpdateWaitingList(newState.updateWaitingList, updateTodo);
 
-        // swap old item with updated item.
-        newTodos.splice(index, 1, newTodo);
+      updateCurrentList(newTodos, updateTodo);
+
+
+      if (payload.listType === TodoListType.Completed) {
+        newState.compTodos = newTodos;
+      } else {
+        newState.inCompTodos = newTodos;
       }
-
-      const updateUpdateWaitingList = () => {
-        /* add into updateWaitingList */
-        // make copy of updateWaitingList
-        const newUpdateWaitingList = [...state.updateWaitingList]
-
-        // check for pre existence.
-        const indexOfExisting = state.updateWaitingList.indexOf((todo: UpdateTodo) => todo.id === todoToUpdate.id)
-        const doesExist = indexOfExisting !== -1 ? true : false
-
-        if (doesExist) {
-          const newTodoToUpdate = { ...state.updateWaitingList[indexOfExisting], ...todoToUpdate }
-
-          newUpdateWaitingList.splice(indexOfExisting, 1, newTodoToUpdate);
-        }
-        else {
-          newUpdateWaitingList.push(todoToUpdate);
-        }
-      }
-
-      updateTodos();
-      updateUpdateWaitingList();
       break;
-
     default:
       break;
   }
 
-  if (payload.listType === TodoListType.Completed) {
-    newState.compTodos = newTodos;
-  } else {
-    newState.inCompTodos = newTodos;
-  }
+
+
   return newState;
 };
 
