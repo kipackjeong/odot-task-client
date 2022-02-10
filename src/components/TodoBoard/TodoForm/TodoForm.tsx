@@ -20,6 +20,7 @@ import Priority from "enums/priority.enum";
 import PriorityIcon from "../../UI/PriorityIcon/PriorityIcon";
 import TaskInput from "components/UI/TaskInput/TaskInput";
 import todoService from "service/todo.service";
+import useTodoForm, { useTodoFormOutputs } from "hooks/todo-form/todo-form.hook";
 
 type TodoFormProp = {
   listDate: Date;
@@ -27,65 +28,13 @@ type TodoFormProp = {
 };
 
 function TodoForm(props: TodoFormProp) {
-  // ANCHOR context
-  const { dispatch } = useContext(AppCtx);
 
-  // ANCHOR props
-  const { onSubmit, listDate } = props;
+  /* Hook */
+  const useTodoFormOutputs: useTodoFormOutputs = useTodoForm({ listDate: props.listDate, onSubmit: props.onSubmit });
 
-  // ANCHOR state
-  const [task, setTask] = useState("");
-  const [typed, setTyped] = useState(false);
-  const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
-  const [priority, setPriority] = useState<Priority | string>(Priority.MEDIUM);
-
-  // ANCHOR useEffect
-  // useEffect(() => {}, [listDate]);
-
-  // ANCHOR local var
-  const todayDate = new Date(Date.now());
-
-  // ANCHOR handlers
-  const handleOnSubmit = async (event: SyntheticEvent) => {
-    event.preventDefault();
-
-    if (!isEmpty(task)) {
-      setTyped(true);
-      return;
-    }
-    let creatingTodo: CreateTodo = {
-      task: task,
-      createdAt: listDate,
-      dueDate: dueDate,
-      priority: priority,
-    };
-
-    const createdTodoFromServer: ReadTodo = await todoService.createTodo(
-      creatingTodo
-    );
-
-    dispatch(createAddItemAction(createdTodoFromServer, TodoListType.Incompleted));
-    setTask("");
-    setTyped(false);
-    onSubmit(true);
-  };
-  const handleOnChange = (event: SyntheticEvent<HTMLInputElement>) => {
-    const target = event.target as HTMLInputElement;
-    setTask(target.value);
-    setTyped(true);
-  };
-
-  const handleOnDateAccept = (date: Date | null) => {
-    if (!date || date < todayDate) {
-      return;
-    }
-    setDueDate(date);
-  };
-  // error check
-  const inputError: boolean = task.trim() === "" && typed ? true : false;
 
   return (
-    <form style={{ height: "100%", width: "100%" }} onSubmit={handleOnSubmit}>
+    <form style={{ height: "100%", width: "100%" }} onSubmit={useTodoFormOutputs.handleOnSubmit}>
       <Grid
         container
         width={"100%"}
@@ -96,10 +45,10 @@ function TodoForm(props: TodoFormProp) {
       >
         <Grid item width={"90%"} md={4}>
           <TaskInput
-            value={task}
+            value={useTodoFormOutputs.task}
             label="What do you need to do?"
-            onChange={handleOnChange}
-            error={inputError}
+            onChange={useTodoFormOutputs.handleOnChange}
+            error={useTodoFormOutputs.showInputError}
           />
         </Grid>
 
@@ -109,9 +58,9 @@ function TodoForm(props: TodoFormProp) {
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DateTimePicker
                   label="Due Date"
-                  value={dueDate}
+                  value={useTodoFormOutputs.dueDate}
                   minDate={new Date("2021-01-01T00:00")}
-                  onChange={handleOnDateAccept}
+                  onChange={useTodoFormOutputs.handleOnDateAccept}
                   inputFormat={"MM/dd/yyyy"}
                   mask="__/__/____"
                   renderInput={(params) => <TextField {...params} />}
@@ -142,15 +91,10 @@ function TodoForm(props: TodoFormProp) {
                   fullWidth
                   labelId="select-label"
                   id="select-label"
-                  value={priority}
+                  value={useTodoFormOutputs.priority}
                   defaultValue={Priority.MEDIUM}
                   label="Priority"
-                  onChange={(event) => {
-                    const newValue: string | Priority = event.target.value;
-                    if (newValue) {
-                      setPriority(newValue);
-                    }
-                  }}
+                  onChange={useTodoFormOutputs.handleOnPrioritySelect}
                 >
                   <MenuItem value={Priority.LOW}>
                     <PriorityIcon priority={Priority.LOW} size="medium" />

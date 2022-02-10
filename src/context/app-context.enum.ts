@@ -4,4 +4,5 @@ export enum ItemActionType {
   UpdateItem = "UPDATE",
   RemoveItems = "REMOVE",
   ToggleDone = "TOGGLE_DONE",
+  ClearWaitingList = "CLEAR_WAITING"
 }

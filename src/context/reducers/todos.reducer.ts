@@ -101,11 +101,12 @@ todosReducer = function (state, action: TodosAction): ITodo[] {
         newState.inCompTodos = newTodos;
       }
       break;
+    case ItemActionType.ClearWaitingList:
+      newState.updateWaitingList = [];
+      break;
     default:
       break;
   }
-
-
 
   return newState;
 };

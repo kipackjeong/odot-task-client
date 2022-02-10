@@ -23,6 +23,7 @@ class TodoApi {
     todos.map(this.mapTodo);
     return todos;
   }
+
   get = async (queryStr: string) => {
     const response = await axios.get(this.url + queryStr);
     const todos = this.mapIncomingTodos(response);

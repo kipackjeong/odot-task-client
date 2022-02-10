@@ -1,5 +1,5 @@
 import { IconButton } from "@mui/material";
-import { isSameDay, isToday } from "date-fns";
+import { isSameDay, isToday, parseISO } from "date-fns";
 import React, { useCallback, useMemo, useState } from "react";
 
 import ModalCalendarTimePicker from "./ModalCalendarTimePicker";
@@ -59,35 +59,33 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
   // #endregion Handlers
 
   // ANCHOR local
-  const title = useMemo(() => {
-    return (
-      <p
-        style={{
-          fontSize: fontSize,
-          color: "black",
-          fontWeight: "normal",
-          cursor: "pointer",
-          textDecorationLine: textUnderLine,
-          textUnderlineOffset: "25%",
-        }}
-        onClick={handleTextDateClick}
-      >
-        {!date ? (
-          iconForNullDate ? (
-            <IconButton style={{ width: "50%" }} onClick={handleTextDateClick}>
-              <DateRangeIcon fontSize="medium" />
-            </IconButton>
-          ) : (
-            ""
-          )
-        ) : displayTimeForToday && isToday(date) ? (
-          date.toLocaleTimeString()
+  const title = useMemo(() => (
+    <p
+      style={{
+        fontSize: fontSize,
+        color: "black",
+        fontWeight: "normal",
+        cursor: "pointer",
+        textDecorationLine: textUnderLine,
+        textUnderlineOffset: "25%",
+      }}
+      onClick={handleTextDateClick}
+    >
+      {date === undefined ? (
+        iconForNullDate ? (
+          <IconButton style={{ width: "50%" }} onClick={handleTextDateClick}>
+            <DateRangeIcon fontSize="medium" />
+          </IconButton>
         ) : (
-          date.toDateString()
-        )}
-      </p>
-    );
-  }, [date]);
+          ""
+        )
+      ) : displayTimeForToday && isToday(date) ? (
+        date.toLocaleTimeString()
+      ) : (
+        date.toDateString()
+      )}
+    </p>
+  ), [date]);
 
   return showModal ? (
     <ModalCalendarTimePicker
