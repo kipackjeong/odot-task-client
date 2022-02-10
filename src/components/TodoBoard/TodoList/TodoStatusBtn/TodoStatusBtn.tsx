@@ -16,11 +16,11 @@ type TodoStatusBtn = {
 };
 
 const TodoStatusBtn = (props: any) => {
-  // ANCHOR props
+  // #region  ANCHOR props
   const { listType, showButtons, onDone, onRemove } = props;
+  // #endregion 
 
-  // ANCHOR state
-  // ANCHOR style
+  // #region ANCHOR Style
   const buttonAnimationStyle = {
     display: "block",
   };
@@ -28,6 +28,7 @@ const TodoStatusBtn = (props: any) => {
     listType === TodoListType.Incompleted ? "success" : "disabled";
 
   const animationClassName = showButtons ? null : "inactive";
+  // #endregion 
 
   return (
     <div

@@ -43,6 +43,7 @@ export default function TodoList(props: TodoListProperty) {
     handleListTypeToggle,
     handleUpdate,
   } = useTodoList(
+    props.listDate
   );
 
   // #endregion State
@@ -94,7 +95,6 @@ export default function TodoList(props: TodoListProperty) {
             checkedItemIds={checkedItemIds}
             onUpdate={handleUpdate}
           />}
-
         </Table>
       </TableContainer>
     </div>

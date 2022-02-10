@@ -92,20 +92,20 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
   ), [date]);
   // #endregion Memo
 
-  return showModal ? (
-    <ModalCalendarTimePicker
-      disablePast={disablePast}
-      showModal={showModal}
-      displayTimeForToday={displayTimeForToday}
-      date={date}
-      onChange={handleCaledarDatePickChange}
-      onAccept={handleCaledarDatePickAccept}
-      showClock={showClock}
-      onBackDropClick={handleBackDropClick}
-    />
-  ) : (
-    title
-  );
+  return (
+    <> {title}
+      <ModalCalendarTimePicker
+        disablePast={disablePast}
+        showModal={showModal}
+        displayTimeForToday={displayTimeForToday}
+        date={date}
+        onChange={handleCaledarDatePickChange}
+        onAccept={handleCaledarDatePickAccept}
+        showClock={showClock}
+        onBackDropClick={handleBackDropClick}
+      />
+    </>
+  )
 };
 
 TextDateTimePicker.defaultProps = {

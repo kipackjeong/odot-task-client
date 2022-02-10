@@ -128,6 +128,7 @@ function TodoItem(props: TodoItemProps) {
     setPriority(newPriority);
     onUpdate(updateTodo);
   };
+
   const handleDueDatePickerAccept = (newDueDate: Date | null) => {
     if (newDueDate! < todayDate) {
       return;

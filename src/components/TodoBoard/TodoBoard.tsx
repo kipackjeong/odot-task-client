@@ -14,6 +14,8 @@ const TodoBoard = () => {
   const ctx = useContext(AppCtx);
   const inCompTodos: ReadTodo[] = ctx.state.inCompTodos;
   const compTodos: ReadTodo[] = ctx.state.compTodos;
+  const dispatch = ctx.dispatch;
+
   // #endregion Context
 
   // #region ANCHOR States
