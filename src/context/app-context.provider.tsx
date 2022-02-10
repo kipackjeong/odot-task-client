@@ -4,6 +4,7 @@ import AppCtx from "context/app-context";
 import { ITodoState } from "interfaces/interfaces";
 
 const defaultState: ITodoState = {
+  listDate: new Date(Date.now()),
   inCompTodos: [],
   compTodos: [],
   updateWaitingList: []

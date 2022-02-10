@@ -1,5 +1,5 @@
 import { IconButton } from "@mui/material";
-import { isSameDay, isToday, parseISO } from "date-fns";
+import { isToday } from "date-fns";
 import React, { useCallback, useMemo, useState } from "react";
 
 import ModalCalendarTimePicker from "./ModalCalendarTimePicker";
@@ -20,7 +20,8 @@ type TextDateTimePickerProps = {
 };
 
 const TextDateTimePicker = (props: TextDateTimePickerProps) => {
-  // ANCHOR props
+
+  // #region ANCHOR props
   const {
     date,
     disablePast,
@@ -31,8 +32,11 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
     textUnderLine,
     fontSize,
   } = props;
-  // #region ANCHOR
+  // #endregion props
+
+  // #region ANCHOR States
   const [showModal, setShowModal] = useState(false);
+  // #endregion
 
   // #region ANCHOR Handlers
   const handleTextDateClick = useCallback(() => {
@@ -58,7 +62,7 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
   }, []);
   // #endregion Handlers
 
-  // ANCHOR local
+  // #region ANCHOR Memo
   const title = useMemo(() => (
     <p
       style={{
@@ -86,6 +90,7 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
       )}
     </p>
   ), [date]);
+  // #endregion Memo
 
   return showModal ? (
     <ModalCalendarTimePicker

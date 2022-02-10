@@ -6,3 +6,7 @@ export enum ItemActionType {
   ToggleDone = "TOGGLE_DONE",
   ClearWaitingList = "CLEAR_WAITING"
 }
+
+export enum ListDateActionType {
+  Update = "UPDATE_LIST_DATE",
+}

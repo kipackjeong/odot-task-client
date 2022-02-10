@@ -19,35 +19,32 @@ import TodoListTableBody from "./TodoListTableBody/TodoListTableBody";
 type TodoListProperty = {
   inCompTodos: ReadTodo[],
   compTodos: ReadTodo[],
-  listType: TodoListType;
   listDate: Date;
-  checkedItemIds: string[];
-  isLoading: boolean;
-  isItemAdded: boolean;
-  allChecked: boolean;
-  handleDone: any;
-  handleRemove: any;
-  handleAllCheckToggle: any;
-  handleCheckToggle: any;
-  handleListTypeToggle: any;
-  handleUpdate: any;
-  afterFetching?: Function;
 };
 
 export default function TodoList(props: TodoListProperty) {
 
   // #region ANCHOR State
-  const [renderAll, setRenderAll] = useState(true);
 
-  useEffect(() => {
-    setRenderAll(true);
-  }, [props.listType]);
 
-  useEffect(() => {
-    if (props.isItemAdded) {
-      setRenderAll(false);
-    }
-  }, [props.isItemAdded]);
+  const {
+    inCompTodos,
+    compTodos,
+    listType,
+    isLoading,
+    allChecked,
+    checkedItemIds,
+    renderAll,
+
+    handleDone,
+    handleRemove,
+    handleAllCheckToggle,
+    handleCheckToggle,
+    handleListTypeToggle,
+    handleUpdate,
+  } = useTodoList(
+  );
+
   // #endregion State
 
   // #region ANCHOR Styles
@@ -56,46 +53,46 @@ export default function TodoList(props: TodoListProperty) {
   const headerFontSize = "  1.0rem";
   // #endregion Styles
 
-  return props.isLoading ? (
+  return isLoading ? (
     <div>loading</div>
   ) : (
     <div style={{ paddingLeft: "1%", width: "97%", height: "95%" }}>
       <div style={{ position: "static" }}>
         <TodoStatusBtn
-          listType={props.listType}
-          showButtons={props.checkedItemIds.length > 0}
-          onDone={props.handleDone}
-          onRemove={props.handleRemove}
+          listType={listType}
+          showButtons={checkedItemIds.length > 0}
+          onDone={handleDone}
+          onRemove={handleRemove}
         />
       </div>
-      <ListChangeToggle listType={props.listType} onChange={props.handleListTypeToggle} />
+      <ListChangeToggle listType={listType} onChange={handleListTypeToggle} />
 
       <TableContainer style={{ width: "100%" }} className={todoListStyle.list}>
         <Table size="small" stickyHeader aria-label="sticky table">
           <TodoListTableHead
             fontSize={headerFontSize}
             checkBoxColor={checkBoxColor}
-            onCheckToggle={props.handleAllCheckToggle}
-            checked={props.allChecked}
+            onCheckToggle={handleAllCheckToggle}
+            checked={allChecked}
           />
-          {props.listType === TodoListType.Completed ? <TodoListTableBody
-            todos={props.compTodos}
-            listType={props.listType}
+          {listType === TodoListType.Completed ? <TodoListTableBody
+            todos={compTodos}
+            listType={listType}
             renderAll={renderAll}
             fontSize={itemFontSize}
             checkBoxColor={checkBoxColor}
-            onCheckToggle={props.handleCheckToggle}
-            checkedItemIds={props.checkedItemIds}
-            onUpdate={props.handleUpdate}
+            onCheckToggle={handleCheckToggle}
+            checkedItemIds={checkedItemIds}
+            onUpdate={handleUpdate}
           /> : <TodoListTableBody
-            todos={props.inCompTodos}
-            listType={props.listType}
+            todos={inCompTodos}
+            listType={listType}
             renderAll={renderAll}
             fontSize={itemFontSize}
             checkBoxColor={checkBoxColor}
-            onCheckToggle={props.handleCheckToggle}
-            checkedItemIds={props.checkedItemIds}
-            onUpdate={props.handleUpdate}
+            onCheckToggle={handleCheckToggle}
+            checkedItemIds={checkedItemIds}
+            onUpdate={handleUpdate}
           />}
 
         </Table>

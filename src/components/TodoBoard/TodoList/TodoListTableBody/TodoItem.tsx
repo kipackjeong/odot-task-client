@@ -12,10 +12,6 @@ import React, {
 import {
   Checkbox,
   Grow,
-  IconButton,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
   styled,
   StyledEngineProvider,
   TableCell,
@@ -23,8 +19,6 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import { DateTimePicker, LocalizationProvider } from "@mui/lab";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import UpdateTodo from "models/update-todo";
 import "./TodoItem.css";
 import TextDateTimePicker from "components/UI/Calendar/TextDateTimePicker";
@@ -34,7 +28,7 @@ import PrioritySelector from "components/UI/PrioritySelector/PrioritySelector";
 import ReadTodo from "models/read-todo";
 import TaskInput from "components/UI/TaskInput/TaskInput";
 import AppCtx from "context/app-context";
-import { createUpdateItemAction } from "context/actions/itemActionCreators";
+import { createUpdateItemAction } from "context/actions/item.action.creator";
 import TodoListType from "enums/todo-list-type.enum";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({

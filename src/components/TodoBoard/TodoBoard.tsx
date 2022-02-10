@@ -16,29 +16,18 @@ const TodoBoard = () => {
   const compTodos: ReadTodo[] = ctx.state.compTodos;
   // #endregion Context
 
-
+  // #region ANCHOR States
+  const [listDate, setListDate] = useState<Date>(new Date(Date.now()));
+  // #endregion
 
   // #region ANCHOR Hooks 
-  const {
-    listDate,
-    listType,
-    isItemAdded,
-    isLoading,
-    allChecked,
-    checkedItemIds,
+  // #endregion
 
-    handleDone,
-    handleRemove,
-    handleAllCheckToggle,
-    handleCheckToggle,
-    handleListTypeToggle,
-    handleUpdate,
-    handleTodoFormSubmit,
-    handleCalendarDatePick,
-  } = useTodoList(
-  );
-
-  // ANCHOR handler
+  // #region ANCHOR handler
+  const handleCalendarDatePick = (newDate: any) => {
+    setListDate(newDate);
+  };
+  // #endregion
 
   return (
     <Board>
@@ -69,7 +58,7 @@ const TodoBoard = () => {
             </Grid>
 
             <Grid item xs={9} md={11}>
-              <TodoForm listDate={listDate} onSubmit={handleTodoFormSubmit}></TodoForm>
+              <TodoForm listDate={listDate}></TodoForm>
             </Grid>
           </Grid>
         </Grid>
@@ -78,18 +67,7 @@ const TodoBoard = () => {
           <TodoList
             inCompTodos={inCompTodos}
             compTodos={compTodos}
-            listType={listType}
-            isLoading={isLoading}
-            checkedItemIds={checkedItemIds}
-            allChecked={allChecked}
-            handleDone={handleDone}
-            handleRemove={handleRemove}
-            handleAllCheckToggle={handleAllCheckToggle}
-            handleCheckToggle={handleCheckToggle}
-            handleListTypeToggle={handleListTypeToggle}
-            handleUpdate={handleUpdate}
             listDate={listDate}
-            isItemAdded={isItemAdded}
           ></TodoList>
         </Grid>
       </Grid>

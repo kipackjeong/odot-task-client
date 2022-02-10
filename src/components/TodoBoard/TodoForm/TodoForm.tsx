@@ -9,7 +9,7 @@ import {
 import { SyntheticEvent, useContext, useState } from "react";
 import "./TodoForm.css";
 import AppCtx from "context/app-context";
-import { createAddItemAction } from "context/actions/itemActionCreators";
+import { createAddItemAction } from "context/actions/item.action.creator";
 import { isEmpty } from "utilities/validation.utility";
 import CreateTodo from "models/create-todo";
 import ReadTodo from "models/read-todo";
@@ -24,13 +24,12 @@ import useTodoForm, { useTodoFormOutputs } from "hooks/todo-form/todo-form.hook"
 
 type TodoFormProp = {
   listDate: Date;
-  onSubmit: Function;
 };
 
 function TodoForm(props: TodoFormProp) {
 
   /* Hook */
-  const useTodoFormOutputs: useTodoFormOutputs = useTodoForm({ listDate: props.listDate, onSubmit: props.onSubmit });
+  const useTodoFormOutputs: useTodoFormOutputs = useTodoForm({ listDate: props.listDate });
 
 
   return (
