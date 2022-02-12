@@ -36,7 +36,7 @@ function TodoForm(props: TodoFormProp) {
         justifyContent={"center"}
         alignItems={"center"}
       >
-        <Grid item width={"90%"} md={4}>
+        <Grid item width={"90%"} md={4} sm={4}>
           <TaskInput
             value={task}
             label="What do you need to do?"
@@ -45,9 +45,9 @@ function TodoForm(props: TodoFormProp) {
           />
         </Grid>
 
-        <Grid item md={4}>
+        <Grid item md={4} sm={4}>
           <Grid container justifyContent={"center"}>
-            <Grid item md={8}>
+            <Grid item md={8} sm={8}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DateTimePicker
                   label="Due Date"
@@ -61,7 +61,7 @@ function TodoForm(props: TodoFormProp) {
               </LocalizationProvider>
             </Grid>
 
-            <Grid item md={3}>
+            <Grid item md={3} sm={4}>
               <div
                 className="select-container"
                 style={{ position: "relative" }}
@@ -72,7 +72,7 @@ function TodoForm(props: TodoFormProp) {
           </Grid>
         </Grid>
 
-        <Grid item md={2}>
+        <Grid item md={2} sm={4}>
           <Button style={{ border: "0.05px solid" }} color="success" type="submit">
             Save
           </Button>

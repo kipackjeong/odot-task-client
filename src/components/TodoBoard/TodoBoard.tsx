@@ -8,6 +8,8 @@ import useTodoList from "hooks/todo-list/todo-list.hook";
 import AppCtx from "context/app-context";
 import ReadTodo from "models/read-todo";
 
+import styles from './TodoBoard.module.css';
+
 const TodoBoard = () => {
 
   // #region ANCHOR Context
@@ -32,7 +34,7 @@ const TodoBoard = () => {
   // #endregion
 
   return (
-    <Board>
+    <Board className={styles['todo-board']}>
       <Grid container paddingY={1} paddingX={1} spacing={1}>
         <Grid
           item

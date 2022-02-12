@@ -8,14 +8,14 @@ import "./TodoStatusBtn.css";
 
 import TodoListType from "enums/todo-list-type.enum";
 
-type TodoStatusBtn = {
+type TodoStatusBtnProps = {
   listType: TodoListType;
   showButtons: boolean;
-  onDone: boolean;
-  onRemove: Function;
+  onDone: any;
+  onRemove: any;
 };
 
-const TodoStatusBtn = (props: any) => {
+const TodoStatusBtn = (props: TodoStatusBtnProps) => {
   // #region  ANCHOR props
   const { listType, showButtons, onDone, onRemove } = props;
   // #endregion 
@@ -29,22 +29,19 @@ const TodoStatusBtn = (props: any) => {
 
   const animationClassName = showButtons ? null : "inactive";
   // #endregion 
-
   return (
     <div
-      className="status-container"
-      style={{ position: "absolute", right: "67.8%" }}
+      className={`status-container ${showButtons ? "show" : null}`}
     >
-      <CSSTransition in={showButtons} classNames="fade" timeout={2000}>
-        <ButtonGroup className="buttons">
-          <IconButton size="small" onClick={onDone}>
-            <CheckCircleOutlineIcon color={firstBtnColor} />
-          </IconButton>
-          <IconButton color="secondary" size="small" onClick={onRemove}>
-            <DeleteOutlineIcon />
-          </IconButton>
-        </ButtonGroup>
-      </CSSTransition>
+
+      <ButtonGroup className="buttons">
+        <IconButton size="small" onClick={onDone}>
+          <CheckCircleOutlineIcon color={firstBtnColor} />
+        </IconButton>
+        <IconButton color="secondary" size="small" onClick={onRemove}>
+          <DeleteOutlineIcon />
+        </IconButton>
+      </ButtonGroup>
     </div>
   );
 };

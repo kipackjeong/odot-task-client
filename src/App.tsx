@@ -5,16 +5,16 @@ import TodoBoard from "components/TodoBoard/TodoBoard";
 function App() {
   return (
     <AppContextProvider>
-      <div className={appStyle.App}>
-        <TodoBoard />
 
-        {
-          //TODO Make references component
-        }
-        <a href="https://www.flaticon.com/free-icons/tick" title="tick icons">
+      <div className={appStyle.App}>
+
+        <TodoBoard />
+        <a style={{ color: 'black' }} href="https://www.flaticon.com/free-icons/tick" title="tick icons">
           Tick icons created by Alfredo Hernandez - Flaticon
         </a>
+
       </div>
+
     </AppContextProvider>
   );
 }

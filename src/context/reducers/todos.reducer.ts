@@ -70,21 +70,6 @@ todosReducer = function (state, action: TodosAction): ITodo[] {
 
       break;
 
-    /* Updates items' completion status. */
-    case ItemActionType.ToggleDone:
-      // payload.updateTodos : UpdateTodo []
-
-      // remove seleceted todos from the current list inCompTodos | compTodo.
-
-      updateTodo = payload.updateTodo;
-
-      updateUpdateWaitingList(newState.updateWaitingList, payload.updateTodo);
-
-      transferTodoToOtherList(updateTodo, newState.compTodos, newState.inCompTodos, listType);
-
-      break;
-
-
     /* Update item in context, then add it in updateWaitingList */
     case ItemActionType.UpdateItem:
       updateTodo = payload.updateTodo;
@@ -101,6 +86,21 @@ todosReducer = function (state, action: TodosAction): ITodo[] {
         newState.inCompTodos = newTodos;
       }
       break;
+
+    /* Updates items' completion status. */
+    case ItemActionType.ToggleDone:
+      // payload.updateTodos : UpdateTodo []
+
+      // remove seleceted todos from the current list inCompTodos | compTodo.
+
+      updateTodo = payload.updateTodo;
+
+      updateUpdateWaitingList(newState.updateWaitingList, payload.updateTodo);
+
+      transferTodoToOtherList(updateTodo, newState.compTodos, newState.inCompTodos, listType);
+
+      break;
+
     case ItemActionType.ClearWaitingList:
       newState.updateWaitingList = [];
       break;

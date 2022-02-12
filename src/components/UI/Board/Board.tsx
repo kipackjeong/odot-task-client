@@ -4,7 +4,7 @@ import boardStyle from "./Board.module.css";
 
 function Board(props: any) {
   return (
-    <Paper className={boardStyle.board} elevation={2}>
+    <Paper className={`${boardStyle.board} ${props.className}`} elevation={2}>
       {props.children}
     </Paper>
   );
