@@ -5,7 +5,8 @@ import ReadTodo from "../models/read-todo";
 import UpdateTodo from "../models/update-todo";
 
 class TodoApi {
-  url = "http://localhost:3000/items/";
+  url = "https://odot-task-server-heroku.herokuapp.com/items/";
+
 
   get = async (queryStr: string) => {
     const response: AxiosResponse = await axios.get(this.url + queryStr);

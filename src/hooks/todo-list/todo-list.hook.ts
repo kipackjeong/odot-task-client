@@ -79,6 +79,8 @@ const useTodoList = (listDate: Date
 
         inCompTodos = await todoService.getTodos({ listType: TodoListType.Incompleted, date: listDate })
 
+        console.log('fetch todos')
+          ;
       }
 
       dispatch(createFetchAllAction(inCompTodos, compTodos, listType))
@@ -89,6 +91,7 @@ const useTodoList = (listDate: Date
 
     fetchTodos();
   }
+
   /** Updates unloadCallback fn with current updateWaitingList. 
    * @returns 
    *  function fetchData() :void {

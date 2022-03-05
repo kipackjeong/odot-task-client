@@ -1,4 +1,5 @@
 {
     "commentAnchors.tagHighlights.enabled": true,
-    "editor.wordWrap": "on"
+    "editor.wordWrap": "on",
+    "appService.deploySubpath": "."
 }
