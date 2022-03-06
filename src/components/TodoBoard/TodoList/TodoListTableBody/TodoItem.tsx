@@ -1,8 +1,5 @@
 import React, {
   EventHandler,
-  KeyboardEventHandler,
-  MouseEvent,
-  ReactEventHandler,
   SyntheticEvent,
   useContext,
   useEffect,
@@ -17,12 +14,10 @@ import {
   TableCell,
   tableCellClasses,
   TableRow,
-  TextField,
 } from "@mui/material";
 import UpdateTodo from "models/update-todo";
 import "./TodoItem.css";
 import TextDateTimePicker from "components/UI/Calendar/TextDateTimePicker";
-import { ConstructionOutlined } from "@mui/icons-material";
 import Priority from "enums/priority.enum";
 import PrioritySelector from "components/UI/PrioritySelector/PrioritySelector";
 import ReadTodo from "models/read-todo";
@@ -76,6 +71,11 @@ function TodoItem(props: TodoItemProps) {
   const [taskInputOn, setTaskInputOn] = useState<boolean>(false);
   // #endregion State
 
+  // #region ANCHOR Memo
+  const todayDate = useMemo(() => {
+    return new Date(Date.now());
+  }, []);
+
   // #region ANCHOR Effects
   /* change date display format */
   useEffect(() => {
@@ -96,7 +96,7 @@ function TodoItem(props: TodoItemProps) {
     decideDateFormat();
     setPriority(todo.priority);
     setTask(todo.task);
-  }, [todo]);
+  }, [todayDate, todo]);
   // #endregion
 
   // #region ANCHOR Handlers
@@ -110,12 +110,13 @@ function TodoItem(props: TodoItemProps) {
 
   const handleTaskSubmit: EventHandler<
     SyntheticEvent<HTMLInputElement>
-  > = (event: any) => {
+  > = async (event: any) => {
     const updateTodo: UpdateTodo = new UpdateTodo(todo.id, {
       task,
     });
     setTaskInputOn(false);
     onUpdate(updateTodo);
+
   };
 
   const handlePrioritySelect = (event: any) => {
@@ -150,16 +151,14 @@ function TodoItem(props: TodoItemProps) {
   };
   // #endregion Handlers
 
-  // #region ANCHOR Memo
-  const todayDate = useMemo(() => {
-    return new Date(Date.now());
-  }, []);
+
   const labelId = useMemo(() => `checkbox-li  st-label-${todo.id}`, [todo]);
   // #endregion Memo
 
   return (
     <Grow in={todo !== null} timeout={renderTime}>
       <TableRow key={todo.id} className="todo-row">
+        {/* Check box */}
         <StyledTableCell
           height={"5px"}
           style={{ paddingTop: 0, paddingBottom: 0 }}
@@ -178,6 +177,7 @@ function TodoItem(props: TodoItemProps) {
           />
         </StyledTableCell>
 
+        {/* Task title */}
         <StyledTableCell height={"5px"} width={"40%"} align="center">
           {taskInputOn ? (
             <TaskInput
@@ -197,6 +197,7 @@ function TodoItem(props: TodoItemProps) {
           )}
         </StyledTableCell>
 
+        {/* Priority */}
         <StyledTableCell width={"10%"} align="center">
           <PrioritySelector
             priority={priority}
@@ -205,11 +206,11 @@ function TodoItem(props: TodoItemProps) {
           />
         </StyledTableCell>
 
+        {/* Due Date */}
         <StyledTableCell align="center">
           <StyledEngineProvider injectFirst>
             <div className="date-container">
               <TextDateTimePicker
-                iconForNullDate={true}
                 displayTimeForToday={true}
                 date={dateToDisplay}
                 showClock={true}

@@ -1,9 +1,9 @@
 import todoApi from "api/todoApi";
 import TodoListType from "enums/todo-list-type.enum";
+import { fstat, fsync } from "fs";
 import ReadTodo from "models/read-todo";
 import UpdateTodo from "models/update-todo";
 import dateConverter from "utilities/date-converter.utility";
-import { resourceLimits } from "worker_threads";
 import CreateTodo from "../models/create-todo";
 
 type GetAllOption = {
@@ -61,19 +61,20 @@ class TodoService {
   }
 
   async updateTodo(updateTodo: UpdateTodo) {
-    const result = await todoApi.putTodo(updateTodo);
+    await todoApi.putTodo(updateTodo);
   }
 
   async updateMultipleTodos(updateTodos: UpdateTodo[]) {
-    const result = await todoApi.putMultipleTodos(updateTodos);
+    localStorage.setItem("updateTodos", JSON.stringify(updateTodos));
+    await todoApi.putMultipleTodos(updateTodos);
   }
 
   async deleteTodo(todoId: string) {
-    const result = await todoApi.deleteTodo(todoId);
+    await todoApi.deleteTodo(todoId);
   }
 
   async deleteMultipleTodos(todoIds: string[]) {
-    const result = await todoApi.deleteMultipleTodos(todoIds);
+    await todoApi.deleteMultipleTodos(todoIds);
   }
 }
 

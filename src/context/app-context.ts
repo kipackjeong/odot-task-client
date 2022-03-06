@@ -6,7 +6,6 @@ const defaultValue: AppContextInterface = {
     listDate: new Date(Date.now()),
     inCompTodos: [],
     compTodos: [],
-    updateWaitingList: [],
   },
   dispatch: () => { },
 };

@@ -9,14 +9,13 @@ import sessionStorageManager from 'utilities/session-storage-manager.utility'
 import ReadTodo from "models/read-todo";
 import dateConverterUtility from 'utilities/date-converter.utility';
 
-// FIXME: task update issue.
 
 const useTodoList = (listDate: Date
 ) => {
 
   // #region ANCHOR Context
   const ctx = useContext(AppCtx);
-  const { inCompTodos, compTodos, updateWaitingList } = ctx.state;
+  const { inCompTodos, compTodos } = ctx.state;
   const dispatch = ctx.dispatch;
   // #endregion context  
 
@@ -26,6 +25,7 @@ const useTodoList = (listDate: Date
   const [isLoading, setIsLoading] = useState(true);
   const [listType, setListType] = useState(TodoListType.Incompleted);
   const [renderAll, setRenderAll] = useState(true);
+
 
   // #endregion states
 
@@ -40,10 +40,19 @@ const useTodoList = (listDate: Date
 
   // #region ANCHOR Effects 
 
+  /** Whenever the list type changes (incompleted list <-> completed list), 
+   * set to render all list items.
+   * This is needed for the rendering animation time adjustment per situation. 
+   */
+
   useEffect(() => {
     setRenderAll(true);
   }, [listType]);
 
+  /** Whenever the list length changes due to addition or deletion of item in the list,
+   * set to not render all.
+ * This is needed for the rendering animation time adjustment per situation. 
+ */
   useEffect(() => {
     setRenderAll(false);
   }, [inCompTodos.length, compTodos.length]);
@@ -52,7 +61,7 @@ const useTodoList = (listDate: Date
    *  - if session storage has data, then receive session storage data.
    *  - if not then call service to get data from the server.
    */
-  const loadTodoEffect = () => {
+  useEffect(() => {
 
     /**
      * Calls api to retrieve compTodos and inCompTodos, then dispatches it into context.
@@ -90,58 +99,14 @@ const useTodoList = (listDate: Date
     }
 
     fetchTodos();
-  }
+  }, [dispatch, listDate, listType, sessionKey]);
 
-  /** Updates unloadCallback fn with current updateWaitingList. 
-   * @returns 
-   *  function fetchData() :void {
-      setIsLoading(true);
-      helper.fetchTodos(dispatch, listType, listDate);
-      setIsLoading(false);
-    }
-     */
-  const listDateChangedEffect = useCallback(() => {
-    sessionStorageManager.updateStorage({ inCompTodos, compTodos }, sessionKey);
-
-  }, [listDate, inCompTodos, compTodos])
-
-  const updateUnloadCallbackEffect = useCallback(() => {
-
-    /**
-     * function that will be called on when event 'beforeunload' triggered.
-     * @returns event.returnValue = "Are you sure you want to exit?"
-     * */
-    async function beforeunloadCallback(event: any) {
-
-      //update todos in the db with updateWaitingList.
-      await todoService.updateMultipleTodos(updateWaitingList)
-
-      console.log(`Before refresh: \n inCompTodos: ${inCompTodos}\n compTodos: ${compTodos}`)
-
-      // clear waiting list.
-      dispatch(createClearWaitingList());
-
-      return event.returnValue = "Are you sure you want to exit?";
-    }
-
-
-    // FIXME The amount of callback registered on 'beforeunload' is equal to amount of updates. Which causes to call beforeunloadCallback function multiple times.
-
+  /** Update the session storage upon deletion, update, or addition in the list. 
+   */
+  useEffect(() => {
     // update session storage.
     sessionStorageManager.updateStorage({ inCompTodos, compTodos }, sessionKey);
-
-    console.log('a');
-    window.removeEventListener('beforeunload', beforeunloadCallback, true)
-    window.addEventListener('beforeunload', beforeunloadCallback, true)
-
-  }, [updateWaitingList.length])
-
-
-  useEffect(loadTodoEffect, [listDate, sessionKey]);
-
-  useEffect(listDateChangedEffect, [listDate, sessionKey, inCompTodos, compTodos]);
-
-  useEffect(updateUnloadCallbackEffect, [updateWaitingList.length]);
+  }, [compTodos, inCompTodos, sessionKey]);
 
   // #endregion useEffect
 
@@ -223,13 +188,26 @@ const useTodoList = (listDate: Date
         // if current list is completed list and user clicks undone, then here should set item.completed = false.
         completed: listType === TodoListType.Completed ? false : true,
       });
+
+      // ctx dispatch
       dispatch(createToggleDoneItemAction(updateTodo, listType))
+
+      // update server 
+      await todoService.updateTodo(updateTodo);
     }
   };
 
-  const handleUpdate = (updateTodo: UpdateTodo) => {
-    // TODO update context.state.updateWaitingList
+  /**
+   * Handles update of task, priority, or dueDate on single item.
+   * @param updateTodo 
+   */
+  const handleUpdate = async (updateTodo: UpdateTodo) => {
+    // ctx dispatch
     dispatch(createUpdateItemAction(updateTodo, listType));
+
+    // update server
+    await todoService.updateTodo(updateTodo);
+
   };
 
 

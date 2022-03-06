@@ -25,7 +25,6 @@ function TodoForm(props: TodoFormProp) {
     handleOnSubmit, handleOnChange, handleOnPrioritySelect, handleOnDateAccept,
   }: useTodoFormOutputs = useTodoForm({ listDate: props.listDate });
 
-
   return (
     <form style={{ height: "100%", width: "100%" }} onSubmit={handleOnSubmit}>
       <Grid
@@ -36,6 +35,7 @@ function TodoForm(props: TodoFormProp) {
         justifyContent={"center"}
         alignItems={"center"}
       >
+        {/* task title input */}
         <Grid item width={"90%"} md={4} sm={4}>
           <TaskInput
             value={task}
@@ -45,6 +45,7 @@ function TodoForm(props: TodoFormProp) {
           />
         </Grid>
 
+        {/* due date / priority */}
         <Grid item md={4} sm={4}>
           <Grid container justifyContent={"center"}>
             <Grid item md={8} sm={8}>
@@ -72,6 +73,7 @@ function TodoForm(props: TodoFormProp) {
           </Grid>
         </Grid>
 
+        {/* save btn */}
         <Grid item md={2} sm={4}>
           <Button style={{ border: "0.05px solid" }} color="success" type="submit">
             Save

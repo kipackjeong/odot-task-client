@@ -12,7 +12,6 @@ type TextDateTimePickerProps = {
   displayTimeForToday: boolean;
   showClock: boolean;
   disablePast: boolean;
-  iconForNullDate: boolean;
   onDateChange?: Function;
   onDateAccept: Function;
   textUnderLine?: any;
@@ -27,7 +26,6 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
     disablePast,
     displayTimeForToday,
     showClock,
-    iconForNullDate,
     onDateAccept,
     textUnderLine,
     fontSize,
@@ -75,16 +73,9 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
       }}
       onClick={handleTextDateClick}
     >
-      {date === undefined ? (
-        iconForNullDate ? (
-          <IconButton style={{ width: "50%" }} onClick={handleTextDateClick}>
-            <DateRangeIcon fontSize="medium" />
-          </IconButton>
-        ) : (
-          ""
-        )
+      {date === undefined ? (""
       ) : displayTimeForToday && isToday(date) ? (
-        date.toLocaleTimeString()
+        "Today"
       ) : (
         date.toDateString()
       )}

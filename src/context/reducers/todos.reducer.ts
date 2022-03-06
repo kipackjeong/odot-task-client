@@ -2,12 +2,10 @@ import { IReducer, ITodo } from "interfaces/interfaces";
 import {
   ItemActionType
 } from "context/app-context.enum";
-
-import React from "react";
 import { TodosAction } from "interfaces/interfaces";
 import TodoListType from "enums/todo-list-type.enum";
 import UpdateTodo from "models/update-todo";
-import { transferTodoToOtherList, updateCurrentList, updateUpdateWaitingList } from './todos.reducer.helper';
+import { transferTodoToOtherList, updateCurrentList } from './todos.reducer.helper';
 
 
 const addNewItem = (newState: ITodo[], newTodo: ITodo) => {
@@ -31,7 +29,6 @@ todosReducer = function (state, action: TodosAction): ITodo[] {
   const newState = { ...state };
   newState.compTodos = [...state.compTodos];
   newState.inCompTodos = [...state.inCompTodos];
-  newState.updateWaitingList = [...state.updateWaitingList];
   const listType = payload.listType;
 
   let newTodos =
@@ -45,6 +42,7 @@ todosReducer = function (state, action: TodosAction): ITodo[] {
 
   switch (type) {
 
+    /* Fetches all the items included in selected date. */
     case ItemActionType.FetchAll:
 
       newState.compTodos = payload.compTodos;
@@ -52,6 +50,7 @@ todosReducer = function (state, action: TodosAction): ITodo[] {
 
       break;
 
+    /* Add Item in the state.inCompTodos */
     case ItemActionType.AddItem:
 
       const targetList = listType === TodoListType.Completed ? newState.compTodos : newState.inCompTodos;
@@ -59,6 +58,7 @@ todosReducer = function (state, action: TodosAction): ITodo[] {
 
       break;
 
+    /* Remove Item from whether state.inCompTodos or state.compTodos */
     case ItemActionType.RemoveItems:
 
       newTodos = removeItems(newTodos, payload.todosIdsToRemove);
@@ -70,15 +70,11 @@ todosReducer = function (state, action: TodosAction): ITodo[] {
 
       break;
 
-    /* Update item in context, then add it in updateWaitingList */
+    /* Update item in context */
     case ItemActionType.UpdateItem:
       updateTodo = payload.updateTodo;
 
-
-      updateUpdateWaitingList(newState.updateWaitingList, updateTodo);
-
       updateCurrentList(newTodos, updateTodo);
-
 
       if (payload.listType === TodoListType.Completed) {
         newState.compTodos = newTodos;
@@ -95,15 +91,11 @@ todosReducer = function (state, action: TodosAction): ITodo[] {
 
       updateTodo = payload.updateTodo;
 
-      updateUpdateWaitingList(newState.updateWaitingList, payload.updateTodo);
-
       transferTodoToOtherList(updateTodo, newState.compTodos, newState.inCompTodos, listType);
 
       break;
 
-    case ItemActionType.ClearWaitingList:
-      newState.updateWaitingList = [];
-      break;
+
     default:
       break;
   }

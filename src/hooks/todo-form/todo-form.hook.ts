@@ -4,7 +4,7 @@ import Priority from "enums/priority.enum";
 import TodoListType from "enums/todo-list-type.enum";
 import CreateTodo from "models/create-todo";
 import ReadTodo from "models/read-todo";
-import { useContext, useState, SyntheticEvent, EventHandler, useMemo } from "react";
+import { useContext, useState, SyntheticEvent, useMemo } from "react";
 import todoService from "service/todo.service";
 import { isEmpty } from "utilities/validation.utility";
 
@@ -18,10 +18,6 @@ export type useTodoFormOutputs = {
     handleOnPrioritySelect: any;
     handleOnDateAccept: any;
 };
-
-type useTodoFormArgs = {
-    listDate: Date,
-}
 
 const useTodoForm = (args: any) => {
 
@@ -38,7 +34,7 @@ const useTodoForm = (args: any) => {
     // #region ANCHOR state
     const [task, setTask] = useState("");
     const [typed, setTyped] = useState(false);
-    const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
+    const [dueDate, setDueDate] = useState<Date | undefined>();
     const [priority, setPriority] = useState<Priority>(Priority.MEDIUM);
 
     // #endregion
@@ -51,7 +47,7 @@ const useTodoForm = (args: any) => {
         return new Date(Date.now());
     }, [])
 
-    // error check
+    /* When user submits with empty task title input. */
     const showInputError: boolean = useMemo(() => {
         return task.trim() === "" && typed ? true : false;
     }, [])
@@ -68,6 +64,7 @@ const useTodoForm = (args: any) => {
     const handleOnSubmit = async (event: SyntheticEvent) => {
         event.preventDefault();
 
+        // make sure user actually typed in something.
         if (!isEmpty(task)) {
             setTyped(true);
             return;
@@ -108,9 +105,12 @@ const useTodoForm = (args: any) => {
     const handleOnDateAccept = (acceptedDateStr: string) => {
         if (acceptedDateStr) {
             const acceptedDate = new Date(acceptedDateStr);
+
+            // due date cannot be past, so handled that.
             if (!acceptedDate || acceptedDate < todayDate) {
                 return;
             }
+
             setDueDate(acceptedDate);
         }
 

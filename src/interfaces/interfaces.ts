@@ -30,5 +30,4 @@ export interface ITodoState {
   listDate: Date,
   compTodos: ReadTodo[];
   inCompTodos: ReadTodo[];
-  updateWaitingList: UpdateTodo[];
 }

@@ -3,27 +3,6 @@ import UpdateTodo from "models/update-todo";
 import TodoListType from 'enums/todo-list-type.enum';
 
 /**
- * Adds `updateTodo` item into context state's `updateWaitingList`.
- * If `updateTodo` item already exists in the `updateWaitingList`, then updates that existing item.
- * @param newUpdateWaitingList 
- * @param updateTodo 
- */
-export const updateUpdateWaitingList = (newUpdateWaitingList: UpdateTodo[], updateTodo: UpdateTodo) => {
-
-    // check for pre existence.
-    const indexOfExisting = newUpdateWaitingList.findIndex((todo: UpdateTodo) => todo.id === updateTodo.id)
-
-    const doesExist = indexOfExisting !== -1 ? true : false
-
-    if (doesExist) {
-        newUpdateWaitingList[indexOfExisting] = { ...newUpdateWaitingList[indexOfExisting], ...updateTodo.option }
-    }
-    else {
-        newUpdateWaitingList.push(updateTodo);
-    }
-}
-
-/**
  * Updates the list that updateTodo is currently in.
  * @param newTodos 
  * @param updateTodo 

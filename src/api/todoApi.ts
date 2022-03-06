@@ -1,3 +1,4 @@
+import { Alert } from "@mui/material";
 import axios, { AxiosResponse } from "axios";
 import { ITodo } from "../interfaces/interfaces";
 import CreateTodo from "../models/create-todo";
@@ -5,7 +6,8 @@ import ReadTodo from "../models/read-todo";
 import UpdateTodo from "../models/update-todo";
 
 class TodoApi {
-  url = "https://odot-task-server-heroku.herokuapp.com/items/";
+  url = "https://odot-task-server-heroku.herokuapp.com/items/"
+  // public url = "http://localhost:3000/items/";
 
 
   get = async (queryStr: string) => {
@@ -22,14 +24,17 @@ class TodoApi {
   };
 
   putTodo = async (updateTodo: UpdateTodo) => {
-    const response = await axios.put(
+    await axios.put(
       this.url + updateTodo.id,
       updateTodo.option
     );
   };
 
-  putMultipleTodos = async (updateTodos?: UpdateTodo[]) => {
-    await axios.put(this.url, { data: updateTodos });
+  putMultipleTodos = async (updateTodos: UpdateTodo[]) => {
+    await axios.put(
+      this.url,
+      updateTodos[0]
+    );
   };
 
   deleteTodo = async (todoId: string) => {

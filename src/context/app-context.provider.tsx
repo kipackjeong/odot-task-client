@@ -7,7 +7,6 @@ const defaultState: ITodoState = {
   listDate: new Date(Date.now()),
   inCompTodos: [],
   compTodos: [],
-  updateWaitingList: []
 };
 
 const AppContextProvider = (props: any) => {
