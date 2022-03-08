@@ -1,5 +1,4 @@
 import { TableBody } from "@mui/material";
-import { ITodo } from "../../../../interfaces/interfaces";
 import ReadTodo from "../../../../models/read-todo";
 import TodoListType from "enums/todo-list-type.enum";
 import TodoItem from "./TodoItem";

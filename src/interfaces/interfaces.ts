@@ -1,6 +1,5 @@
 import Priority from "enums/priority.enum";
 import ReadTodo from "models/read-todo";
-import UpdateTodo from "models/update-todo";
 
 export interface IUser {
   name: string;

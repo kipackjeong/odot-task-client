@@ -1,9 +1,7 @@
 import { ButtonGroup, IconButton } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import ReactDOM from "react-dom";
-import { CSSTransition } from "react-transition-group";
 import "./TodoStatusBtn.css";
 
 import TodoListType from "enums/todo-list-type.enum";

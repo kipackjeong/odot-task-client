@@ -1,9 +1,7 @@
-import { IconButton } from "@mui/material";
 import { isToday } from "date-fns";
 import React, { useCallback, useMemo, useState } from "react";
 
 import ModalCalendarTimePicker from "./ModalCalendarTimePicker";
-import DateRangeIcon from "@mui/icons-material/DateRange";
 
 // NOTE MainDate
 
@@ -80,7 +78,7 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
         date.toDateString()
       )}
     </p>
-  ), [date]);
+  ), [date, displayTimeForToday, fontSize, handleTextDateClick, textUnderLine]);
   // #endregion Memo
 
   return (

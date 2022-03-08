@@ -2,9 +2,8 @@ import { Grid } from "@mui/material";
 import TodoForm from "./TodoForm/TodoForm";
 import TodoList from "./TodoList/TodoList";
 import Board from "components/UI/Board/Board";
-import { useCallback, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import MainDate from "./MainDate/MainDate";
-import useTodoList from "hooks/todo-list/todo-list.hook";
 import AppCtx from "context/app-context";
 import ReadTodo from "models/read-todo";
 
@@ -16,7 +15,6 @@ const TodoBoard = () => {
   const ctx = useContext(AppCtx);
   const inCompTodos: ReadTodo[] = ctx.state.inCompTodos;
   const compTodos: ReadTodo[] = ctx.state.compTodos;
-  const dispatch = ctx.dispatch;
 
   // #endregion Context
 

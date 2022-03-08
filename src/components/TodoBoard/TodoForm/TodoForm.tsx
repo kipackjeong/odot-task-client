@@ -6,8 +6,6 @@ import {
 import "./TodoForm.css";
 import { DateTimePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import Priority from "enums/priority.enum";
-import PriorityIcon from "../../UI/PriorityIcon/PriorityIcon";
 import TaskInput from "components/UI/TaskInput/TaskInput";
 import useTodoForm, { } from "hooks/todo-form/todo-form.hook";
 import PrioritySelector from "components/UI/PrioritySelector/PrioritySelector";

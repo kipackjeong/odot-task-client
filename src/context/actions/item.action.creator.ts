@@ -1,7 +1,7 @@
 import { IStateAction, ITodo } from "../../interfaces/interfaces";
 import TodoListType from "enums/todo-list-type.enum";
 import { ItemActionType } from "context/app-context.enum";
-import UpdateTodo, { UpdateTodoOption } from '../../models/update-todo';
+import UpdateTodo from '../../models/update-todo';
 import ReadTodo from "models/read-todo";
 
 

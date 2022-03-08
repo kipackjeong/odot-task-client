@@ -1,18 +1,12 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React from "react";
 import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import AppCtx from "context/app-context";
 import ReadTodo from "models/read-todo";
-import TodoItem from "./TodoListTableBody/TodoItem";
 import TodoListTableHead from "./TodoListTableHead/TodoListTableHead";
-import todoApi from "../../../api/todoApi";
 import todoListStyle from "./TodoList.module.css";
 import TodoStatusBtn from "./TodoStatusBtn/TodoStatusBtn";
 import TodoListType from "enums/todo-list-type.enum";
 import ListChangeToggle from "./ListChangeToggle/ListChangeToggle";
-import { ITodo } from "interfaces/interfaces";
 import useTodoList from "hooks/todo-list/todo-list.hook";
 import TodoListTableBody from "./TodoListTableBody/TodoListTableBody";
 

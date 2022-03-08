@@ -1,4 +1,3 @@
-import { Label } from "@mui/icons-material";
 import {
   Checkbox,
   styled,
@@ -6,8 +5,6 @@ import {
   tableCellClasses,
   TableHead,
   TableRow,
-  TableSortLabel,
-  TextareaAutosize,
 } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({

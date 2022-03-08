@@ -92,11 +92,12 @@ function TodoItem(props: TodoItemProps) {
       else setDateFormat("MM/dd");
       setDateToDisplay(todo.dueDate);
     };
+    console.log(dateFormat);
 
     decideDateFormat();
     setPriority(todo.priority);
     setTask(todo.task);
-  }, [todayDate, todo]);
+  }, [dateFormat, todayDate, todo]);
   // #endregion
 
   // #region ANCHOR Handlers

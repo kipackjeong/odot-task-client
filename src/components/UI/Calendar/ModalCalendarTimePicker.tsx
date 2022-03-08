@@ -5,7 +5,6 @@ import {
 } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import {
-  Modal,
   TextField,
   ButtonGroup,
   IconButton,
@@ -77,9 +76,9 @@ const ModalCalendarTimePicker = (props: ModalCalendarTimePickerProps) => {
     setOnClock(false);
   };
 
-  const handleClockPickerViewChange = (view: TimePickerView) => {};
+  const handleClockPickerViewChange = (view: TimePickerView) => { };
 
-  const handleClockPickerChange = useCallback((newDate: Date | null) => {}, []);
+  const handleClockPickerChange = useCallback((newDate: Date | null) => { }, []);
 
   const handleClockPickerAccept = (newDate: Date | null) => {
     if (!newDate) {

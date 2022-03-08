@@ -1,6 +1,4 @@
-import { Alert } from "@mui/material";
 import axios, { AxiosResponse } from "axios";
-import { ITodo } from "../interfaces/interfaces";
 import CreateTodo from "../models/create-todo";
 import ReadTodo from "../models/read-todo";
 import UpdateTodo from "../models/update-todo";

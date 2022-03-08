@@ -1,4 +1,3 @@
-import ReadTodo from "models/read-todo";
 
 class SessionStorageManager {
     public storage;
