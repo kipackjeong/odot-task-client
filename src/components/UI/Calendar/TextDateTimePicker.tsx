@@ -51,7 +51,7 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
     onDateAccept(newDate);
     // close calendar
     setShowModal(false);
-  }, []);
+  }, [onDateAccept]);
 
   const handleBackDropClick = useCallback(() => {
     setShowModal(false);

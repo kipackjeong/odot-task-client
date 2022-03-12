@@ -15,7 +15,7 @@ const TaskInput = (props: TaskInputProps) => {
   const { value, label, onChange, onSubmit, error, fullWidth } = props;
 
   const handleOnKeyPress = (event: any) => {
-    if (onSubmit && event.key == "Enter") onSubmit();
+    if (onSubmit && event.key === "Enter") onSubmit();
   };
 
   const handleBlur = () => {
