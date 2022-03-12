@@ -3,7 +3,7 @@ import { createFetchAllAction, createToggleDoneItemAction, createUpdateItemActio
 import TodoListType from "enums/todo-list-type.enum";
 import UpdateTodo from "models/update-todo";
 import todoService from "service/todo.service";
-import { createRemoveItemsAction, createClearWaitingList } from '../../context/actions/item.action.creator';
+import { createRemoveItemsAction } from '../../context/actions/item.action.creator';
 import AppCtx from "context/app-context";
 import sessionStorageManager from 'utilities/session-storage-manager.utility'
 import ReadTodo from "models/read-todo";

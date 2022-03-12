@@ -11,7 +11,7 @@ import {
   Alert,
   Dialog,
 } from "@mui/material";
-import { useCallback, useMemo, useState } from "react";
+import { ReactEventHandler, useCallback, useState } from "react";
 
 import styles from "./Calendar.module.css";
 import DateRangeIcon from "@mui/icons-material/DateRange";
@@ -27,7 +27,7 @@ type ModalCalendarTimePickerProps = {
   onAccept: Function;
   showModal: boolean;
   showClock: boolean;
-  onBackDropClick: Function;
+  onBackDropClick: ReactEventHandler;
 };
 const AlertBar = (props: any) => {
   const { text } = props;
@@ -39,13 +39,6 @@ const AlertBar = (props: any) => {
   );
 };
 const ModalCalendarTimePicker = (props: ModalCalendarTimePickerProps) => {
-  const minDate = useMemo(() => {
-    return new Date("2020-01-01T00:00:00.000");
-  }, []);
-
-  const maxDate = useMemo(() => {
-    return new Date("2034-01-01T00:00:00.000");
-  }, []);
 
   // ANCHOR props
   const {
@@ -116,10 +109,6 @@ const ModalCalendarTimePicker = (props: ModalCalendarTimePickerProps) => {
     console.log("Date Chosen: ", newDate);
   }, []);
 
-  const handleBackDropClick = useCallback(() => {
-    onBackDropClick();
-  }, []);
-
   /* ANCHOR helper */
   // ANCHOR locals
   return (
@@ -144,7 +133,7 @@ const ModalCalendarTimePicker = (props: ModalCalendarTimePickerProps) => {
           width: "100%",
         }}
         open={showModal}
-        onBackdropClick={handleBackDropClick}
+        onBackdropClick={onBackDropClick}
       >
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           {onClock ? (

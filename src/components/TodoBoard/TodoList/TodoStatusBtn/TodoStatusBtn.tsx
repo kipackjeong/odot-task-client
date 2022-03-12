@@ -19,13 +19,10 @@ const TodoStatusBtn = (props: TodoStatusBtnProps) => {
   // #endregion 
 
   // #region ANCHOR Style
-  const buttonAnimationStyle = {
-    display: "block",
-  };
+
   const firstBtnColor =
     listType === TodoListType.Incompleted ? "success" : "disabled";
 
-  const animationClassName = showButtons ? null : "inactive";
   // #endregion 
   return (
     <div

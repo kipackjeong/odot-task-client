@@ -45,7 +45,7 @@ const TextDateTimePicker = (props: TextDateTimePickerProps) => {
         setShowModal(false);
       }
     },
-    [showClock]
+    [onDateAccept, showClock]
   );
   const handleCaledarDatePickAccept = useCallback((newDate: Date) => {
     onDateAccept(newDate);

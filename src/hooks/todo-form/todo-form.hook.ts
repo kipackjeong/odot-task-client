@@ -50,7 +50,7 @@ const useTodoForm = (args: any) => {
     /* When user submits with empty task title input. */
     const showInputError: boolean = useMemo(() => {
         return task.trim() === "" && typed ? true : false;
-    }, [])
+    }, [task, typed])
 
     // #endregion
 
