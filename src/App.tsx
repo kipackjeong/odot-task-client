@@ -1,21 +1,9 @@
-import appStyle from "./App.module.css";
-import AppContextProvider from "context/app-context.provider";
-import TodoBoard from "components/TodoBoard/TodoBoard";
+import Home from "pages/Home";
 
 function App() {
   return (
-    <AppContextProvider>
+    <Home />
 
-      <div className={appStyle.App}>
-
-        <TodoBoard />
-        <a style={{ color: 'black' }} href="https://www.flaticon.com/free-icons/tick" title="tick icons">
-          Tick icons created by Alfredo Hernandez - Flaticon
-        </a>
-
-      </div>
-
-    </AppContextProvider>
   );
 }
 
