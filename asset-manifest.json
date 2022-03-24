@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/odot-task-client/static/css/main.d551c926.css",
+    "main.js": "/odot-task-client/static/js/main.805939e5.js",
+    "static/js/787.37874412.chunk.js": "/odot-task-client/static/js/787.37874412.chunk.js",
+    "index.html": "/odot-task-client/index.html",
+    "main.d551c926.css.map": "/odot-task-client/static/css/main.d551c926.css.map",
+    "main.805939e5.js.map": "/odot-task-client/static/js/main.805939e5.js.map",
+    "787.37874412.chunk.js.map": "/odot-task-client/static/js/787.37874412.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d551c926.css",
+    "static/js/main.805939e5.js"
+  ]
+}
